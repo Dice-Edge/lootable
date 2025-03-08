@@ -1,0 +1,51 @@
+<form>
+  <style>
+    .table-list {
+      margin-bottom: 10px;
+      max-height: 350px;
+      overflow-y: auto;
+    }
+    .table-item {
+      padding: 5px;
+      border-bottom: 1px solid #ddd;
+    }
+    .table-item:last-child {
+      border-bottom: none;
+    }
+    .table-item label {
+      display: flex;
+      align-items: center;
+    }
+    .table-item input[type="radio"] {
+      margin-right: 10px;
+    }
+    .form-group {
+      margin-top: 10px;
+      text-align: center;
+    }
+    .form-group button {
+      width: 100%;
+    }
+  </style>
+
+  <div class="table-list">
+    {{#if tables.length}}
+      {{#each tables}}
+        <div class="table-item">
+          <label>
+            <input type="radio" name="selectedTable" value="{{this.id}}" {{#if this.selected}}checked{{/if}}>
+            {{this.name}}
+          </label>
+        </div>
+      {{/each}}
+    {{else}}
+      <p class="notification warning">{{localize 'LOOTABLE.RandomLootSettings.TableSelector.NoTables'}}</p>
+    {{/if}}
+  </div>
+
+  <div class="form-group">
+    <button type="submit">
+      <i class="fas fa-check"></i> {{localize 'LOOTABLE.RandomLootSettings.TableSelector.Confirm'}}
+    </button>
+  </div>
+</form>

@@ -1,0 +1,18 @@
+<form class="edit-creature-type-form">
+  <div class="form-group">
+    <label for="editCreatureType">{{localize 'LOOTABLE.RandomLootSettings.EditCreatureType.TypeLabel'}}</label>
+    <input type="text" id="editCreatureType" name="editCreatureType" value="{{type}}" required>
+  </div>
+  <div class="form-group">
+    <label for="editCreatureSubtype">{{localize 'LOOTABLE.RandomLootSettings.EditCreatureType.SubtypeLabel'}}</label>
+    <input type="text" id="editCreatureSubtype" name="editCreatureSubtype" value="{{subtype}}">
+  </div>
+  <div class="form-group">
+    <label for="editCreatureCRMin">{{localize 'LOOTABLE.RandomLootSettings.EditCreatureType.CRMinLabel'}}</label>
+    <input type="number" id="editCreatureCRMin" name="editCreatureCRMin" min="0" max="30" value="{{crRangeStart}}">
+  </div>
+  <div class="form-group">
+    <label for="editCreatureCRMax">{{localize 'LOOTABLE.RandomLootSettings.EditCreatureType.CRMaxLabel'}}</label>
+    <input type="number" id="editCreatureCRMax" name="editCreatureCRMax" min="0" max="30" value="{{crRangeEnd}}">
+  </div>
+</form>

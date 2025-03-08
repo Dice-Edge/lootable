@@ -1,0 +1,134 @@
+/* Chat Message Styles */
+/* Styles for lootable messages in the chat */
+#chat-log .message.lootable-message {
+  display: flex;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  color: #ffd700;
+  text-align: center;
+  font-size: 12px;
+  margin: 2px;
+  padding: 2px;
+  border: 2px solid #ffd700;
+  background-color: #4a0000;
+}
+/* Add a semi-transparent background image to the lootable message */
+#chat-log .message.lootable-message::before {
+  background-image: url(../assets/chat.webp);
+  background-position: center;
+  opacity: 0.2;
+}
+/* Hides the default message header for lootable messages */
+#chat-log .message.lootable-message header.message-header {
+  display: none;
+}
+
+/* Table Selector Styles */
+/* Styles for the table selector in the lootable settings */
+.lootable.table-selector .table-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  padding: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+.lootable.table-selector .table-item {
+  margin-bottom: 5px;
+}
+
+.lootable.table-selector .table-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Styles for the labels in the table selector */
+.lootable.table-selector .table-item label {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  margin: 2px 0;
+  border-radius: 3px;
+}
+/* Styles for the radio buttons in the table selector */
+.lootable.table-selector .table-item input[type="radio"] {
+  margin-right: 8px;
+}
+/* Styles for the submit button in the table selector */
+.lootable.table-selector button[type="submit"] {
+  width: 100%;
+  margin-top: 10px;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid #7a7971;
+  border-radius: 3px;
+  padding: 5px;
+}
+
+.lootable.table-selector .notification.warning {
+  background: rgba(255, 180, 0, 0.1);
+  color: #ff9800;
+  padding: 10px;
+  border: 1px solid #ff9800;
+  border-radius: 3px;
+  text-align: center;
+}
+
+.lootable.table-selector .notification.info {
+  background: rgba(0, 120, 255, 0.1);
+  color: #0078ff;
+  padding: 10px;
+  border: 1px solid #0078ff;
+  border-radius: 3px;
+  text-align: center;
+}
+
+/* Random Loot Table Styles */
+/* Center icons in all buttons within the Random Loot Settings */
+.random-loot-settings button i {
+  margin: 0;
+}
+/* Disable the move up and move down buttons if they are disabled */
+.random-loot-settings .creature-type-entry .move-up:disabled,
+.random-loot-settings .creature-type-entry .move-down:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+/* Add grid layout to the form fields in the Random Loot Settings */
+.random-loot-settings .creature-type-entry .form-fields {
+  display: grid;
+  grid-template-columns: 30px 30px 120px 120px 120px 200px 30px 30px 30px;
+  gap: 5px;
+  align-items: center;
+  width: 100%;
+  padding: 2px 0;
+}
+/* Add a scrollable container for the creature types in the Random Loot Settings */
+form.random-loot-settings .creature-types-container {
+  max-height: 315px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-bottom: 10px;
+}
+
+/* Text result styles */
+/* Style for text result items in chat messages */
+#chat-log .message.lootable-message em {
+  color: #cccccc;
+  font-style: italic;
+}
+
+/* Style for labels in creature-type-entry */
+.random-loot-settings .creature-type-entry label {
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+/* Style for readonly inputs in creature-type-entry */
+.random-loot-settings .creature-type-entry input[readonly] {
+  background-color: rgba(0, 0, 0, 0.05);
+  cursor: default;
+}

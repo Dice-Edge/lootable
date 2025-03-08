@@ -1,0 +1,11 @@
+<div>
+    <strong>{{actor.name}}</strong>
+</div>
+<div>
+    {{localize 'LOOTABLE.ChatMessages.RandomLootGenerated'}}
+    {{#if items.length}}
+        <em style="color: #ccc;">{{#each items as |item index|}}{{#if index}}, {{/if}}"{{item.name}}"{{#if item.quantity}} x{{item.quantity}}{{/if}}{{/each}}</em>
+    {{else}}
+        <em style="color: #ccc;">"{{localize 'LOOTABLE.ChatMessages.NoLoot'}}"</em>
+    {{/if}}
+</div>

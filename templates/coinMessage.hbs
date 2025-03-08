@@ -1,0 +1,10 @@
+<div>
+    <strong>{{tokenName}}</strong>
+</div>
+<div>
+    {{#if isPenniless}}
+    {{localize 'LOOTABLE.ChatMessages.CoinGeneratedPenniless'}} <em style="color: #ccc;">{{localize 'LOOTABLE.ChatMessages.PennilessText'}}</em>
+    {{else}}
+    {{localize 'LOOTABLE.ChatMessages.CoinGenerated'}} <em style="color: #ccc;">{{cp}} cp, {{sp}} sp, {{gp}} gp, {{pp}} pp</em>
+    {{/if}}
+</div>

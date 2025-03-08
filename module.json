@@ -1,0 +1,57 @@
+{
+  "id": "lootable",
+  "title": "Lootable!",
+  "description": "Module to add loot to NPCs when added to a scene using world rollable tables.",
+  "version": "0.1.2",
+  "authors": [
+    {
+      "name": "Dice Edge",
+      "url": "https://github.com/Dice-Edge",
+      "flags": {}
+    }
+  ],
+  "compatibility": {
+    "minimum": "11",
+    "verified": "12.331",
+    "maximum": "12.331"
+  },
+  "relationships": {
+    "systems": [
+      {
+        "id": "dnd5e",
+        "type": "system",
+        "compatibility": [
+          {
+            "minimum": "3.0.0",
+            "verified": "3.3.1"
+          }
+        ]
+      }
+    ]
+  },
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "languages/en.json",
+      "flags": {}
+    }
+  ],
+  "esmodules": [
+    "scripts/Lootable.js",
+    "scripts/LootableSettings.js",
+    "scripts/PocketChangeSettingsForm.js",
+    "scripts/RandomLootSettingsForm.js",
+    "scripts/TableSelector.js",
+    "scripts/PocketChange.js",
+    "scripts/RandomLoot.js"
+  ],
+  "styles": [
+    "styles/styles.css"
+  ],
+  "url": "https://github.com/Dice-Edge/lootable",
+  "manifest": "https://github.com/Dice-Edge/lootable/raw/main/module.json",
+  "download": "https://github.com/Dice-Edge/lootable/archive/refs/heads/main.zip",
+  "license": "LICENSE",
+  "readme": "README.md"
+}

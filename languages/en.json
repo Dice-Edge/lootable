@@ -1,0 +1,133 @@
+{
+  "LOOTABLE": {
+    "SettingsMenu": {
+      "PocketChange": {
+        "Name": "Pocket Change Settings",
+        "Label": "Pocket Change"
+      },
+      "RandomLoot": {
+        "Name": "Random Loot Settings",
+        "Label": "Random Loot"
+      },
+      "EnableDebug": {
+        "Name": "Enable Debugging"
+      }
+    },
+    "PocketChangeSettings": {
+      "AmountConfig": "Amount Config",
+      "TokenConfig": "Token Config",
+      "ProbabilityConfig": "Probability Config",
+      "ProbabilityNote": "NOTE: The total values of the probabilities should not exceed 100% otherwise it will fail to correctly calculate.",
+      "MessageConfig": "Message Config",
+      "SaveChanges": "Save Changes",
+      "DisablePocketChange": {
+        "Name": "Disable Pocket Change"
+      },
+      "PerCoinAmount": {
+        "Name": "Percentage of Coin Amount",
+        "Hint": "Percentage of coin tokens receive. (10-300%) [default: 100%]"
+      },
+      "MinCoinAmount": {
+        "Name": "Minimum Coin Amount",
+        "Hint": "Minimum number of coins a token can receive in cp if not 0. [default: 10]"
+      },
+      "IgnoreExistingCoin": {
+        "Name": "Ignore Existing Coin",
+        "Hint": "Tokens that already have coin are ignored. [default: true]"
+      },
+      "AllowedCreatureTypes": {
+        "Name": "Allowed Creature Types",
+        "Hint": "List of creature types that can receive coin, types are separated by commas. (e.g., humanoid, beast, monstrosity) [default: humanoid]"
+      },
+      "NoCoinChance": {
+        "Name": "Penniless Chance",
+        "Hint": "Probability of a token receiving no coin. (0-100%) [default: 0%]"
+      },
+      "TenPercentGoldChance": {
+        "Name": "Squalid Chance",
+        "Hint": "Probability of a token receiving one tenth the amount of coin. (0-100%) [default: 5%]"
+      },
+      "HalfGoldChance": {
+        "Name": "Poor Chance",
+        "Hint": "Probability of a token receiving half the amount of coin. (0-100%) [default: 10%]"
+      },
+      "DoubleCoinChance": {
+        "Name": "Affluent Chance",
+        "Hint": "Probability of a token receiving double the amount of coin. (0-100%) [default: 10%]"
+      },
+      "TripleCoinChance": {
+        "Name": "Rich Chance",
+        "Hint": "Probability of a token receiving triple the amount of coin. (0-100%) [default: 5%]"
+      },
+      "HidePocketChangeChatMsg": {
+        "Name": "Hide Chat Messages",
+        "Hint": "Hide chat messages when coin is generated. [default: false]"
+      }
+    },
+    "RandomLootSettings": {
+      "RolltableByCreatureType": "Rolltable by Creature Type",
+      "MessageConfig": "Message Config",
+      "SaveChanges": "Save Changes",
+      "MissingTable": "Missing Table",
+      "NoTable": "No Table Selected",
+      "ColumnHeaders": {
+        "Order": "Order",
+        "Type": "Type",
+        "Subtype": "Subtype",
+        "CRRange": "CR Range",
+        "Table": "Table",
+        "Actions": "Actions"
+      },
+      "DisableRandomLoot": {
+        "Name": "Disable Random Loot"
+      },
+      "HideRandomLootChatMsg": {
+        "Name": "Hide Chat Messages",
+        "Hint": "Hide chat messages when items are granted. [default: false]"
+      },
+      "TableSelector": {
+        "Title": "Select Table",
+        "NoTable": "No Table",
+        "NoTables": "No rollable tables found in your world.",
+        "Confirm": "Confirm Selection"
+      },
+      "EditCreatureType": {
+        "Title": "Edit Creature Type",
+        "TypeLabel": "Creature Type",
+        "SubtypeLabel": "Creature Subtype",
+        "CRMinLabel": "Minimum CR",
+        "CRMaxLabel": "Maximum CR",
+        "Confirm": "Update",
+        "Cancel": "Cancel"
+      },
+      "RemoveCreatureType": {
+        "Title": "Remove Creature Type",
+        "ConfirmContent": "Remove creature type: '{type}', subtype: '{subtype}', CR: {crRange}?"
+      },
+      "AddCreatureType": {
+        "Title": "Add New Creature Type",
+        "TypeLabel": "Creature Type",
+        "SubtypeLabel": "Creature Subtype",
+        "SubtypePlaceholder": "Enter subtype (optional)",
+        "CRMinLabel": "Minimum CR",
+        "CRMaxLabel": "Maximum CR",
+        "DuplicateEntry": "A creature type with these exact specifications already exists.",
+        "Confirm": "Add",
+        "Cancel": "Cancel"
+      }
+    },
+    "ChatMessages": {
+      "CoinGenerated": "Pocket Change:",
+      "CoinGeneratedPenniless": "Pocket Change:",
+      "PennilessText": "Penniless (No Coin)",
+      "RandomLootGenerated": "Random Loot:",
+      "NoLoot": "Nothing"
+    },
+    "RandomLoot": {
+      "ChatMessage": {
+        "Title": "Random Loot",
+        "NoLoot": "No loot found"
+      }
+    }
+  }
+}
