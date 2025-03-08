@@ -69,3 +69,24 @@ Created by Dice Edge
 
 ## License
 [LICENSE](LICENSE) 
+
+## For Developers
+
+### Release Process
+
+This module uses GitHub Actions to automate the release process. To create a new release:
+
+1. Run the update-version script with the new version number:
+   ```
+   node update-version.js x.y.z
+   ```
+   This will update the version in module.json and provide instructions for the next steps.
+
+2. Follow the instructions to commit the changes, create a tag, and push to GitHub.
+
+3. The GitHub Actions workflow will automatically:
+   - Create a new release
+   - Build a zip file with all the module files
+   - Upload the zip file and module.json to the release
+
+4. The download counter will now track downloads from this official release. 
