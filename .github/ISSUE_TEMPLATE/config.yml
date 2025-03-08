@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Lootable Documentation
+    url: https://github.com/Dice-Edge/lootable#readme
+    about: Check the README for documentation and usage instructions
+  - name: Foundry VTT Discord
+    url: https://discord.gg/foundryvtt
+    about: Join the Foundry VTT Discord for community support 
