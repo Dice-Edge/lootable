@@ -94,12 +94,12 @@ export class RandomLoot {
     
     if (enableDebug) console.log(`%cLootable DEBUG |%c Table results:`, 'color: #940000;', 'color: inherit', results);
     
-    // Add items to actor
-    await RandomLoot.addItemsToActor(tokenDoc.actor, results);
+    // Add items to actor and get the consolidated items
+    const consolidatedItems = await RandomLoot.addItemsToActor(tokenDoc.actor, results);
     
-    // Send chat message
+    // Send chat message with the consolidated items
     if (!hideRandomLootChatMsg) {
-        await RandomLoot.sendLootMessage(tokenDoc.actor, results);
+        await RandomLoot.sendLootMessage(tokenDoc.actor, consolidatedItems || results);
     }
   }
   
@@ -109,43 +109,48 @@ export class RandomLoot {
     if (enableDebug) console.log(`%cLootable DEBUG |%c Rolling with Better Tables`, 'color: #940000;', 'color: inherit');
     
     try {
-        // Get the Better Tables API
-        let betterTables = game.modules.get('better-rolltables').api;
-        if (!betterTables) {
-            if (enableDebug) console.log(`%cLootable DEBUG |%c Better Tables API not found`, 'color: #940000;', 'color: inherit');
-            return null;
-        }
-        
-        // Create a Better Table instance
-        let betterTable = new betterTables.BetterTable(table);
-        
-        // Roll on the table
-        let results = await betterTable.roll();
-        
-        if (enableDebug) console.log(`%cLootable DEBUG |%c Better Tables results:`, 'color: #940000;', 'color: inherit', results);
-        
-        // Process the results
-        let processedResults = {
-            items: []
-        };
-        
-        // Process loot items
-        for (let loot of results.loot || []) {
-            if (!loot.item) continue;
-            
-            // Get the item data
-            let itemData = loot.item.toObject();
-            
-            // Add quantity
-            itemData.system.quantity = loot.quantity || 1;
-            
+      // Get the Better Tables module
+      const brt = game.modules.get('better-rolltables');
+      if (!brt?.api) {
+        if (enableDebug) console.log(`%cLootable DEBUG |%c Better Roll Tables API not found`, 'color: #940000;', 'color: inherit');
+        return await this.rollWithoutBetterTables(table);
+      }
+      
+      // Use the betterTableRoll method as in the old implementation
+      let betterResults = await brt.api.betterTableRoll(table, {
+        displayChat: false,
+        rollMode: 'gmroll'
+      });
+      
+      if (enableDebug) console.log(`%cLootable DEBUG |%c Better Roll Tables results:`, 'color: #940000;', 'color: inherit', betterResults);
+      
+      // Process the results
+      let processedResults = {
+        items: []
+      };
+      
+      // Process each result using the getItem method
+      for (let result of betterResults) {
+        try {
+          let item = await this.getItem(result);
+          if (item) {
+            let itemData = item.toObject();
+            itemData.system.quantity = result.hasOwnProperty('quantity') ? result.quantity : 1;
             processedResults.items.push(itemData);
+          } else {
+            if (enableDebug) console.log(`%cLootable DEBUG |%c Item not found: ${result.text || result.documentId}`, 'color: #940000;', 'color: inherit');
+          }
+        } catch (itemError) {
+          if (enableDebug) console.error(`%cLootable DEBUG |%c Error processing item from Better Roll Tables:`, 'color: #940000;', 'color: inherit', itemError);
         }
-        
-        return processedResults.items;
+      }
+      
+      if (enableDebug) console.log(`%cLootable DEBUG |%c Processed ${processedResults.items.length} items`, 'color: #940000;', 'color: inherit');
+      
+      return processedResults.items;
     } catch (error) {
-        if (enableDebug) console.error(`%cLootable DEBUG |%c Error rolling with Better Tables:`, 'color: #940000;', 'color: inherit', error);
-        return null;
+      if (enableDebug) console.error(`%cLootable DEBUG |%c Error rolling with Better Tables:`, 'color: #940000;', 'color: inherit', error);
+      return await this.rollWithoutBetterTables(table);
     }
   }
   
@@ -153,40 +158,63 @@ export class RandomLoot {
     let enableDebug = game.settings.get('lootable', 'enableDebug') || false;
     
     try {
-      // Handle different collection structures
-      let item = null;
-      
-      // Try to get the collection from game.collections
-      let collection = game.collections.get(result.documentCollection);
-      
-      if (collection) {
-        if (enableDebug) console.log(`%cLootable DEBUG |%c Getting item from collection: ${result.documentCollection}, ID: ${result.documentId}`, 'color: #940000;', 'color: inherit');
-        item = collection.get(result.documentId);
-      } 
-      // Try to get the collection directly from game
-      else if (game[result.documentCollection]) {
-        if (enableDebug) console.log(`%cLootable DEBUG |%c Getting item from game object: ${result.documentCollection}`, 'color: #940000;', 'color: inherit');
-        item = game[result.documentCollection].get(result.documentId);
-      }
-      // Try to get from packs
-      else if (result.documentCollection.includes('.')) {
-        if (enableDebug) console.log(`%cLootable DEBUG |%c Getting item from compendium pack: ${result.documentCollection}`, 'color: #940000;', 'color: inherit');
-        const [packName, entryName] = result.documentCollection.split('.');
-        const pack = game.packs.get(`${packName}.${entryName}`);
+      // First try to find by documentId
+      if (result.documentId) {
+        // Check in game items
+        let item = game.items.get(result.documentId);
+        if (item) {
+          if (enableDebug) console.log(`%cLootable DEBUG |%c Found item by ID in game items: ${item.name}`, 'color: #940000;', 'color: inherit');
+          return item;
+        }
         
-        if (pack) {
-          item = await pack.getDocument(result.documentId);
+        // Check in all item packs
+        for (let pack of game.packs) {
+          if (pack.documentName === 'Item') {
+            try {
+              const packItem = await pack.getDocument(result.documentId);
+              if (packItem) {
+                if (enableDebug) console.log(`%cLootable DEBUG |%c Found item by ID in pack ${pack.collection}: ${packItem.name}`, 'color: #940000;', 'color: inherit');
+                return packItem;
+              }
+            } catch (e) {
+              // Continue to next pack
+            }
+          }
         }
       }
       
-      if (!item) {
-        if (enableDebug) console.log(`%cLootable DEBUG |%c Item not found: ${result.documentCollection}, ID: ${result.documentId}`, 'color: #940000;', 'color: inherit');
-        return null;
+      // If not found by ID, try to find by name
+      if (result.text) {
+        // Check in game items
+        let item = game.items.getName(result.text);
+        if (item) {
+          if (enableDebug) console.log(`%cLootable DEBUG |%c Found item by name in game items: ${item.name}`, 'color: #940000;', 'color: inherit');
+          return item;
+        }
+        
+        // Check in all item packs
+        for (let pack of game.packs) {
+          if (pack.documentName === 'Item') {
+            try {
+              const index = await pack.getIndex();
+              const entry = index.find(e => e.name === result.text);
+              if (entry) {
+                const packItem = await pack.getDocument(entry._id);
+                if (packItem) {
+                  if (enableDebug) console.log(`%cLootable DEBUG |%c Found item by name in pack ${pack.collection}: ${packItem.name}`, 'color: #940000;', 'color: inherit');
+                  return packItem;
+                }
+              }
+            } catch (e) {
+              // Continue to next pack
+            }
+          }
+        }
       }
       
-      if (enableDebug) console.log(`%cLootable DEBUG |%c Found item: ${item.name}`, 'color: #940000;', 'color: inherit');
-      
-      return item;
+      // If we get here, the item wasn't found
+      if (enableDebug) console.log(`%cLootable DEBUG |%c Item not found: ${result.text || result.documentId}`, 'color: #940000;', 'color: inherit');
+      return null;
     } catch (error) {
       if (enableDebug) console.error(`%cLootable DEBUG |%c Error getting item:`, 'color: #940000;', 'color: inherit', error);
       return null;
@@ -294,10 +322,35 @@ export class RandomLoot {
     if (!items.length) return;
     
     try {
-        await actor.createEmbeddedDocuments('Item', items);
+        // Group similar items by name
+        let groupedItems = {};
+        for (let item of items) {
+            const key = item.name;
+            if (!groupedItems[key]) {
+                // Create a copy of the item
+                groupedItems[key] = foundry.utils.deepClone(item);
+            } else {
+                // Increase the quantity of the existing item
+                groupedItems[key].system.quantity += item.system.quantity || 1;
+            }
+        }
+        
+        // Convert the grouped items back to an array
+        const consolidatedItems = Object.values(groupedItems);
+        
+        if (enableDebug) {
+            console.log(`%cLootable DEBUG |%c Consolidated ${items.length} items into ${consolidatedItems.length} unique items`, 'color: #940000;', 'color: inherit');
+            console.log(`%cLootable DEBUG |%c Consolidated items:`, 'color: #940000;', 'color: inherit', consolidatedItems);
+        }
+        
+        await actor.createEmbeddedDocuments('Item', consolidatedItems);
         if (enableDebug) console.log(`%cLootable DEBUG |%c Items added successfully`, 'color: #940000;', 'color: inherit');
+        
+        // Return the consolidated items for the chat message
+        return consolidatedItems;
     } catch (error) {
         if (enableDebug) console.error(`%cLootable DEBUG |%c Error adding items:`, 'color: #940000;', 'color: inherit', error);
+        return items; // Return original items if there was an error
     }
   }
   
