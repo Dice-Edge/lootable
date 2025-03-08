@@ -4,7 +4,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/Dice-Edge/lootable.svg)](https://GitHub.com/Dice-Edge/lootable/issues/)
 [![GitHub stars](https://img.shields.io/github/stars/Dice-Edge/lootable.svg)](https://GitHub.com/Dice-Edge/lootable/stargazers/)
 [![GitHub license](https://img.shields.io/github/license/Dice-Edge/lootable.svg)](https://github.com/Dice-Edge/lootable/blob/main/LICENSE)
-[![Foundry Shield](https://img.shields.io/badge/Foundry-v11-informational)](https://foundryvtt.com)
+[![Foundry Shield](https://img.shields.io/badge/Foundry-v12-informational)](https://foundryvtt.com)
 
 [![Support me on Patreon](https://img.shields.io/badge/Support%20me%20on-Patreon-orange?style=for-the-badge&logo=patreon)](https://www.patreon.com/diceedge)
 
