@@ -4,13 +4,11 @@ export class RandomLootSettingsForm extends FormApplication {
   constructor(...args) {
     super(...args);
     
-    // Retrieve all settings once in the constructor
     this.creatureTypeTables = game.settings.get('lootable', 'creatureTypeTables');
     this.enableDebug = game.settings.get('lootable', 'enableDebug') || false;
     this.disableRandomLoot = game.settings.get('lootable', 'disableRandomLoot');
     this.hideRandomLootChatMsg = game.settings.get('lootable', 'hideRandomLootChatMsg');
     
-    // Initialize with empty array if needed
     if (!this.creatureTypeTables) {
       this.creatureTypeTables = { entries: [] };
     } else if (!this.creatureTypeTables.entries) {
@@ -35,7 +33,6 @@ export class RandomLootSettingsForm extends FormApplication {
   }
 
   async getData() {
-    // Map creature type entries with Promise.all to handle async operations
     let creatureTypes = await Promise.all(
         this.creatureTypeTables.entries.map((entry, index) => this._mapCreatureTypeEntry(entry, index))
     );
@@ -50,26 +47,17 @@ export class RandomLootSettingsForm extends FormApplication {
   }
 
   async _mapCreatureTypeEntry(entry, index) {
-    // Clone the entry to avoid modifying the original
     let mappedEntry = foundry.utils.deepClone(entry);
     mappedEntry.index = index;
     
-    // Handle the table ID
-    if (this.enableDebug) console.log(`%cLootable DEBUG |%c Processing table ID: ${mappedEntry.tableId}`, 'color: #940000;', 'color: inherit');
-    
-    // If tableId is empty or null, it's "No Table"
     if (!mappedEntry.tableId) {
-        if (this.enableDebug) console.log(`%cLootable DEBUG |%c No table selected`, 'color: #940000;', 'color: inherit');
         mappedEntry.tableName = game.i18n.localize('LOOTABLE.RandomLootSettings.NoTable');
         return mappedEntry;
     }
     
-    // Try to get the table
     let table = game.tables.get(mappedEntry.tableId);
     
-    // If table is found, use its name
     if (table) {
-        if (this.enableDebug) console.log(`%cLootable DEBUG |%c Found world table: ${table.name}`, 'color: #940000;', 'color: inherit');
         mappedEntry.tableName = table.name;
     } else {
         if (this.enableDebug) console.log(`%cLootable DEBUG |%c Table not found: ${mappedEntry.tableId}`, 'color: #940000;', 'color: inherit');
@@ -104,17 +92,7 @@ export class RandomLootSettingsForm extends FormApplication {
     let button = event.currentTarget;
     let { creatureType, creatureSubtype, crRangeStart, crRangeEnd } = button.dataset;
     
-    if (this.enableDebug) {
-        console.log(`%cLootable DEBUG |%c Opening table selector for: ${creatureType}, ${creatureSubtype}, CR ${crRangeStart}-${crRangeEnd}`, 'color: #940000;', 'color: inherit');
-    }
-    
-    // Create a callback function to handle the selected table
     let callback = async (tableId) => {
-        if (this.enableDebug) {
-            console.log(`%cLootable DEBUG |%c Table selector callback with newTableId: ${tableId}`, 'color: #940000;', 'color: inherit');
-        }
-        
-        // Find the entry in creatureTypeTables
         let entryIndex = this.creatureTypeTables.entries.findIndex(e => 
             e.type === creatureType && 
             e.subtype === creatureSubtype && 
@@ -123,19 +101,8 @@ export class RandomLootSettingsForm extends FormApplication {
         );
         
         if (entryIndex !== -1) {
-            if (this.enableDebug) {
-                console.log(`%cLootable DEBUG |%c Found entry at index ${entryIndex}`, 'color: #940000;', 'color: inherit');
-                console.log(`%cLootable DEBUG |%c Before update: ${JSON.stringify(this.creatureTypeTables.entries[entryIndex])}`, 'color: #940000;', 'color: inherit');
-            }
-            
-            // Update the tableId
             this.creatureTypeTables.entries[entryIndex].tableId = tableId;
             
-            if (this.enableDebug) {
-                console.log(`%cLootable DEBUG |%c After update: ${JSON.stringify(this.creatureTypeTables.entries[entryIndex])}`, 'color: #940000;', 'color: inherit');
-            }
-            
-            // Save and render
             await this._updateAndRender();
         } else {
             if (this.enableDebug) {
@@ -144,7 +111,6 @@ export class RandomLootSettingsForm extends FormApplication {
         }
     };
     
-    // Open the table selector
     let tableSelector = new TableSelector(
         creatureType, 
         creatureSubtype, 
@@ -159,7 +125,6 @@ export class RandomLootSettingsForm extends FormApplication {
     let button = event.currentTarget;
     let { creatureType, creatureSubtype, crRangeStart, crRangeEnd } = button.dataset;
     
-    // Find the entry in creatureTypeTables
     let entryIndex = this.creatureTypeTables.entries.findIndex(e => 
         e.type === creatureType && 
         e.subtype === creatureSubtype && 
@@ -171,7 +136,6 @@ export class RandomLootSettingsForm extends FormApplication {
     
     let entry = this.creatureTypeTables.entries[entryIndex];
     
-    // Render the template
     let content = await renderTemplate('modules/lootable/templates/editCreatureType.hbs', {
       type: entry.type,
       subtype: entry.subtype || '',
@@ -179,7 +143,6 @@ export class RandomLootSettingsForm extends FormApplication {
       crRangeEnd: entry.crRange[1]
     });
     
-    // Create a dialog to edit the creature type
     let dialog = new Dialog({
       title: game.i18n.localize('LOOTABLE.RandomLootSettings.EditCreatureType.Title'),
       content: content,
@@ -194,13 +157,11 @@ export class RandomLootSettingsForm extends FormApplication {
             let crMin = parseInt(form.editCreatureCRMin.value);
             let crMax = parseInt(form.editCreatureCRMax.value);
             
-            // Validate CR range
             if (crMin > crMax) {
               ui.notifications.error(game.i18n.localize('LOOTABLE.RandomLootSettings.InvalidCRRange'));
               return;
             }
             
-            // Check for duplicate entries
             let duplicate = this.creatureTypeTables.entries.some((e, i) => 
                 i !== entryIndex && 
                 e.type === type && 
@@ -214,7 +175,6 @@ export class RandomLootSettingsForm extends FormApplication {
               return;
             }
             
-            // Update the entry
             this.creatureTypeTables.entries[entryIndex] = {
               ...entry,
               type,
@@ -240,7 +200,6 @@ export class RandomLootSettingsForm extends FormApplication {
     event.preventDefault();
     let button = event.currentTarget;
     
-    // Get the index directly from the closest creature-type-entry element
     let tr = button.closest('.creature-type-entry');
     let index = parseInt(tr.dataset.index);
     
@@ -249,14 +208,12 @@ export class RandomLootSettingsForm extends FormApplication {
       return;
     }
     
-    // Get the entry data for the confirmation message
     let entry = this.creatureTypeTables.entries[index];
     let creatureType = entry?.type || 'Unknown';
     let creatureSubtype = entry?.subtype || '';
     let crRangeStart = entry?.crRange?.[0] || 0;
     let crRangeEnd = entry?.crRange?.[1] || 0;
     
-    // Create a confirmation dialog
     let confirmContent = game.i18n.format('LOOTABLE.RandomLootSettings.RemoveCreatureType.ConfirmContent', {
       type: creatureType,
       subtype: creatureSubtype,
@@ -272,7 +229,6 @@ export class RandomLootSettingsForm extends FormApplication {
     });
     
     if (confirmed) {
-      // Remove the entry by index
       this.creatureTypeTables.entries.splice(index, 1);
       await this._updateAndRender();
     }
@@ -286,7 +242,6 @@ export class RandomLootSettingsForm extends FormApplication {
     
     if (index <= 0) return;
     
-    // Swap with the previous entry
     let temp = this.creatureTypeTables.entries[index];
     this.creatureTypeTables.entries[index] = this.creatureTypeTables.entries[index - 1];
     this.creatureTypeTables.entries[index - 1] = temp;
@@ -302,7 +257,6 @@ export class RandomLootSettingsForm extends FormApplication {
     
     if (index >= this.creatureTypeTables.entries.length - 1) return;
     
-    // Swap with the next entry
     let temp = this.creatureTypeTables.entries[index];
     this.creatureTypeTables.entries[index] = this.creatureTypeTables.entries[index + 1];
     this.creatureTypeTables.entries[index + 1] = temp;
@@ -311,28 +265,16 @@ export class RandomLootSettingsForm extends FormApplication {
   }
 
   async _updateAndRender() {
-    if (this.enableDebug) console.log(`%cLootable DEBUG |%c Saving creatureTypeTables:`, 'color: #940000;', 'color: inherit', this.creatureTypeTables);
-    
     let creatureTypeTablesCopy = foundry.utils.deepClone(this.creatureTypeTables);
     
-    // Save the settings
     await game.settings.set('lootable', 'creatureTypeTables', creatureTypeTablesCopy);
     
-    if (this.enableDebug) {
-        console.log(`%cLootable DEBUG |%c Settings saved, rendering form`, 'color: #940000;', 'color: inherit');
-    }
-    
-    // Re-render the form
     this.render();
   }
 
   async _updateObject(_event, formData) {
-    if (this.enableDebug) console.log(`%cLootable DEBUG |%c Saving form data:`, 'color: #940000;', 'color: inherit', formData);
-    
-    // Handle all form data except creatureTypeTables
     for (let [key, value] of Object.entries(formData)) {
         if (key !== 'creatureTypeTables') {
-            if (this.enableDebug) console.log(`%cLootable DEBUG |%c Setting ${key} to ${value}`, 'color: #940000;', 'color: inherit');
             await game.settings.set('lootable', key, value);
         }
     }
@@ -363,7 +305,6 @@ class AddCreatureTypeForm extends FormApplication {
   }
 
   async _updateObject(_event, formData) {
-    // Check if an entry with the same type, subtype, and CR range already exists
     let duplicate = this.creatureTypeTables.entries.some(e => 
       e.type === formData.newCreatureType && 
       e.subtype === formData.newCreatureSubtype && 
@@ -376,7 +317,6 @@ class AddCreatureTypeForm extends FormApplication {
       return;
     }
     
-    // Create the new entry
     let newEntry = {
       type: formData.newCreatureType,
       subtype: formData.newCreatureSubtype || "",
@@ -384,7 +324,6 @@ class AddCreatureTypeForm extends FormApplication {
       tableId: ""
     };
     
-    // Call the callback with the new entry
     if (this.callback) {
       this.callback(newEntry);
     }

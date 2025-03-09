@@ -5,7 +5,6 @@ export class PocketChange {
     let enableDebug = game.settings.get('lootable', 'enableDebug');
     
     if (game.settings.get('lootable', 'disablePocketChange')) {
-      if (enableDebug) console.log(`%cLootable DEBUG |%c Pocket Change Disabled.`, 'color: #940000;', 'color: inherit');
       return;
     }
 
@@ -18,7 +17,6 @@ export class PocketChange {
     let token = tokenDoc.object;
     let actor = token.actor;
     if (!actor) {
-      if (enableDebug) console.log(`%cLootable DEBUG |%c Token skipped - actor undefined.`, 'color: #940000;', 'color: inherit');
       return;
     }
 
@@ -28,28 +26,33 @@ export class PocketChange {
     let creatureType = actor.system.details.type?.value?.toLowerCase() || "unknown";
 
     if (enableDebug) {
-      console.log(`%cLootable DEBUG |%c Token: ${tokenName}`, 'color: #940000;', 'color: inherit');
-      console.log(`%cLootable DEBUG |%c Creature Type: ${creatureType}`, 'color: #940000;', 'color: inherit');
-      console.log(`%cLootable DEBUG |%c CR: ${CR}`, 'color: #940000;', 'color: inherit');
+      console.log(`%cLootable DEBUG |%c Token: ${tokenName} | Creature Type: ${creatureType} | CR: ${CR}`, 'color: #940000;', 'color: inherit');
     }
 
     if (CR === undefined || CR === null) {
-      if (enableDebug) console.log(`%cLootable DEBUG |%c ${tokenName} - no coin generated, invalid CR.`, 'color: #940000;', 'color: inherit');
       return;
     }
 
     if (!allowedCreatureTypes.includes(creatureType)) {
-      if (enableDebug) console.log(`%cLootable DEBUG |%c ${tokenName} - no coin generated, creature type not included.`, 'color: #940000;', 'color: inherit');
       return;
     }
     if (ignoreExistingCoin && currency && (currency.gp || currency.sp || currency.ep || currency.pp || currency.cp)) {
-      if (enableDebug) console.log(`%cLootable DEBUG |%c ${tokenName} - no coin generated, already has coin.`, 'color: #940000;', 'color: inherit');
       return;
     }
 
-    let { cp, multiplier, isPenniless } = PocketChange.calculatePocketChange(CR, perCoinAmount);
+    let { cp, multiplier, isPenniless, debugInfo } = PocketChange.calculatePocketChange(CR, perCoinAmount);
     if (cp > 0 || isPenniless) {
-      let { cp: finalCp, pp, gp, sp } = PocketChange.convertCurrency(cp, minCoinAmount);
+      let result = PocketChange.convertCurrency(cp, minCoinAmount);
+      let { cp: finalCp, pp, gp, sp, debugInfo: conversionDebugInfo } = result;
+      
+      if (enableDebug && debugInfo) {
+        let fullDebugInfo = debugInfo;
+        if (conversionDebugInfo) {
+          fullDebugInfo += " | " + conversionDebugInfo;
+        }
+        console.log(`%cLootable DEBUG |%c ${fullDebugInfo} | Coin Added: ${pp}pp, ${gp}gp, ${sp}sp, ${finalCp}cp`, 'color: #940000;', 'color: inherit');
+      }
+      
       if (currency) {
         await actor.update({
           "system.currency.cp": (currency.cp || 0) + finalCp,
@@ -58,7 +61,6 @@ export class PocketChange {
           "system.currency.sp": (currency.sp || 0) + sp,
         });
       } else {
-        if (enableDebug) console.log(`%cLootable DEBUG |%c ${tokenName} - no coin generated, no coin entry field.`, 'color: #940000;', 'color: inherit');
         return;
       }
       if (!hidePocketChangeChatMsg) {
@@ -89,104 +91,165 @@ export class PocketChange {
 
     let multiplier = 1;
     let outcomes = [
-      { type: 'noCoin', chance: noCoinChance },
-      { type: 'doubleCoin', chance: doubleCoinChance },
-      { type: 'tripleCoin', chance: tripleCoinChance },
-      { type: 'halfGold', chance: halfGoldChance },
-      { type: 'tenPercentGold', chance: tenPercentGoldChance }
+      { type: 'noCoin', chance: noCoinChance, name: 'Penniless' },
+      { type: 'doubleCoin', chance: doubleCoinChance, name: 'Affluent' },
+      { type: 'tripleCoin', chance: tripleCoinChance, name: 'Rich' },
+      { type: 'halfGold', chance: halfGoldChance, name: 'Poor' },
+      { type: 'tenPercentGold', chance: tenPercentGoldChance, name: 'Squalid' }
     ];
 
     let totalChance = outcomes.reduce((sum, outcome) => sum + outcome.chance, 0);
     let normalChance = Math.max(0, 100 - totalChance);
-    outcomes.push({ type: 'normal', chance: normalChance });
+    outcomes.push({ type: 'normal', chance: normalChance, name: 'Normal' });
     
-    if (enableDebug) {
-      let chancesString = outcomes.map(outcome => `${outcome.type}: ${outcome.chance.toFixed(2)}%`).join(', ');
-      console.log(`%cLootable DEBUG |%c Outcome chances: ${chancesString}`, 'color: #940000;', 'color: inherit');
-    }
-
     let roll = Math.random() * 100;
     let cumulativeChance = 0;
     let selectedOutcome;
+    let profileName = 'Normal';
+    let profileChance = normalChance;
+    
     for (let outcome of outcomes) {
       cumulativeChance += outcome.chance;
       if (roll < cumulativeChance) {
         selectedOutcome = outcome.type;
+        profileName = outcome.name;
+        profileChance = outcome.chance;
         break;
       }
     }
 
     switch (selectedOutcome) {
       case 'noCoin':
-        if (enableDebug) console.log(`%cLootable DEBUG |%c Penniless profile used.`, 'color: #940000;', 'color: inherit');
-        return { cp: 0, multiplier: 0, isPenniless: true };
+        return { cp: 0, multiplier: 0, isPenniless: true, debugInfo: `Profile: ${profileName} (${profileChance.toFixed(2)}%) | No coins generated` };
       case 'doubleCoin':
         multiplier = 2;
-        if (enableDebug) console.log(`%cLootable DEBUG |%c Affluent profile used.`, 'color: #940000;', 'color: inherit');
         break;
       case 'tripleCoin':
         multiplier = 3;
-        if (enableDebug) console.log(`%cLootable DEBUG |%c Rich profile used.`, 'color: #940000;', 'color: inherit');
         break;
       case 'halfGold':
         multiplier = 0.5;
-        if (enableDebug) console.log(`%cLootable DEBUG |%c Poor profile used.`, 'color: #940000;', 'color: inherit');
         break;
       case 'tenPercentGold':
         multiplier = 0.1;
-        if (enableDebug) console.log(`%cLootable DEBUG |%c Squalid profile used.`, 'color: #940000;', 'color: inherit');
         break;
-      default:
-        if (enableDebug) console.log(`%cLootable DEBUG |%c Normal profile used.`, 'color: #940000;', 'color: inherit');
     }
 
-    let baseCP = Math.round((Math.random() * (300 - 100) + 100) * (CR === 0 ? 1/8 : CR) * percentage);
+    // Generate a random number between 100 and 300
+    let diceRoll = Math.floor(Math.random() * (300 - 100 + 1) + 100);
+    let crValue = CR === 0 ? 1/8 : CR;
+    let baseCP = Math.round(diceRoll * crValue * percentage);
     let finalCP = Math.round(baseCP * multiplier);
 
-    if (enableDebug) console.log(`%cLootable DEBUG |%c Coin conversion START - Initial cp: ${baseCP}, cp Multiplier: ${multiplier}x, Starting cp: ${finalCP}.`, 'color: #940000;', 'color: inherit');
+    let debugInfo = `Profile: ${profileName} (${profileChance.toFixed(2)}%) | Base: Roll.100-300(${diceRoll}) × CR(${crValue}) = ${baseCP}cp | Final: Base(${baseCP}cp) × %F(${percentage}) × Profile(${multiplier}) = ${finalCP}cp`;
 
-    return { cp: finalCP, multiplier: multiplier, isPenniless: false };
+    return { cp: finalCP, multiplier: multiplier, isPenniless: false, debugInfo };
   }
 
   static convertCurrency(cp, minCoinAmount) {
     let pp = 0, gp = 0, sp = 0;
     let enableDebug = game.settings.get('lootable', 'enableDebug');
+    let originalCp = cp;
+    let minCoinUsed = false;
+    let loopCount = 0;
+    let conversionSteps = [];
+    let anyConversionsPerformed = false;
 
+    // Check if minimum coin amount should be applied
     if (cp > 0 && cp < minCoinAmount) {
+      let beforeMinCoin = cp;
       cp += minCoinAmount;
-      if (enableDebug) console.log(`%cLootable DEBUG |%c Starting cp was less than ${minCoinAmount}. Added ${minCoinAmount}cp, new starting cp: ${cp}`, 'color: #940000;', 'color: inherit');
+      minCoinUsed = true;
+      if (enableDebug) {
+        console.log(`%cLootable DEBUG |%c Min Coin Used: ${beforeMinCoin}cp → ${cp}cp`, 'color: #940000;', 'color: inherit');
+      }
     }
 
     do {
+      loopCount++;
+      let loopConversions = [];
+      let startingCpForLoop = cp;
+      let conversionsInThisLoop = false;
+      
+      // Try to convert to platinum (1000cp = 1pp)
       if (cp >= 1000) {
         let platinumValue = Math.floor((cp * Math.random()) / 1000);
-        cp -= platinumValue * 1000;
-        pp += platinumValue;
-        if (enableDebug) console.log(`%cLootable DEBUG |%c Converted to pp: ${pp}, remaining cp: ${cp}`, 'color: #940000;', 'color: inherit');
+        if (platinumValue > 0) {
+          let beforeCp = cp;
+          cp -= platinumValue * 1000;
+          pp += platinumValue;
+          loopConversions.push(`${beforeCp}cp → ${platinumValue}pp - ${cp}cp remaining`);
+          conversionsInThisLoop = true;
+          anyConversionsPerformed = true;
+        }
       }
+      
+      // Try to convert to gold (100cp = 1gp)
       if (cp >= 100 && gp < 200) {
         let goldValue = Math.floor((cp * Math.random()) / 100);
         if (gp + goldValue > 200) {
           goldValue = 200 - gp;
           goldValue -= Math.floor(Math.random() * 6);
         }
-        cp -= goldValue * 100;
-        gp += goldValue;
-        if (enableDebug) console.log(`%cLootable DEBUG |%c Converted to gp: ${gp}, remaining cp: ${cp}`, 'color: #940000;', 'color: inherit');
+        if (goldValue > 0) {
+          let beforeCp = cp;
+          cp -= goldValue * 100;
+          gp += goldValue;
+          loopConversions.push(`${beforeCp}cp → ${goldValue}gp - ${cp}cp remaining`);
+          conversionsInThisLoop = true;
+          anyConversionsPerformed = true;
+        }
       }
+      
+      // Try to convert to silver (10cp = 1sp)
       if (cp >= 10 && sp < 200) {
         let silverValue = Math.floor((cp * Math.random()) / 10);
         if (sp + silverValue > 200) {
           silverValue = 200 - sp;
           silverValue -= Math.floor(Math.random() * 6);
         }
-        cp -= silverValue * 10;
-        sp += silverValue;
-        if (enableDebug) console.log(`%cLootable DEBUG |%c Converted to sp: ${sp}, remaining cp: ${cp}`, 'color: #940000;', 'color: inherit');
+        if (silverValue > 0) {
+          let beforeCp = cp;
+          cp -= silverValue * 10;
+          sp += silverValue;
+          loopConversions.push(`${beforeCp}cp → ${silverValue}sp - ${cp}cp remaining`);
+          conversionsInThisLoop = true;
+          anyConversionsPerformed = true;
+        }
       }
-    } while (cp > 100);
+      
+      // Add this loop's conversions to the steps if any happened
+      if (conversionsInThisLoop) {
+        conversionSteps.push(loopConversions.join(' | '));
+      }
+      
+      // If no conversions happened this loop or we're below the threshold, break
+      if (!conversionsInThisLoop || cp <= 100) {
+        break;
+      }
+    } while (true);
 
-    if (enableDebug) console.log(`%cLootable DEBUG |%c Coin conversion END - fewer than 100cp`, 'color: #940000;', 'color: inherit');
+    // Only return debug info if debugging is enabled
+    if (enableDebug) {
+      let minCoinInfo = minCoinUsed ? `Min Coin Used ${originalCp}cp → ${originalCp + minCoinAmount}cp` : '';
+      let conversionInfo = '';
+      
+      if (anyConversionsPerformed) {
+        conversionInfo = `Conversion (${loopCount} loops): ${conversionSteps.join(' | ')}`;
+      } else {
+        conversionInfo = 'No conversions performed';
+      }
+      
+      let debugInfo = '';
+      if (minCoinInfo) debugInfo += minCoinInfo;
+      if (debugInfo && conversionInfo) debugInfo += ' | ';
+      if (conversionInfo) debugInfo += conversionInfo;
+      
+      return { cp, pp, gp, sp, debugInfo };
+    }
+
     return { cp, pp, gp, sp };
   }
 }
+
+
