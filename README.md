@@ -14,78 +14,29 @@ A Foundry VTT module that automatically adds loot to NPCs when they are added to
 ### Pocket Change
 Automatically adds currency to NPCs based on their Challenge Rating (CR) when they are placed on the scene.
 
-- **Configurable Currency Generation**: Set the amount of coins NPCs receive based on their CR
+- **Configurable Currency Generation**: Starting with a base amount of coin using the creature's CR, the module features a highly configurable pocket change generation system.
 - **Creature Type Filtering**: Specify which creature types can receive coins (e.g., humanoid, beast, monstrosity)
-- **Probability Settings**: Configure chances for different coin amounts:
-  - Penniless (no coins)
-  - Squalid (10% of normal coins)
-  - Poor (50% of normal coins)
-  - Normal (base amount)
-  - Wealthy (double coins)
-  - Rich (triple coins)
+- **Probability Settings**: Random profiles to have pocket change variance for creatures. Penniless (no coin), Squalid (1/10th the coin), Poor (1/2 the coin), Wealthy (double the coin), Rich (triple the coin)
 - **Ignore Existing Currency**: Option to skip NPCs that already have currency
 
 ### Random Loot
 Automatically adds items to NPCs from rollable tables based on their creature type and CR.
 
-- **Creature Type Tables**: Configure which rollable tables to use for different creature types
+- **Creature Type Tables**: Configure which rollable tables to use for different creature types and even subtypes.
 - **CR Range Filtering**: Set different loot tables based on CR ranges
-- **Creature Subtype Support**: Further refine loot tables by creature subtype
-- **Better Tables Integration**: Compatible with the Better Tables module
-
-### General Features
-- **Chat Messages**: Configurable chat messages when loot is added
-- **Debug Mode**: Enable detailed logging for troubleshooting
-- **User Interface**: Dedicated settings forms for easy configuration
-- **DnD5e Integration**: Designed to work with the DnD5e system
+- **Better Tables Integration**: Compatible with the Better Tables module for more advanced loot assignment. Multiple of the same items and multi-table rolling.
 
 ## Requirements
-- Foundry VTT v11+
-- DnD5e System v3.0.0+
+- Foundry VTT v12+
+- DnD5e System v4+ (Lootable may work on earlier versions but is untested and not supported)
 
 ## Installation
 1. In the Foundry VTT setup screen, go to the "Add-on Modules" tab
 2. Click "Install Module"
-3. Enter the following URL in the "Manifest URL" field: https://github.com/Dice-Edge/lootable/raw/main/module.json
-4. Click "Install"
-
-## Usage
-
-### Setup
-1. After enabling the module, access the module settings through the Game Settings menu
-2. Configure "Pocket Change" settings to determine how currency is generated
-3. Configure "Random Loot" settings to link creature types to rollable tables
-
-### In-Game
-- When you place an NPC token on the scene, the module automatically:
-  1. Adds appropriate currency based on the NPC's CR and your settings
-  2. Rolls on the configured loot tables based on the NPC's creature type
-  3. Adds the resulting items to the NPC's inventory
-  4. Sends a chat message with the generated loot (if enabled)
+3. Search for Lootable! in the search bar and select Install. OR enter the following URL in the "Manifest URL" field: https://github.com/Dice-Edge/lootable/releases/latest/download/module.json and click "Install"
 
 ## Credits
 Created by Dice Edge
 
 ## License
-[LICENSE](LICENSE) 
-
-## For Developers
-
-### Release Process
-
-This module uses GitHub Actions to automate the release process. To create a new release:
-
-1. Run the update-version script with the new version number:
-   ```
-   node update-version.js x.y.z
-   ```
-   This will update the version in module.json and provide instructions for the next steps.
-
-2. Follow the instructions to commit the changes, create a tag, and push to GitHub.
-
-3. The GitHub Actions workflow will automatically:
-   - Create a new release
-   - Build a zip file with all the module files
-   - Upload the zip file and module.json to the release
-
-4. The download counter will now track downloads from this official release. 
+[LICENSE](LICENSE)
