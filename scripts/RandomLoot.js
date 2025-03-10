@@ -102,11 +102,24 @@ export class RandomLoot {
       });
       
       let processedResults = {
-        items: []
+        items: [],
+        textResults: []
       };
       
       for (let result of betterResults) {
         try {
+          const isTextEntry = this.isTextEntry(result);
+          
+          if (isTextEntry) {
+            const text = result.text || result.data?.text || '';
+            if (enableDebug) console.log(`%cLootable DEBUG |%c [Better Tables] Found text entry: ${text}`, 'color: #940000;', 'color: inherit');
+            processedResults.textResults.push({
+              text: text,
+              isText: true
+            });
+            continue;
+          }
+          
           let item = await this.getItem(result);
           if (item) {
             let itemData = item.toObject();
@@ -114,17 +127,52 @@ export class RandomLoot {
             processedResults.items.push(itemData);
           } else {
             if (enableDebug) console.log(`%cLootable DEBUG |%c [Better Tables] Item not found: ${result.text || result.documentId}`, 'color: #940000;', 'color: inherit');
+            
+            if (result.text) {
+              processedResults.textResults.push({
+                text: result.text,
+                isText: true
+              });
+            }
           }
         } catch (itemError) {
           if (enableDebug) console.error(`%cLootable DEBUG |%c Error processing item from Better Roll Tables:`, 'color: #940000;', 'color: inherit', itemError);
         }
       }
       
-      return processedResults.items;
+      return [...processedResults.items, ...processedResults.textResults];
     } catch (error) {
       this.logTableRollError(error, true);
       return await this.rollWithoutBetterTables(table);
     }
+  }
+  
+  static isTextEntry(result) {
+    if (result.text && (!result.documentId && !result.documentCollection)) {
+      return true;
+    }
+    
+    if (result.type === 'text' || result.data?.type === 'text') {
+      return true;
+    }
+    
+    const collection = result.documentCollection || result.collection || result.data?.collection;
+    if (!collection && result.text) {
+      return true;
+    }
+    
+    if (result.documentType === 'Text' || result.type === 'Text') {
+      return true;
+    }
+    
+    const text = result.text || result.data?.text;
+    const documentId = result.documentId || result.resultId || result.data?.resultId || result._id;
+    
+    if (text && !documentId) {
+      return true;
+    }
+    
+    return false;
   }
   
   static async getItem(result) {
@@ -188,7 +236,8 @@ export class RandomLoot {
         let roll = await table.draw({displayChat: false});
         
         let results = {
-            items: []
+            items: [],
+            textResults: []
         };
         
         let rollResults = [];
@@ -208,6 +257,16 @@ export class RandomLoot {
         }
         
         for (let r of rollResults) {
+            if (this.isTextEntry(r)) {
+                const text = r.text || r.data?.text || '';
+                if (enableDebug) console.log(`%cLootable DEBUG |%c Found text entry: ${text}`, 'color: #940000;', 'color: inherit');
+                results.textResults.push({
+                    text: text,
+                    isText: true
+                });
+                continue;
+            }
+            
             let documentCollection = r.documentCollection || r.collection || r.data?.collection || null;
             let documentId = r.documentId || r.resultId || r.data?.resultId || r._id || null;
             
@@ -222,6 +281,12 @@ export class RandomLoot {
             
             let item = await this.getItem(resultObj);
             if (!item) {
+                if (r.text) {
+                    results.textResults.push({
+                        text: r.text,
+                        isText: true
+                    });
+                }
                 continue;
             }
             
@@ -232,7 +297,7 @@ export class RandomLoot {
             results.items.push(itemData);
         }
         
-        return results.items;
+        return [...results.items, ...results.textResults];
     } catch (error) {
         this.logTableRollError(error, false);
         return null;
@@ -252,11 +317,15 @@ export class RandomLoot {
   static async addItemsToActor(actor, items) {
     let enableDebug = game.settings.get('lootable', 'enableDebug') || false;
     
-    if (!items.length) return;
+    if (!items.length) return [];
     
     try {
+        const itemsToAdd = items.filter(item => !item.isText);
+        
+        if (!itemsToAdd.length) return items;
+        
         let groupedItems = {};
-        for (let item of items) {
+        for (let item of itemsToAdd) {
             const key = item.name;
             if (!groupedItems[key]) {
                 groupedItems[key] = foundry.utils.deepClone(item);
@@ -268,17 +337,16 @@ export class RandomLoot {
         const consolidatedItems = Object.values(groupedItems);
         
         if (enableDebug) {
-            // Create a formatted list of items with quantities
             const itemList = consolidatedItems.map(item => 
                 `${item.name} (${item.system.quantity || 1})`
             ).join(', ');
             
-            console.log(`%cLootable DEBUG |%c Consolidated ${items.length} items into ${consolidatedItems.length} unique items for ${actor.name} | Items: ${itemList}`, 'color: #940000;', 'color: inherit');
+            console.log(`%cLootable DEBUG |%c Consolidated ${itemsToAdd.length} items into ${consolidatedItems.length} unique items for ${actor.name} | Items: ${itemList}`, 'color: #940000;', 'color: inherit');
         }
         
         await actor.createEmbeddedDocuments('Item', consolidatedItems);
         
-        return consolidatedItems;
+        return items;
     } catch (error) {
         if (enableDebug) console.error(`%cLootable DEBUG |%c Error adding items to ${actor.name}:`, 'color: #940000;', 'color: inherit', error);
         return items;
@@ -288,11 +356,58 @@ export class RandomLoot {
   static async sendLootMessage(actor, results) {
     let enableDebug = game.settings.get('lootable', 'enableDebug') || false;
     
-    let itemsToDisplay = results.map(item => ({
-        name: item.name,
-        img: item.img,
-        quantity: item.system.quantity || 1
-    }));
+    const textEntries = results.filter(item => item.isText);
+    const itemResults = results.filter(item => !item.isText);
+    
+    // Consolidate items for the chat message
+    let groupedItems = {};
+    for (let item of itemResults) {
+        const key = item.name;
+        if (!groupedItems[key]) {
+            groupedItems[key] = {
+                name: item.name,
+                img: item.img,
+                quantity: item.system.quantity || 1
+            };
+        } else {
+            groupedItems[key].quantity += item.system.quantity || 1;
+        }
+    }
+    
+    const itemsToDisplay = Object.values(groupedItems);
+    
+    if (enableDebug && itemResults.length > 0) {
+        const itemList = itemsToDisplay.map(item => 
+            `${item.name} (${item.quantity})`
+        ).join(', ');
+        
+        console.log(`%cLootable DEBUG |%c Consolidated ${itemResults.length} items into ${itemsToDisplay.length} unique items for chat message | Items: ${itemList}`, 'color: #940000;', 'color: inherit');
+    }
+    
+    // Consolidate text entries
+    let groupedTextEntries = {};
+    for (let entry of textEntries) {
+        const key = entry.text;
+        if (!groupedTextEntries[key]) {
+            groupedTextEntries[key] = {
+                text: entry.text,
+                isText: true,
+                quantity: 1
+            };
+        } else {
+            groupedTextEntries[key].quantity += 1;
+        }
+    }
+    
+    const consolidatedTextEntries = Object.values(groupedTextEntries);
+    
+    if (enableDebug && textEntries.length > 0) {
+        const textList = consolidatedTextEntries.map(entry => 
+            `${entry.text} (${entry.quantity})`
+        ).join(', ');
+        
+        console.log(`%cLootable DEBUG |%c Consolidated ${textEntries.length} text entries into ${consolidatedTextEntries.length} unique entries for ${actor.name} | Text entries: ${textList}`, 'color: #940000;', 'color: inherit');
+    }
     
     try {
         let content = await renderTemplate(`modules/lootable/templates/lootMessage.hbs`, {
@@ -300,21 +415,17 @@ export class RandomLoot {
                 name: actor.name,
                 img: actor.img
             },
-            items: itemsToDisplay
+            items: itemsToDisplay,
+            textEntries: consolidatedTextEntries
         });
         
-        await ChatMessage.create({
+        ChatMessage.create({
             content: content,
-            speaker: ChatMessage.getSpeaker({ actor }),
-            type: CONST.CHAT_MESSAGE_TYPES.OTHER,
-            whisper: ChatMessage.getWhisperRecipients('GM'),
-            flags: {
-                lootable: {
-                    randomLootGenerated: true
-                }
-            }
+            whisper: ChatMessage.getWhisperRecipients(`GM`),
+            flags: { "lootable": { randomLootGenerated: true } }
         });
     } catch (error) {
+        if (enableDebug) console.error(`%cLootable DEBUG |%c Error sending loot message:`, 'color: #940000;', 'color: inherit', error);
     }
   }
 }
