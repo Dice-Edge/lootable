@@ -3,9 +3,15 @@
 </div>
 <div>
     {{localize 'LOOTABLE.ChatMessages.RandomLootGenerated'}}
+    <em style="color: #ccc;">
     {{#if items.length}}
-        <em style="color: #ccc;">{{#each items as |item index|}}{{#if index}}, {{/if}}"{{item.name}}"{{#if item.quantity}} x{{item.quantity}}{{/if}}{{/each}}</em>
-    {{else}}
-        <em style="color: #ccc;">"{{localize 'LOOTABLE.ChatMessages.NoLoot'}}"</em>
+        {{#each items as |item index|}}{{#if index}}, {{/if}}"{{item.name}}"{{#if item.quantity}} x{{item.quantity}}{{/if}}{{/each}}
     {{/if}}
+    {{#if textEntries.length}}
+        {{#if items.length}}, {{/if}}
+        {{#each textEntries as |entry index|}}{{#if index}}, {{/if}}"{{entry.text}}"{{#if entry.quantity}} x{{entry.quantity}}{{/if}}{{/each}}
+    {{else}}
+        {{#unless items.length}}"{{localize 'LOOTABLE.ChatMessages.NoLoot'}}"{{/unless}}
+    {{/if}}
+    </em>
 </div>
