@@ -21,7 +21,7 @@ export class RandomLoot {
     let cr = tokenDoc.actor.system?.details?.cr || 0;
     
     if (enableDebug) {
-        console.log(`%cLootable DEBUG |%c Processing token: ${tokenDoc.name} | Type: ${creatureType}, Subtype: ${creatureSubtype}, CR: ${cr}`, 'color: #940000;', 'color: inherit');
+        console.log(`%cLootable DEBUG |%c [RL] Token: ${tokenDoc.name} | Type: ${creatureType}, Subtype: ${creatureSubtype}, CR: ${cr}`, 'color: #940000;', 'color: inherit');
     }
     
     if (!creatureType) {
@@ -47,25 +47,29 @@ export class RandomLoot {
         break;
     }
     
+    if (enableDebug) {
+        if (matchingEntry) {
+            let tableId = matchingEntry.tableId;
+            let table = tableId ? game.tables.get(tableId) : null;
+            
+            if (table) {
+                console.log(`%cLootable DEBUG |%c [RL] Rolling on table: "${table.name}" (${table.id})`, 'color: #940000;', 'color: inherit');
+            } else {
+                console.log(`%cLootable DEBUG |%c [RL] Table ID ${tableId} not found`, 'color: #940000;', 'color: inherit');
+            }
+        } else {
+            console.log(`%cLootable DEBUG |%c [RL] No matching table found for this token`, 'color: #940000;', 'color: inherit');
+        }
+    }
+    
     if (!matchingEntry) {
-        if (enableDebug) console.log(`%cLootable DEBUG |%c No matching table found for ${creatureType} (${creatureSubtype}) CR ${cr}`, 'color: #940000;', 'color: inherit');
         return;
     }
     
     let tableId = matchingEntry.tableId;
     let table = tableId ? game.tables.get(tableId) : null;
     
-    if (enableDebug) {
-        if (!tableId) {
-            console.log(`%cLootable DEBUG |%c Table validation failed: No table ID in matching entry`, 'color: #940000;', 'color: inherit');
-            return;
-        } else if (!table) {
-            console.log(`%cLootable DEBUG |%c Table validation failed: Table ID ${tableId} not found`, 'color: #940000;', 'color: inherit');
-            return;
-        }
-    } else {
-        if (!tableId || !table) return;
-    }
+    if (!tableId || !table) return;
     
     let results = await RandomLoot.rollTable(table);
     if (!results || !results.length) {
@@ -80,11 +84,6 @@ export class RandomLoot {
   }
   
   static logTableRollError(error, usingBetterTables = true) {
-    const enableDebug = game.settings.get('lootable', 'enableDebug') || false;
-    if (enableDebug) {
-        const context = usingBetterTables ? "with Better Tables" : "without Better Tables";
-        console.error(`%cLootable DEBUG |%c Error rolling ${context}:`, 'color: #940000;', 'color: inherit', error);
-    }
   }
   
   static async rollWithBetterTables(table) {
@@ -112,7 +111,6 @@ export class RandomLoot {
           
           if (isTextEntry) {
             const text = result.text || result.data?.text || '';
-            if (enableDebug) console.log(`%cLootable DEBUG |%c [Better Tables] Found text entry: ${text}`, 'color: #940000;', 'color: inherit');
             processedResults.textResults.push({
               text: text,
               isText: true
@@ -126,7 +124,7 @@ export class RandomLoot {
             itemData.system.quantity = result.hasOwnProperty('quantity') ? result.quantity : 1;
             processedResults.items.push(itemData);
           } else {
-            if (enableDebug) console.log(`%cLootable DEBUG |%c [Better Tables] Item not found: ${result.text || result.documentId}`, 'color: #940000;', 'color: inherit');
+            if (enableDebug) console.log(`%cLootable DEBUG |%c [RL] [Better Tables] Item not found: ${result.text || result.documentId}`, 'color: #940000;', 'color: inherit');
             
             if (result.text) {
               processedResults.textResults.push({
@@ -136,7 +134,6 @@ export class RandomLoot {
             }
           }
         } catch (itemError) {
-          if (enableDebug) console.error(`%cLootable DEBUG |%c Error processing item from Better Roll Tables:`, 'color: #940000;', 'color: inherit', itemError);
         }
       }
       
@@ -221,10 +218,8 @@ export class RandomLoot {
         }
       }
       
-      if (enableDebug) console.log(`%cLootable DEBUG |%c [Item Lookup] Item not found: ${result.text || result.documentId}`, 'color: #940000;', 'color: inherit');
       return null;
     } catch (error) {
-      if (enableDebug) console.error(`%cLootable DEBUG |%c Error getting item:`, 'color: #940000;', 'color: inherit', error);
       return null;
     }
   }
@@ -259,7 +254,6 @@ export class RandomLoot {
         for (let r of rollResults) {
             if (this.isTextEntry(r)) {
                 const text = r.text || r.data?.text || '';
-                if (enableDebug) console.log(`%cLootable DEBUG |%c Found text entry: ${text}`, 'color: #940000;', 'color: inherit');
                 results.textResults.push({
                     text: text,
                     isText: true
@@ -281,6 +275,8 @@ export class RandomLoot {
             
             let item = await this.getItem(resultObj);
             if (!item) {
+                if (enableDebug) console.log(`%cLootable DEBUG |%c [RL] [Standard Tables] Item not found: ${r.text || documentId}`, 'color: #940000;', 'color: inherit');
+                
                 if (r.text) {
                     results.textResults.push({
                         text: r.text,
@@ -321,8 +317,9 @@ export class RandomLoot {
     
     try {
         const itemsToAdd = items.filter(item => !item.isText);
+        const textEntries = items.filter(item => item.isText);
         
-        if (!itemsToAdd.length) return items;
+        if (!itemsToAdd.length && !textEntries.length) return items;
         
         let groupedItems = {};
         for (let item of itemsToAdd) {
@@ -336,19 +333,36 @@ export class RandomLoot {
         
         const consolidatedItems = Object.values(groupedItems);
         
-        if (enableDebug) {
-            const itemList = consolidatedItems.map(item => 
-                `${item.name} (${item.system.quantity || 1})`
-            ).join(', ');
-            
-            console.log(`%cLootable DEBUG |%c Consolidated ${itemsToAdd.length} items into ${consolidatedItems.length} unique items for ${actor.name} | Items: ${itemList}`, 'color: #940000;', 'color: inherit');
-        }
-        
         await actor.createEmbeddedDocuments('Item', consolidatedItems);
+        
+        if (enableDebug) {
+            const totalItemCount = itemsToAdd.length;
+            const uniqueItemCount = consolidatedItems.length;
+            const textCount = textEntries.length;
+            
+            let debugMessage = `%cLootable DEBUG |%c [RL] Added to ${actor.name}: ${totalItemCount} total items consolidated into ${uniqueItemCount} unique items`;
+            
+            if (textCount > 0) {
+                debugMessage += ` | ${textCount} text entries found`;
+            }
+            
+            if (uniqueItemCount > 0) {
+                const itemList = consolidatedItems.map(item => 
+                    `${item.name} (${item.system.quantity || 1})`
+                ).join(', ');
+                debugMessage += ` | Items: ${itemList}`;
+            }
+            
+            if (textCount > 0) {
+                const textList = textEntries.map(entry => entry.text).join(', ');
+                debugMessage += ` | Text: ${textList}`;
+            }
+            
+            console.log(debugMessage, 'color: #940000;', 'color: inherit');
+        }
         
         return items;
     } catch (error) {
-        if (enableDebug) console.error(`%cLootable DEBUG |%c Error adding items to ${actor.name}:`, 'color: #940000;', 'color: inherit', error);
         return items;
     }
   }
@@ -376,14 +390,6 @@ export class RandomLoot {
     
     const itemsToDisplay = Object.values(groupedItems);
     
-    if (enableDebug && itemResults.length > 0) {
-        const itemList = itemsToDisplay.map(item => 
-            `${item.name} (${item.quantity})`
-        ).join(', ');
-        
-        console.log(`%cLootable DEBUG |%c Consolidated ${itemResults.length} items into ${itemsToDisplay.length} unique items for chat message | Items: ${itemList}`, 'color: #940000;', 'color: inherit');
-    }
-    
     // Consolidate text entries
     let groupedTextEntries = {};
     for (let entry of textEntries) {
@@ -401,14 +407,6 @@ export class RandomLoot {
     
     const consolidatedTextEntries = Object.values(groupedTextEntries);
     
-    if (enableDebug && textEntries.length > 0) {
-        const textList = consolidatedTextEntries.map(entry => 
-            `${entry.text} (${entry.quantity})`
-        ).join(', ');
-        
-        console.log(`%cLootable DEBUG |%c Consolidated ${textEntries.length} text entries into ${consolidatedTextEntries.length} unique entries for ${actor.name} | Text entries: ${textList}`, 'color: #940000;', 'color: inherit');
-    }
-    
     try {
         let content = await renderTemplate(`modules/lootable/templates/lootMessage.hbs`, {
             actor: {
@@ -425,7 +423,6 @@ export class RandomLoot {
             flags: { "lootable": { randomLootGenerated: true } }
         });
     } catch (error) {
-        if (enableDebug) console.error(`%cLootable DEBUG |%c Error sending loot message:`, 'color: #940000;', 'color: inherit', error);
     }
   }
 }

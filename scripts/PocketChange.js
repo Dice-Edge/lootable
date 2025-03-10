@@ -26,7 +26,7 @@ export class PocketChange {
     let creatureType = actor.system.details.type?.value?.toLowerCase() || "unknown";
 
     if (enableDebug) {
-      console.log(`%cLootable DEBUG |%c Token: ${tokenName} | Creature Type: ${creatureType} | CR: ${CR}`, 'color: #940000;', 'color: inherit');
+      console.log(`%cLootable DEBUG |%c [PC] Token: ${tokenName} | Creature Type: ${creatureType} | CR: ${CR}`, 'color: #940000;', 'color: inherit');
     }
 
     if (CR === undefined || CR === null) {
@@ -34,6 +34,9 @@ export class PocketChange {
     }
 
     if (!allowedCreatureTypes.includes(creatureType)) {
+      if (enableDebug) {
+        console.log(`%cLootable DEBUG |%c [PC] Skipping pocket change for ${tokenName}: Creature type "${creatureType}" not in allowed types [${allowedCreatureTypes.join(', ')}]`, 'color: #940000;', 'color: inherit');
+      }
       return;
     }
     if (ignoreExistingCoin && currency && (currency.gp || currency.sp || currency.ep || currency.pp || currency.cp)) {
@@ -50,7 +53,7 @@ export class PocketChange {
         if (conversionDebugInfo) {
           fullDebugInfo += " | " + conversionDebugInfo;
         }
-        console.log(`%cLootable DEBUG |%c ${fullDebugInfo} | Coin Added: ${pp}pp, ${gp}gp, ${sp}sp, ${finalCp}cp`, 'color: #940000;', 'color: inherit');
+        console.log(`%cLootable DEBUG |%c [PC] ${fullDebugInfo} | Coin Added: ${pp}pp, ${gp}gp, ${sp}sp, ${finalCp}cp`, 'color: #940000;', 'color: inherit');
       }
       
       if (currency) {
@@ -160,9 +163,6 @@ export class PocketChange {
       let beforeMinCoin = cp;
       cp += minCoinAmount;
       minCoinUsed = true;
-      if (enableDebug) {
-        console.log(`%cLootable DEBUG |%c Min Coin Used: ${beforeMinCoin}cp → ${cp}cp`, 'color: #940000;', 'color: inherit');
-      }
     }
 
     do {
@@ -231,7 +231,7 @@ export class PocketChange {
 
     // Only return debug info if debugging is enabled
     if (enableDebug) {
-      let minCoinInfo = minCoinUsed ? `Min Coin Used ${originalCp}cp → ${originalCp + minCoinAmount}cp` : '';
+      let minCoinInfo = minCoinUsed ? `Min Coin Used: ${originalCp}cp → ${originalCp + minCoinAmount}cp` : '';
       let conversionInfo = '';
       
       if (anyConversionsPerformed) {
