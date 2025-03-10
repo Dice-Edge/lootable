@@ -23,7 +23,7 @@
         "compatibility": [
           {
             "minimum": "3",
-            "verified": "4.3.5",
+            "verified": "4.3",
             "maximum": "4"
           }
         ]
