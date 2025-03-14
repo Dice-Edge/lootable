@@ -23,7 +23,17 @@ export class PocketChange {
     let tokenName = token.name;
     let currency = actor.system.currency;
     let CR = actor.system.details.cr;
-    let creatureType = actor.system.details.type?.value?.toLowerCase() || "unknown";
+    
+    let creatureType = "unknown";
+    const typeData = actor.system.details.type;
+    
+    if (typeData) {
+        if (typeData.value === "custom" && typeData.custom) {
+            creatureType = typeData.custom.toLowerCase();
+        } else {
+            creatureType = (typeData.value || "unknown").toLowerCase();
+        }
+    }
 
     if (enableDebug) {
       console.log(`%cLootable DEBUG |%c [PC] Token: ${tokenName} | Creature Type: ${creatureType} | CR: ${CR}`, 'color: #940000;', 'color: inherit');

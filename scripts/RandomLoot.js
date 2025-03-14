@@ -16,7 +16,19 @@ export class RandomLoot {
         return;
     }
     
-    let creatureType = tokenDoc.actor.system?.details?.type?.value || tokenDoc.actor.system?.details?.race || "";
+    let creatureType = "";
+    const typeData = tokenDoc.actor.system?.details?.type;
+    
+    if (typeData) {
+        if (typeData.value === "custom" && typeData.custom) {
+            creatureType = typeData.custom;
+        } else {
+            creatureType = typeData.value || "";
+        }
+    } else {
+        creatureType = tokenDoc.actor.system?.details?.race || "";
+    }
+    
     let creatureSubtype = tokenDoc.actor.system?.details?.type?.subtype || "";
     let cr = tokenDoc.actor.system?.details?.cr || 0;
     
@@ -37,9 +49,9 @@ export class RandomLoot {
     for (let entry of creatureTypeTables.entries) {
         if (!entry.tableId) continue;
         
-        if (entry.type !== creatureType) continue;
+        if (entry.type.toLowerCase() !== creatureType.toLowerCase()) continue;
         
-        if (entry.subtype && entry.subtype !== creatureSubtype) continue;
+        if (entry.subtype && entry.subtype.toLowerCase() !== creatureSubtype.toLowerCase()) continue;
         
         if (cr < entry.crRange[0] || cr > entry.crRange[1]) continue;
         

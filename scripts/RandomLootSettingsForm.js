@@ -152,8 +152,8 @@ export class RandomLootSettingsForm extends FormApplication {
           label: game.i18n.localize('LOOTABLE.RandomLootSettings.EditCreatureType.Confirm'),
           callback: async (html) => {
             let form = html.find('form')[0];
-            let type = form.editCreatureType.value;
-            let subtype = form.editCreatureSubtype.value;
+            let type = form.editCreatureType.value.toLowerCase();
+            let subtype = form.editCreatureSubtype.value.toLowerCase();
             let crMin = parseInt(form.editCreatureCRMin.value);
             let crMax = parseInt(form.editCreatureCRMax.value);
             
@@ -164,8 +164,8 @@ export class RandomLootSettingsForm extends FormApplication {
             
             let duplicate = this.creatureTypeTables.entries.some((e, i) => 
                 i !== entryIndex && 
-                e.type === type && 
-                e.subtype === subtype && 
+                e.type.toLowerCase() === type.toLowerCase() && 
+                e.subtype.toLowerCase() === subtype.toLowerCase() && 
                 e.crRange[0] === crMin && 
                 e.crRange[1] === crMax
             );
@@ -306,8 +306,8 @@ class AddCreatureTypeForm extends FormApplication {
 
   async _updateObject(_event, formData) {
     let duplicate = this.creatureTypeTables.entries.some(e => 
-      e.type === formData.newCreatureType && 
-      e.subtype === formData.newCreatureSubtype && 
+      e.type.toLowerCase() === formData.newCreatureType.toLowerCase() && 
+      e.subtype.toLowerCase() === (formData.newCreatureSubtype || "").toLowerCase() && 
       e.crRange[0] === parseInt(formData.newCreatureCRMin) && 
       e.crRange[1] === parseInt(formData.newCreatureCRMax)
     );
@@ -318,8 +318,8 @@ class AddCreatureTypeForm extends FormApplication {
     }
     
     let newEntry = {
-      type: formData.newCreatureType,
-      subtype: formData.newCreatureSubtype || "",
+      type: formData.newCreatureType.toLowerCase(),
+      subtype: (formData.newCreatureSubtype || "").toLowerCase(),
       crRange: [parseInt(formData.newCreatureCRMin), parseInt(formData.newCreatureCRMax)],
       tableId: ""
     };

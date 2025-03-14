@@ -52,6 +52,9 @@ export class PocketChangeSettingsForm extends FormApplication {
   
     async _updateObject(_event, formData) {
       for (let [key, value] of Object.entries(formData)) {
+        if (key === 'allowedCreatureTypes' && typeof value === 'string') {
+          value = value.toLowerCase();
+        }
         await game.settings.set('lootable', key, value);
       }
     }
