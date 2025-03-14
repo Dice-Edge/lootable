@@ -2,7 +2,7 @@
   "id": "lootable",
   "title": "Lootable!",
   "description": "Module to add loot to NPCs when added to a scene using world rollable tables.",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "authors": [
     {
       "name": "Dice Edge",
