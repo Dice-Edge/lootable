@@ -32,7 +32,7 @@
       </div>
     </div>
     {{#each creatureTypes}}
-    <div class="form-group creature-type-entry" data-index="{{this.index}}">
+    <div class="form-group creature-type-entry {{#unless this.tableId}}no-table{{/unless}}" data-index="{{this.index}}">
       <div class="entry-row">
         <div class="order-buttons">
           <button type="button" class="action-button move-up" {{#if @first}}disabled{{/if}}>
