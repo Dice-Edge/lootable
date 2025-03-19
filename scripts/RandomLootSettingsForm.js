@@ -20,7 +20,7 @@ export class RandomLootSettingsForm extends FormApplication {
       title: game.i18n.localize('LOOTABLE.SettingsMenu.RandomLoot.Name'),
       template: 'modules/lootable/templates/randomLoot.hbs',
       classes: ['random-loot-settings'],
-      width: 700,
+      width: 900,
       height: 'auto',
       tabs: [{
         navSelector: '.tabs',
