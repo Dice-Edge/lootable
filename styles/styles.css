@@ -151,6 +151,8 @@
   border: var(--border-medium);
   border-radius: var(--border-radius);
   overflow: hidden;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 .random-loot-settings .creature-type-header {
@@ -176,6 +178,18 @@
 
 .random-loot-settings .creature-type-entry:last-child {
   border-bottom: none;
+}
+
+.random-loot-settings .creature-type-entry.no-table {
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
+.random-loot-settings .creature-type-entry.no-table .select-table i {
+  color: var(--color-danger);
+}
+
+.random-loot-settings .creature-type-entry.no-table .select-table:hover i {
+  color: var(--color-danger-hover);
 }
 
 .random-loot-settings .creature-type-entry label {
