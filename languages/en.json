@@ -17,7 +17,7 @@
       "AmountConfig": "Amount Config",
       "TokenConfig": "Token Config",
       "ProbabilityConfig": "Probability Config",
-      "ProbabilityNote": "NOTE: The total values of the probabilities should not exceed 100% otherwise it will fail to correctly calculate.",
+      "ProbabilityNote": "The total values of the probabilities should not exceed 100% otherwise it will fail to correctly calculate.",
       "MessageConfig": "Message Config",
       "SaveChanges": "Save Changes",
       "DisablePocketChange": {
@@ -70,10 +70,12 @@
       "SaveChanges": "Save Changes",
       "MissingTable": "Missing Table",
       "NoTable": "No Table Selected",
+      "MultiValueHint": "You can use comma-separated values in the Type, Subtype, and Treasure Type fields. The token added only needs to match a single value in each of the fields to use the rolltable. Once a token is added to the scene it will use only the first matching table in the rows listed below.",
       "ColumnHeaders": {
         "Order": "Order",
         "Type": "Type",
         "Subtype": "Subtype",
+        "TreasureType": "Treasure Type",
         "CRRange": "CR Range",
         "Table": "Table",
         "Actions": "Actions"
@@ -95,6 +97,7 @@
         "Title": "Edit Creature Type",
         "TypeLabel": "Creature Type",
         "SubtypeLabel": "Creature Subtype",
+        "TreasureTypeLabel": "Treasure Type",
         "CRMinLabel": "Minimum CR",
         "CRMaxLabel": "Maximum CR",
         "Confirm": "Update",
@@ -102,16 +105,22 @@
       },
       "RemoveCreatureType": {
         "Title": "Remove Creature Type",
-        "ConfirmContent": "Remove creature type: '{type}', subtype: '{subtype}', CR: {crRange}?"
+        "ConfirmContent": "Remove creature type: '{type}', subtype: '{subtype}', treasure type: '{treasureType}', CR: {crRange}?"
       },
       "AddCreatureType": {
         "Title": "Add New Creature Type",
         "TypeLabel": "Creature Type",
+        "TypePlaceholder": "Enter type (optional)",
         "SubtypeLabel": "Creature Subtype",
         "SubtypePlaceholder": "Enter subtype (optional)",
+        "TreasureTypeLabel": "Treasure Type",
+        "TreasureTypePlaceholder": "Enter treasure type (optional)",
         "CRMinLabel": "Minimum CR",
         "CRMaxLabel": "Maximum CR",
         "DuplicateEntry": "A creature type with these exact specifications already exists.",
+        "InvalidCRRange": "Minimum CR cannot be greater than Maximum CR.",
+        "RequiredField": "CR value must be filled out.",
+        "MaxValueError": "Value must be less than or equal to 30.",
         "Confirm": "Add",
         "Cancel": "Cancel"
       }

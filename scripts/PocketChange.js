@@ -148,7 +148,6 @@ export class PocketChange {
         break;
     }
 
-    // Generate a random number between 100 and 300
     let diceRoll = Math.floor(Math.random() * (300 - 100 + 1) + 100);
     let crValue = CR === 0 ? 1/8 : CR;
     let baseCP = Math.round(diceRoll * crValue * percentage);
@@ -168,7 +167,6 @@ export class PocketChange {
     let conversionSteps = [];
     let anyConversionsPerformed = false;
 
-    // Check if minimum coin amount should be applied
     if (cp > 0 && cp < minCoinAmount) {
       let beforeMinCoin = cp;
       cp += minCoinAmount;
@@ -181,7 +179,6 @@ export class PocketChange {
       let startingCpForLoop = cp;
       let conversionsInThisLoop = false;
       
-      // Try to convert to platinum (1000cp = 1pp)
       if (cp >= 1000) {
         let platinumValue = Math.floor((cp * Math.random()) / 1000);
         if (platinumValue > 0) {
@@ -194,7 +191,6 @@ export class PocketChange {
         }
       }
       
-      // Try to convert to gold (100cp = 1gp)
       if (cp >= 100 && gp < 200) {
         let goldValue = Math.floor((cp * Math.random()) / 100);
         if (gp + goldValue > 200) {
@@ -211,7 +207,6 @@ export class PocketChange {
         }
       }
       
-      // Try to convert to silver (10cp = 1sp)
       if (cp >= 10 && sp < 200) {
         let silverValue = Math.floor((cp * Math.random()) / 10);
         if (sp + silverValue > 200) {
@@ -228,18 +223,15 @@ export class PocketChange {
         }
       }
       
-      // Add this loop's conversions to the steps if any happened
       if (conversionsInThisLoop) {
         conversionSteps.push(loopConversions.join(' | '));
       }
       
-      // If no conversions happened this loop or we're below the threshold, break
       if (!conversionsInThisLoop || cp <= 100) {
         break;
       }
     } while (true);
 
-    // Only return debug info if debugging is enabled
     if (enableDebug) {
       let minCoinInfo = minCoinUsed ? `Min Coin Used: ${originalCp}cp → ${originalCp + minCoinAmount}cp` : '';
       let conversionInfo = '';
@@ -261,5 +253,3 @@ export class PocketChange {
     return { cp, pp, gp, sp };
   }
 }
-
-

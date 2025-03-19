@@ -1,0 +1,104 @@
+<form>
+  <div class="form-group" style="padding-bottom: 5px;">
+    <label>{{localize 'LOOTABLE.PocketChangeSettings.DisablePocketChange.Name'}}</label>
+    <div class="form-fields">
+        <input type="checkbox" name="disablePocketChange" {{#if settings.disablePocketChange}}checked{{/if}}>
+    </div>
+</div>
+
+  <h2>{{localize 'LOOTABLE.PocketChangeSettings.AmountConfig'}}</h2>
+  <div class="form-group">
+    <label>{{localize 'LOOTABLE.PocketChangeSettings.PerCoinAmount.Name'}}</label>
+    <div class="form-fields">
+      <input type="range" name="perCoinAmount" value="{{settings.perCoinAmount}}" min="0.1" max="3" step="0.1">
+      <span class="range-value">{{settings.perCoinAmount}}</span>
+    </div>
+    <p class="notes">{{localize 'LOOTABLE.PocketChangeSettings.PerCoinAmount.Hint'}}</p>
+  </div>
+  <div class="form-group">
+    <label>{{localize 'LOOTABLE.PocketChangeSettings.MinCoinAmount.Name'}}</label>
+    <div class="form-fields">
+      <input type="number" name="minCoinAmount" value="{{settings.minCoinAmount}}" step="1" min="0">
+    </div>
+    <p class="notes">{{localize 'LOOTABLE.PocketChangeSettings.MinCoinAmount.Hint'}}</p>
+  </div>
+
+  <h2>{{localize 'LOOTABLE.PocketChangeSettings.TokenConfig'}}</h2>
+  <div class="form-group">
+    <label>{{localize 'LOOTABLE.PocketChangeSettings.IgnoreExistingCoin.Name'}}</label>
+    <div class="form-fields">
+      <input type="checkbox" name="ignoreExistingCoin" {{#if settings.ignoreExistingCoin}}checked{{/if}}>
+    </div>
+    <p class="notes">{{localize 'LOOTABLE.PocketChangeSettings.IgnoreExistingCoin.Hint'}}</p>
+  </div>
+  <div class="form-group">
+    <label>{{localize 'LOOTABLE.PocketChangeSettings.AllowedCreatureTypes.Name'}}</label>
+    <div class="form-fields">
+      <input type="text" name="allowedCreatureTypes" value="{{settings.allowedCreatureTypes}}">
+    </div>
+    <p class="notes">{{localize 'LOOTABLE.PocketChangeSettings.AllowedCreatureTypes.Hint'}}</p>
+  </div>
+
+  <h2>{{localize 'LOOTABLE.PocketChangeSettings.ProbabilityConfig'}}</h2>
+  <div class="info-message" style="background-color: rgba(0, 0, 255, 0.1); border: 1px solid #00f; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+    <div style="display: flex; align-items: center;">
+      <div style="flex-shrink: 0; margin-right: 10px; display: flex; align-items: center;">
+        <i class="fas fa-info-circle"></i>
+      </div>
+      <div>
+        <p style="margin: 0;">{{localize 'LOOTABLE.PocketChangeSettings.ProbabilityNote'}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label>{{localize 'LOOTABLE.PocketChangeSettings.NoCoinChance.Name'}}</label>
+    <div class="form-fields">
+      <input type="range" name="noCoinChance" value="{{settings.noCoinChance}}" step="0.05" min="0" max="1">
+      <span class="range-value">{{settings.noCoinChance}}</span>
+    </div>
+    <p class="notes">{{localize 'LOOTABLE.PocketChangeSettings.NoCoinChance.Hint'}}</p>
+  </div>
+  <div class="form-group">
+    <label>{{localize 'LOOTABLE.PocketChangeSettings.TenPercentGoldChance.Name'}}</label>
+    <div class="form-fields">
+      <input type="range" name="tenPercentGoldChance" value="{{settings.tenPercentGoldChance}}" step="0.05" min="0" max="1">
+      <span class="range-value">{{settings.tenPercentGoldChance}}</span>
+    </div>
+    <p class="notes">{{localize 'LOOTABLE.PocketChangeSettings.TenPercentGoldChance.Hint'}}</p>
+  </div>
+  <div class="form-group">
+    <label>{{localize 'LOOTABLE.PocketChangeSettings.HalfGoldChance.Name'}}</label>
+    <div class="form-fields">
+      <input type="range" name="halfGoldChance" value="{{settings.halfGoldChance}}" step="0.05" min="0" max="1">
+      <span class="range-value">{{settings.halfGoldChance}}</span>
+    </div>
+    <p class="notes">{{localize 'LOOTABLE.PocketChangeSettings.HalfGoldChance.Hint'}}</p>
+  </div>
+  <div class="form-group">
+    <label>{{localize 'LOOTABLE.PocketChangeSettings.DoubleCoinChance.Name'}}</label>
+    <div class="form-fields">
+      <input type="range" name="doubleCoinChance" value="{{settings.doubleCoinChance}}" step="0.05" min="0" max="1">
+      <span class="range-value">{{settings.doubleCoinChance}}</span>
+    </div>
+    <p class="notes">{{localize 'LOOTABLE.PocketChangeSettings.DoubleCoinChance.Hint'}}</p>
+  </div>
+  <div class="form-group">
+    <label>{{localize 'LOOTABLE.PocketChangeSettings.TripleCoinChance.Name'}}</label>
+    <div class="form-fields">
+      <input type="range" name="tripleCoinChance" value="{{settings.tripleCoinChance}}" step="0.05" min="0" max="1">
+      <span class="range-value">{{settings.tripleCoinChance}}</span>
+    </div>
+    <p class="notes">{{localize 'LOOTABLE.PocketChangeSettings.TripleCoinChance.Hint'}}</p>
+  </div>
+
+  <h2>{{localize 'LOOTABLE.PocketChangeSettings.MessageConfig'}}</h2>
+  <div class="form-group">
+    <label>{{localize 'LOOTABLE.PocketChangeSettings.HidePocketChangeChatMsg.Name'}}</label>
+    <div class="form-fields">
+      <input type="checkbox" name="hidePocketChangeChatMsg" {{#if settings.hidePocketChangeChatMsg}}checked{{/if}}>
+    </div>
+    <p class="notes">{{localize 'LOOTABLE.PocketChangeSettings.HidePocketChangeChatMsg.Hint'}}</p>
+  </div>
+
+  <button type="submit"><i class="fas fa-save"></i> {{localize 'LOOTABLE.PocketChangeSettings.SaveChanges'}}</button>
+</form> 

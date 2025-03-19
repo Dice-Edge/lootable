@@ -1,124 +1,183 @@
+:root {
+  --color-gold: #ffd700;
+  --color-dark-red: #4a0000;
+  --color-warning: #ff9800;
+  --color-info: #0078ff;
+  --color-danger: #c53131;
+  --color-danger-hover: #ff0000;
+  --color-text-muted: #cccccc;
+  
+  --border-light: 1px solid rgba(0, 0, 0, 0.1);
+  --border-medium: 1px solid #999;
+  --border-separator: 1px solid #ddd;
+  
+  --spacing-xs: 1px;
+  --spacing-sm: 2px;
+  --spacing-md: 5px;
+  --spacing-lg: 10px;
+  
+  --border-radius: 3px;
+  --opacity-light: 0.1;
+  --opacity-medium: 0.2;
+}
+
 /* Chat Message Styles */
-/* Styles for lootable messages in the chat */
 #chat-log .message.lootable-message {
   display: flex;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-  color: #ffd700;
+  color: var(--color-gold);
+  background-color: var(--color-dark-red);
+  border: 2px solid var(--color-gold);
   text-align: center;
   font-size: 12px;
-  margin: 2px;
-  padding: 2px;
-  border: 2px solid #ffd700;
-  background-color: #4a0000;
+  margin: var(--spacing-sm);
+  padding: var(--spacing-sm);
 }
-/* Add a semi-transparent background image to the lootable message */
+
 #chat-log .message.lootable-message::before {
   background-image: url(../assets/chat.webp);
   background-position: center;
-  opacity: 0.2;
+  opacity: var(--opacity-medium);
 }
-/* Hides the default message header for lootable messages */
+
 #chat-log .message.lootable-message header.message-header {
   display: none;
 }
 
+#chat-log .message.lootable-message em {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
 /* Table Selector Styles */
-/* Styles for the table selector in the lootable settings */
-.lootable.table-selector .table-list {
+.table-list {
   display: flex;
   flex-direction: column;
   max-height: 300px;
   overflow-y: auto;
-  margin-bottom: 10px;
-  padding: 5px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 3px;
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-xs);
+  border: var(--border-light);
+  border-radius: var(--border-radius);
 }
 
-.lootable.table-selector .table-item {
-  margin-bottom: 5px;
+.table-item {
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-bottom: var(--border-separator);
 }
 
-.lootable.table-selector .table-item:last-child {
-  margin-bottom: 0;
+.table-item:last-child {
+  border-bottom: none;
 }
 
-/* Styles for the labels in the table selector */
-.lootable.table-selector .table-item label {
+.table-item label {
   display: flex;
   align-items: center;
-  padding: 5px;
-  margin: 2px 0;
-  border-radius: 3px;
-}
-/* Styles for the radio buttons in the table selector */
-.lootable.table-selector .table-item input[type="radio"] {
-  margin-right: 8px;
-}
-/* Styles for the submit button in the table selector */
-.lootable.table-selector button[type="submit"] {
   width: 100%;
-  margin-top: 10px;
-  background: rgba(0, 0, 0, 0.1);
-  border: 1px solid #7a7971;
-  border-radius: 3px;
-  padding: 5px;
+  padding: var(--spacing-xs);
+  margin: 0;
+  cursor: pointer;
 }
 
-.lootable.table-selector .notification.warning {
-  background: rgba(255, 180, 0, 0.1);
-  color: #ff9800;
-  padding: 10px;
-  border: 1px solid #ff9800;
-  border-radius: 3px;
+.table-item input[type="radio"] {
+  margin-right: var(--spacing-lg);
+  flex-shrink: 0;
+}
+
+.lootable.table-selector button[type="submit"] {
+  width: 100%;
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background: rgba(0, 0, 0, var(--opacity-light));
+  border: 1px solid #7a7971;
+  border-radius: var(--border-radius);
+}
+
+.dialog.table-selector-dialog .window-content {
+  max-height: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Notification Styles */
+.lootable .notification {
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius);
   text-align: center;
+}
+
+.lootable .notification.warning {
+  background: rgba(255, 180, 0, var(--opacity-light));
+  color: var(--color-warning);
+  border: 1px solid var(--color-warning);
 }
 
 .lootable.table-selector .notification.info {
-  background: rgba(0, 120, 255, 0.1);
-  color: #0078ff;
-  padding: 10px;
-  border: 1px solid #0078ff;
-  border-radius: 3px;
-  text-align: center;
+  background: rgba(0, 120, 255, var(--opacity-light));
+  color: var(--color-info);
+  border: 1px solid var(--color-info);
 }
 
-/* Random Loot Table Styles */
-/* Center icons in all buttons within the Random Loot Settings */
-.random-loot-settings button i {
+/* Random Loot Settings Styles */
+.random-loot-settings .form-group {
+  padding-bottom: var(--spacing-md);
+}
+
+.random-loot-settings .info-message {
+  background-color: rgba(0, 0, 255, var(--opacity-light));
+  border: 1px solid blue;
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.random-loot-settings .info-message > div {
+  display: flex;
+  align-items: center;
+}
+
+.random-loot-settings .info-message i {
+  flex-shrink: 0;
+  margin-right: var(--spacing-lg);
+}
+
+.random-loot-settings .info-message p {
   margin: 0;
 }
-/* Disable the move up and move down buttons if they are disabled */
-.random-loot-settings .creature-type-entry .move-up:disabled,
-.random-loot-settings .creature-type-entry .move-down:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+
+/* Creature Types Container */
+.random-loot-settings .creature-types-container {
+  margin-bottom: var(--spacing-lg);
+  border: var(--border-medium);
+  border-radius: var(--border-radius);
+  overflow: hidden;
 }
-/* Add grid layout to the form fields in the Random Loot Settings */
-.random-loot-settings .creature-type-entry .form-fields {
+
+.random-loot-settings .creature-type-header {
+  background-color: rgba(0, 0, 0, var(--opacity-light));
+  padding: var(--spacing-md);
+  font-weight: bold;
+  border-bottom: var(--border-medium);
+}
+
+.random-loot-settings .creature-type-header .header-row,
+.random-loot-settings .creature-type-entry .entry-row {
   display: grid;
-  grid-template-columns: 30px 30px 120px 120px 120px 200px 30px 30px 30px;
-  gap: 5px;
+  grid-template-columns: 70px 1fr 1fr 1fr 1fr 1fr 120px;
   align-items: center;
-  width: 100%;
-  padding: 2px 0;
-}
-/* Add a scrollable container for the creature types in the Random Loot Settings */
-form.random-loot-settings .creature-types-container {
-  max-height: 315px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  margin-bottom: 10px;
+  gap: var(--spacing-md);
 }
 
-/* Text result styles */
-/* Style for text result items in chat messages */
-#chat-log .message.lootable-message em {
-  color: #cccccc;
-  font-style: italic;
+.random-loot-settings .creature-type-entry {
+  border-bottom: var(--border-separator);
+  margin: 0 !important;
+  padding: var(--spacing-md);
 }
 
-/* Style for labels in creature-type-entry */
+.random-loot-settings .creature-type-entry:last-child {
+  border-bottom: none;
+}
+
 .random-loot-settings .creature-type-entry label {
   font-weight: bold;
   white-space: nowrap;
@@ -127,8 +186,40 @@ form.random-loot-settings .creature-types-container {
   margin: 0;
 }
 
-/* Style for readonly inputs in creature-type-entry */
 .random-loot-settings .creature-type-entry input[readonly] {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgba(0, 0, 0, var(--opacity-light));
   cursor: default;
+}
+
+/* Button Styles */
+.random-loot-settings .action-button {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  margin: 0 var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.random-loot-settings .order-buttons,
+.random-loot-settings .action-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.random-loot-settings .text-center {
+  text-align: center;
+}
+
+.random-loot-settings .remove-creature-type i {
+  color: var(--color-danger);
+}
+
+.random-loot-settings .remove-creature-type:hover i {
+  color: var(--color-danger-hover);
+}
+
+.random-loot-settings button i {
+  margin: 0;
 }

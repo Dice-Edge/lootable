@@ -3,7 +3,7 @@ export class PocketChangeSettingsForm extends FormApplication {
       return foundry.utils.mergeObject(super.defaultOptions, {
         title: game.i18n.localize('LOOTABLE.SettingsMenu.PocketChange.Name'),
         id: 'pocket-change-settings',
-        template: 'modules/lootable/templates/pocketchange.hbs',
+        template: 'modules/lootable/templates/pocketChange.hbs',
         width: 500,
         height: 'auto',
         closeOnSubmit: true,

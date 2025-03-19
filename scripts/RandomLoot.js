@@ -30,10 +30,17 @@ export class RandomLoot {
     }
     
     let creatureSubtype = tokenDoc.actor.system?.details?.type?.subtype || "";
+    
+    let treasureType = "";
+    if (tokenDoc.actor.system?.details?.treasure?.value instanceof Set) {
+        const treasureValues = Array.from(tokenDoc.actor.system.details.treasure.value.values());
+        treasureType = treasureValues.join(",");
+    }
+    
     let cr = tokenDoc.actor.system?.details?.cr || 0;
     
     if (enableDebug) {
-        console.log(`%cLootable DEBUG |%c [RL] Token: ${tokenDoc.name} | Type: ${creatureType}, Subtype: ${creatureSubtype}, CR: ${cr}`, 'color: #940000;', 'color: inherit');
+        console.log(`%cLootable DEBUG |%c [RL] Token: ${tokenDoc.name} | Type: ${creatureType}, Subtype: ${creatureSubtype}, Treasure Type: ${treasureType}, CR: ${cr}`, 'color: #940000;', 'color: inherit');
     }
     
     if (!creatureType) {
@@ -49,9 +56,38 @@ export class RandomLoot {
     for (let entry of creatureTypeTables.entries) {
         if (!entry.tableId) continue;
         
-        if (entry.type.toLowerCase() !== creatureType.toLowerCase()) continue;
+        if (entry.type && entry.type !== "") {
+            const entryTypes = entry.type.toLowerCase().split(',').map(t => t.trim());
+            const tokenTypes = creatureType.toLowerCase().split(',').map(t => t.trim());
+            
+            const hasMatchingType = entryTypes.some(entryType => 
+                tokenTypes.some(tokenType => tokenType === entryType)
+            );
+            
+            if (!hasMatchingType) continue;
+        }
         
-        if (entry.subtype && entry.subtype.toLowerCase() !== creatureSubtype.toLowerCase()) continue;
+        if (entry.subtype && entry.subtype !== "") {
+            const entrySubtypes = entry.subtype.toLowerCase().split(',').map(s => s.trim());
+            const tokenSubtypes = creatureSubtype.toLowerCase().split(',').map(s => s.trim());
+            
+            const hasMatchingSubtype = entrySubtypes.some(entrySubtype => 
+                tokenSubtypes.some(tokenSubtype => tokenSubtype === entrySubtype)
+            );
+            
+            if (!hasMatchingSubtype) continue;
+        }
+        
+        if (entry.treasureType && entry.treasureType !== "") {
+            const entryTreasureTypes = entry.treasureType.toLowerCase().split(',').map(t => t.trim());
+            const tokenTreasureTypes = treasureType.toLowerCase().split(',').map(t => t.trim());
+            
+            const hasMatchingTreasureType = entryTreasureTypes.some(entryTreasureType => 
+                tokenTreasureTypes.some(tokenTreasureType => tokenTreasureType === entryTreasureType)
+            );
+            
+            if (!hasMatchingTreasureType) continue;
+        }
         
         if (cr < entry.crRange[0] || cr > entry.crRange[1]) continue;
         
@@ -385,7 +421,6 @@ export class RandomLoot {
     const textEntries = results.filter(item => item.isText);
     const itemResults = results.filter(item => !item.isText);
     
-    // Consolidate items for the chat message
     let groupedItems = {};
     for (let item of itemResults) {
         const key = item.name;
@@ -402,7 +437,6 @@ export class RandomLoot {
     
     const itemsToDisplay = Object.values(groupedItems);
     
-    // Consolidate text entries
     let groupedTextEntries = {};
     for (let entry of textEntries) {
         const key = entry.text;

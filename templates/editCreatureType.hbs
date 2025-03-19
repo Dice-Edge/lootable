@@ -1,18 +1,35 @@
 <form class="edit-creature-type-form">
   <div class="form-group">
     <label for="editCreatureType">{{localize 'LOOTABLE.RandomLootSettings.EditCreatureType.TypeLabel'}}</label>
-    <input type="text" id="editCreatureType" name="editCreatureType" value="{{type}}" required>
+    <input type="text" id="editCreatureType" name="editCreatureType" value="{{type}}" placeholder="{{localize 'LOOTABLE.RandomLootSettings.AddCreatureType.TypePlaceholder'}}">
   </div>
   <div class="form-group">
     <label for="editCreatureSubtype">{{localize 'LOOTABLE.RandomLootSettings.EditCreatureType.SubtypeLabel'}}</label>
-    <input type="text" id="editCreatureSubtype" name="editCreatureSubtype" value="{{subtype}}">
+    <input type="text" id="editCreatureSubtype" name="editCreatureSubtype" value="{{subtype}}" placeholder="{{localize 'LOOTABLE.RandomLootSettings.AddCreatureType.SubtypePlaceholder'}}">
+  </div>
+  <div class="form-group">
+    <label for="editCreatureTreasureType">{{localize 'LOOTABLE.RandomLootSettings.EditCreatureType.TreasureTypeLabel'}}</label>
+    <input type="text" id="editCreatureTreasureType" name="editCreatureTreasureType" value="{{treasureType}}" placeholder="{{localize 'LOOTABLE.RandomLootSettings.AddCreatureType.TreasureTypePlaceholder'}}">
   </div>
   <div class="form-group">
     <label for="editCreatureCRMin">{{localize 'LOOTABLE.RandomLootSettings.EditCreatureType.CRMinLabel'}}</label>
-    <input type="number" id="editCreatureCRMin" name="editCreatureCRMin" min="0" max="30" value="{{crRangeStart}}">
+    <input type="number" id="editCreatureCRMin" name="editCreatureCRMin" min="0" max="30" value="{{crRangeStart}}" required
+           data-error-required="{{localize 'LOOTABLE.RandomLootSettings.AddCreatureType.RequiredField'}}"
+           data-error-max="{{localize 'LOOTABLE.RandomLootSettings.AddCreatureType.MaxValueError'}}">
   </div>
   <div class="form-group">
     <label for="editCreatureCRMax">{{localize 'LOOTABLE.RandomLootSettings.EditCreatureType.CRMaxLabel'}}</label>
-    <input type="number" id="editCreatureCRMax" name="editCreatureCRMax" min="0" max="30" value="{{crRangeEnd}}">
+    <input type="number" id="editCreatureCRMax" name="editCreatureCRMax" min="0" max="30" value="{{crRangeEnd}}" required
+           data-error-required="{{localize 'LOOTABLE.RandomLootSettings.AddCreatureType.RequiredField'}}"
+           data-error-max="{{localize 'LOOTABLE.RandomLootSettings.AddCreatureType.MaxValueError'}}">
+  </div>
+
+  <div class="form-group buttons">
+    <button type="submit" name="submit">
+      <i class="fas fa-save"></i> {{localize 'LOOTABLE.RandomLootSettings.EditCreatureType.Confirm'}}
+    </button>
+    <button type="button" class="close-button">
+      <i class="fas fa-times"></i> {{localize 'LOOTABLE.RandomLootSettings.EditCreatureType.Cancel'}}
+    </button>
   </div>
 </form>

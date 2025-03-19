@@ -1,0 +1,18 @@
+<form class="flexcol">
+  <div class="table-list">
+    {{#if tables.length}}
+      {{#each tables}}
+        <div class="table-item">
+          <label>
+            <input type="radio" name="selectedTable" value="{{this.id}}" {{#if this.selected}}checked{{/if}}>
+            <span>{{this.name}}</span>
+          </label>
+        </div>
+      {{/each}}
+    {{else}}
+      <p class="notification warning">{{localize 'LOOTABLE.RandomLootSettings.TableSelector.NoTables'}}</p>
+    {{/if}}
+  </div>
+  
+  <div style="margin-bottom: 20px;"></div>
+</form>

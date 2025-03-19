@@ -1,8 +1,9 @@
 export class TableSelector extends FormApplication {
-    constructor(creatureType, subtype, crRange, callback) {
+    constructor(creatureType, subtype, treasureType, crRange, callback) {
       super();
       this.creatureType = creatureType;
       this.subtype = subtype;
+      this.treasureType = treasureType;
       this.crRange = crRange;
       this.callback = callback;
       
@@ -13,7 +14,7 @@ export class TableSelector extends FormApplication {
     static get defaultOptions() {
       return foundry.utils.mergeObject(super.defaultOptions, {
         title: game.i18n.localize(`LOOTABLE.RandomLootSettings.TableSelector.Title`),
-        template: `modules/lootable/templates/tableList.hbs`,
+        template: `modules/lootable/templates/tableSelector.hbs`,
         width: 400,
         height: 'auto',
         classes: [`lootable`, `table-selector`],
@@ -28,6 +29,7 @@ export class TableSelector extends FormApplication {
           let entry = this.creatureTypeTables.entries.find(e => 
               e.type === this.creatureType && 
               e.subtype === this.subtype && 
+              e.treasureType === this.treasureType && 
               e.crRange[0] === this.crRange[0] && 
               e.crRange[1] === this.crRange[1]
           );
@@ -69,6 +71,7 @@ export class TableSelector extends FormApplication {
       let index = creatureTypeTables.entries.findIndex(e => 
           e.type === this.creatureType && 
           e.subtype === this.subtype && 
+          e.treasureType === this.treasureType && 
           e.crRange[0] === this.crRange[0] && 
           e.crRange[1] === this.crRange[1]
       );
@@ -78,7 +81,7 @@ export class TableSelector extends FormApplication {
           
           await game.settings.set(`lootable`, `creatureTypeTables`, creatureTypeTables);
       } else {
-          if (this.enableDebug) console.log(`%cLootable DEBUG |%c No entry found for ${this.creatureType}, ${this.subtype}, ${JSON.stringify(this.crRange)}`, 'color: #940000;', 'color: inherit');
+          if (this.enableDebug) console.log(`%cLootable DEBUG |%c No entry found for ${this.creatureType}, ${this.subtype}, ${this.treasureType}, ${JSON.stringify(this.crRange)}`, 'color: #940000;', 'color: inherit');
       }
       
       if (this.callback) {
