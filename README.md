@@ -22,7 +22,7 @@ Automatically adds currency to NPCs based on their Challenge Rating (CR) when th
 ### Random Loot
 Automatically adds items to NPCs from rollable tables based on their creature type and CR.
 
-- **Creature Type Tables**: Configure which rollable tables to use for different creature types and even subtypes.
+- **Creature Type Tables**: Configure which rollable tables to use for different creature types, subtypes, and even treasure types.
 - **CR Range Filtering**: Set different loot tables based on CR ranges
 - **Better Tables Integration**: Compatible with the Better Tables module for more advanced loot assignment. Multiple of the same items and multi-table rolling.
 
