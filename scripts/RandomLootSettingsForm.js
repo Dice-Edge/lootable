@@ -6,6 +6,8 @@ export class RandomLootSettingsForm extends FormApplication {
     this.enableDebug = game.settings.get('lootable', 'enableDebug') || false;
     this.disableRandomLoot = game.settings.get('lootable', 'disableRandomLoot');
     this.hideRandomLootChatMsg = game.settings.get('lootable', 'hideRandomLootChatMsg');
+    this.showRandomLootPrompt = game.settings.get('lootable', 'showRandomLootPrompt');
+    this.hideRandomLootHUD = game.settings.get('lootable', 'hideRandomLootHUD');
     
     if (!this.creatureTypeTables) {
       this.creatureTypeTables = { entries: [] };
@@ -31,16 +33,19 @@ export class RandomLootSettingsForm extends FormApplication {
   }
 
   async getData() {
-    let creatureTypes = await Promise.all(
-        this.creatureTypeTables.entries.map((entry, index) => this._mapCreatureTypeEntry(entry, index))
-    );
-    
     return {
-        creatureTypes,
-        settings: {
-            disableRandomLoot: this.disableRandomLoot,
-            hideRandomLootChatMsg: this.hideRandomLootChatMsg
-        }
+      settings: {
+        disableRandomLoot: game.settings.get('lootable', 'disableRandomLoot'),
+        showRandomLootPrompt: game.settings.get('lootable', 'showRandomLootPrompt'),
+        hideRandomLootChatMsg: game.settings.get('lootable', 'hideRandomLootChatMsg'),
+        randomLootMode: game.settings.get('lootable', 'randomLootMode'),
+        hideRandomLootHUD: game.settings.get('lootable', 'hideRandomLootHUD')
+      },
+      creatureTypes: this.creatureTypeTables.entries.map((entry, index) => ({
+        ...entry,
+        index,
+        tableName: entry.tableId ? game.tables.get(entry.tableId)?.name || game.i18n.localize('LOOTABLE.RandomLootSettings.MissingTable') : game.i18n.localize('LOOTABLE.RandomLootSettings.NoTable')
+      }))
     };
   }
 
@@ -306,12 +311,13 @@ export class RandomLootSettingsForm extends FormApplication {
     this.render();
   }
 
-  async _updateObject(_event, formData) {
-    for (let [key, value] of Object.entries(formData)) {
-        if (key !== 'creatureTypeTables') {
-            await game.settings.set('lootable', key, value);
-        }
-    }
+  async _updateObject(event, formData) {
+    await game.settings.set('lootable', 'disableRandomLoot', formData.disableRandomLoot);
+    await game.settings.set('lootable', 'showRandomLootPrompt', formData.showRandomLootPrompt);
+    await game.settings.set('lootable', 'hideRandomLootChatMsg', formData.hideRandomLootChatMsg);
+    await game.settings.set('lootable', 'randomLootMode', formData.randomLootMode);
+    await game.settings.set('lootable', 'hideRandomLootHUD', formData.hideRandomLootHUD);
+    await game.settings.set('lootable', 'creatureTypeTables', this.creatureTypeTables);
   }
 
   close(options={}) {

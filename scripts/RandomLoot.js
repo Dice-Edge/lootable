@@ -1,14 +1,30 @@
 export class RandomLoot {
+  static registerHandlebarsHelpers() {
+    Handlebars.registerHelper('add', function(value) {
+      return parseInt(value) + 1;
+    });
+    
+    Handlebars.registerHelper('subtract', function(total, index) {
+      return total - index;
+    });
+  }
+
   static async onCreateToken(tokenDoc, options, userId) {
     let enableDebug = game.settings.get('lootable', 'enableDebug') || false;
     let disableRandomLoot = game.settings.get('lootable', 'disableRandomLoot');
     let hideRandomLootChatMsg = game.settings.get('lootable', 'hideRandomLootChatMsg');
+    let showRandomLootPrompt = game.settings.get('lootable', 'showRandomLootPrompt');
+    let randomLootMode = game.settings.get('lootable', 'randomLootMode');
     
     if (!game.user.isGM || game.userId !== userId) {
         return;
     }
     
     if (disableRandomLoot) {
+        return;
+    }
+    
+    if (randomLootMode === 'manualOnly') {
         return;
     }
     
@@ -52,48 +68,7 @@ export class RandomLoot {
         return;
     }
     
-    let matchingEntry = null;
-    for (let entry of creatureTypeTables.entries) {
-        if (!entry.tableId) continue;
-        
-        if (entry.type && entry.type !== "") {
-            const entryTypes = entry.type.toLowerCase().split(',').map(t => t.trim());
-            const tokenTypes = creatureType.toLowerCase().split(',').map(t => t.trim());
-            
-            const hasMatchingType = entryTypes.some(entryType => 
-                tokenTypes.some(tokenType => tokenType === entryType)
-            );
-            
-            if (!hasMatchingType) continue;
-        }
-        
-        if (entry.subtype && entry.subtype !== "") {
-            const entrySubtypes = entry.subtype.toLowerCase().split(',').map(s => s.trim());
-            const tokenSubtypes = creatureSubtype.toLowerCase().split(',').map(s => s.trim());
-            
-            const hasMatchingSubtype = entrySubtypes.some(entrySubtype => 
-                tokenSubtypes.some(tokenSubtype => tokenSubtype === entrySubtype)
-            );
-            
-            if (!hasMatchingSubtype) continue;
-        }
-        
-        if (entry.treasureType && entry.treasureType !== "") {
-            const entryTreasureTypes = entry.treasureType.toLowerCase().split(',').map(t => t.trim());
-            const tokenTreasureTypes = treasureType.toLowerCase().split(',').map(t => t.trim());
-            
-            const hasMatchingTreasureType = entryTreasureTypes.some(entryTreasureType => 
-                tokenTreasureTypes.some(tokenTreasureType => tokenTreasureType === entryTreasureType)
-            );
-            
-            if (!hasMatchingTreasureType) continue;
-        }
-        
-        if (cr < entry.crRange[0] || cr > entry.crRange[1]) continue;
-        
-        matchingEntry = entry;
-        break;
-    }
+    let matchingEntry = RandomLoot.findMatchingTableEntry(creatureType, creatureSubtype, treasureType, cr, creatureTypeTables.entries);
     
     if (enableDebug) {
         if (matchingEntry) {
@@ -118,17 +93,122 @@ export class RandomLoot {
     let table = tableId ? game.tables.get(tableId) : null;
     
     if (!tableId || !table) return;
-    
-    let results = await RandomLoot.rollTable(table);
-    if (!results || !results.length) {
-        return;
+
+    if (showRandomLootPrompt) {
+        await RandomLoot.showPrompt(tokenDoc, table);
+    } else {
+        let results = await RandomLoot.rollTable(table);
+        if (!results || !results.length) {
+            return;
+        }
+        
+        const consolidatedItems = await RandomLoot.addItemsToActor(tokenDoc.actor, results);
+        
+        if (!hideRandomLootChatMsg) {
+            await RandomLoot.sendLootMessage(tokenDoc.actor, consolidatedItems || results);
+        }
     }
+  }
+  
+  static async showPrompt(tokenDoc, table) {
+    let currentResults = [];
+    let allResults = [];
     
-    const consolidatedItems = await RandomLoot.addItemsToActor(tokenDoc.actor, results);
+    // Handle both token document and token object cases
+    const tokenName = tokenDoc.name;
+    const tokenImg = tokenDoc.document ? 
+      (tokenDoc.document.texture?.src || tokenDoc.document.img) : 
+      (tokenDoc.texture?.src || tokenDoc.img);
     
-    if (!hideRandomLootChatMsg) {
-        await RandomLoot.sendLootMessage(tokenDoc.actor, consolidatedItems || results);
-    }
+    const dialog = new Dialog({
+      title: game.i18n.localize('LOOTABLE.RandomLootPrompt.Title'),
+      content: await renderTemplate('modules/lootable/templates/randomLootPrompt.hbs', {
+        token: {
+          name: tokenName,
+          img: tokenImg
+        },
+        table,
+        allResults
+      }),
+      buttons: {
+        accept: {
+          icon: '<i class="fas fa-check"></i>',
+          label: game.i18n.localize('LOOTABLE.RandomLootPrompt.Accept'),
+          callback: async (html) => {
+            if (!allResults || !allResults.length) return;
+            
+            const flatResults = allResults.flat();
+            
+            const consolidatedItems = await RandomLoot.addItemsToActor(tokenDoc.actor, flatResults);
+            
+            if (!game.settings.get('lootable', 'hideRandomLootChatMsg')) {
+              await RandomLoot.sendLootMessage(tokenDoc.actor, consolidatedItems || flatResults);
+            }
+            
+            return true;
+          }
+        },
+        cancel: {
+          icon: '<i class="fas fa-times"></i>',
+          label: game.i18n.localize('LOOTABLE.RandomLootPrompt.Cancel'),
+          callback: () => null
+        }
+      },
+      render: (html) => {
+        const updateContent = async () => {
+          const content = await renderTemplate('modules/lootable/templates/randomLootPrompt.hbs', {
+            token: {
+              name: tokenName,
+              img: tokenImg
+            },
+            table,
+            allResults
+          });
+          dialog.data.content = content;
+          dialog.render(true);
+        };
+
+        // Handle Roll button
+        html.find('.roll-button').click(async (event) => {
+          event.preventDefault();
+          currentResults = await RandomLoot.rollTable(table);
+          if (!currentResults || !currentResults.length) {
+            return;
+          }
+          // Add new results to the beginning of the array
+          allResults.unshift(currentResults);
+          await updateContent();
+        });
+
+        // Handle Reroll button
+        html.find('.reroll-button').click(async (event) => {
+          event.preventDefault();
+          if (!allResults.length) return;
+          
+          currentResults = await RandomLoot.rollTable(table);
+          if (!currentResults || !currentResults.length) {
+            return;
+          }
+          // Replace first roll results (most recent)
+          allResults[0] = currentResults;
+          await updateContent();
+        });
+
+        // Handle Clear button
+        html.find('.clear-button').click(async (event) => {
+          event.preventDefault();
+          allResults = [];
+          currentResults = [];
+          await updateContent();
+        });
+
+        // Prevent form submission
+        html.find('form').submit((ev) => ev.preventDefault());
+      },
+      close: () => {}
+    });
+
+    dialog.render(true);
   }
   
   static logTableRollError(error, usingBetterTables = true) {
@@ -469,6 +549,167 @@ export class RandomLoot {
             flags: { "lootable": { randomLootGenerated: true } }
         });
     } catch (error) {
+    }
+  }
+
+  static canUserRollLoot(user) {
+    return user.isGM;
+  }
+
+  static canTokenReceiveLoot(token) {
+    if (!token.actor) return false;
+    
+    // Check if the token is an NPC
+    if (!token.actor.type === 'npc') return false;
+    
+    let creatureType = "";
+    const typeData = token.actor.system?.details?.type;
+    
+    if (typeData) {
+      if (typeData.value === "custom" && typeData.custom) {
+        creatureType = typeData.custom;
+      } else {
+        creatureType = typeData.value || "";
+      }
+    } else {
+      creatureType = token.actor.system?.details?.race || "";
+    }
+    
+    if (!creatureType) return false;
+    
+    return true;
+  }
+
+  static findMatchingTableEntry(creatureType, creatureSubtype, treasureType, cr, entries) {
+    if (!entries?.length) return null;
+
+    for (let entry of entries) {
+      if (!entry.tableId) continue;
+      
+      if (entry.type && entry.type !== "") {
+        const entryTypes = entry.type.toLowerCase().split(',').map(t => t.trim());
+        const tokenTypes = creatureType.toLowerCase().split(',').map(t => t.trim());
+        
+        const hasMatchingType = entryTypes.some(entryType => 
+          tokenTypes.some(tokenType => tokenType === entryType)
+        );
+        
+        if (!hasMatchingType) continue;
+      }
+      
+      if (entry.subtype && entry.subtype !== "") {
+        const entrySubtypes = entry.subtype.toLowerCase().split(',').map(s => s.trim());
+        const tokenSubtypes = creatureSubtype.toLowerCase().split(',').map(s => s.trim());
+        
+        const hasMatchingSubtype = entrySubtypes.some(entrySubtype => 
+          tokenSubtypes.some(tokenSubtype => tokenSubtype === entrySubtype)
+        );
+        
+        if (!hasMatchingSubtype) continue;
+      }
+      
+      if (entry.treasureType && entry.treasureType !== "") {
+        const entryTreasureTypes = entry.treasureType.toLowerCase().split(',').map(t => t.trim());
+        const tokenTreasureTypes = treasureType.toLowerCase().split(',').map(t => t.trim());
+        
+        const hasMatchingTreasureType = entryTreasureTypes.some(entryTreasureType => 
+          tokenTreasureTypes.some(tokenTreasureType => tokenTreasureType === entryTreasureType)
+        );
+        
+        if (!hasMatchingTreasureType) continue;
+      }
+      
+      if (cr < entry.crRange[0] || cr > entry.crRange[1]) continue;
+      
+      return entry;
+    }
+    
+    return null;
+  }
+
+  static async handleManualRoll(token) {
+    let enableDebug = game.settings.get('lootable', 'enableDebug') || false;
+    let showRandomLootPrompt = game.settings.get('lootable', 'showRandomLootPrompt');
+    let hideRandomLootChatMsg = game.settings.get('lootable', 'hideRandomLootChatMsg');
+    
+    if (!this.canTokenReceiveLoot(token)) {
+      if (enableDebug) {
+        console.log(`%cLootable DEBUG |%c [RL] Token ${token.name} is not valid for random loot`, 'color: #940000;', 'color: inherit');
+      }
+      return;
+    }
+    
+    let creatureType = "";
+    const typeData = token.actor.system?.details?.type;
+    
+    if (typeData) {
+      if (typeData.value === "custom" && typeData.custom) {
+        creatureType = typeData.custom;
+      } else {
+        creatureType = typeData.value || "";
+      }
+    } else {
+      creatureType = token.actor.system?.details?.race || "";
+    }
+    
+    let creatureSubtype = token.actor.system?.details?.type?.subtype || "";
+    
+    let treasureType = "";
+    if (token.actor.system?.details?.treasure?.value instanceof Set) {
+      const treasureValues = Array.from(token.actor.system.details.treasure.value.values());
+      treasureType = treasureValues.join(",");
+    }
+    
+    let cr = token.actor.system?.details?.cr || 0;
+    
+    if (enableDebug) {
+      console.log(`%cLootable DEBUG |%c [RL] Token: ${token.name} | Type: ${creatureType}, Subtype: ${creatureSubtype}, Treasure Type: ${treasureType}, CR: ${cr}`, 'color: #940000;', 'color: inherit');
+    }
+    
+    let creatureTypeTables = game.settings.get('lootable', 'creatureTypeTables');
+    if (!creatureTypeTables?.entries?.length) {
+      return;
+    }
+    
+    let matchingEntry = this.findMatchingTableEntry(creatureType, creatureSubtype, treasureType, cr, creatureTypeTables.entries);
+    
+    if (enableDebug) {
+      if (matchingEntry) {
+        let tableId = matchingEntry.tableId;
+        let table = tableId ? game.tables.get(tableId) : null;
+        
+        if (table) {
+          console.log(`%cLootable DEBUG |%c [RL] Rolling on table: "${table.name}" (${table.id})`, 'color: #940000;', 'color: inherit');
+        } else {
+          console.log(`%cLootable DEBUG |%c [RL] Table ID ${tableId} not found`, 'color: #940000;', 'color: inherit');
+        }
+      } else {
+        console.log(`%cLootable DEBUG |%c [RL] No matching table found for this token`, 'color: #940000;', 'color: inherit');
+      }
+    }
+    
+    if (!matchingEntry) {
+      return;
+    }
+    
+    let tableId = matchingEntry.tableId;
+    let table = tableId ? game.tables.get(tableId) : null;
+    
+    if (!tableId || !table) return;
+    
+    if (showRandomLootPrompt) {
+      await this.showPrompt(token, table);
+    } else {
+      let results = await this.rollTable(table);
+      if (!results || !results.length) {
+        return;
+      }
+      
+      const consolidatedItems = await this.addItemsToActor(token.actor, results);
+      
+      if (!hideRandomLootChatMsg) {
+        await this.sendLootMessage(token.actor, consolidatedItems || results);
+      }
     }
   }
 }

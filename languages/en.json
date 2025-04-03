@@ -65,6 +65,7 @@
       }
     },
     "RandomLootSettings": {
+      "GeneralConfig": "General Config",
       "RolltableByCreatureType": "Rolltable by Creature Type",
       "MessageConfig": "Message Config",
       "SaveChanges": "Save Changes",
@@ -79,6 +80,16 @@
         "CRRange": "CR Range",
         "Table": "Table",
         "Actions": "Actions"
+      },
+      "Mode": {
+        "Name": "Random Loot Mode",
+        "Hint": "Determines when random loot is added to tokens. [default: On Token Creation]",
+        "OnCreate": "On Token Creation",
+        "ManualOnly": "Manual Only"
+      },
+      "HideRandomLootHUD": {
+        "Name": "Hide Random Loot Button",
+        "Hint": "Hide the random loot button from the token HUD. [default: false]"
       },
       "DisableRandomLoot": {
         "Name": "Disable Random Loot"
@@ -123,6 +134,10 @@
         "MaxValueError": "Value must be less than or equal to 30.",
         "Confirm": "Add",
         "Cancel": "Cancel"
+      },
+      "ShowRandomLootPrompt": {
+        "Name": "Show Loot Roll Prompt",
+        "Hint": "When enabled, shows a prompt to roll for loot instead of automatically rolling. [default: false]"
       }
     },
     "ChatMessages": {
@@ -137,6 +152,19 @@
         "Title": "Random Loot",
         "NoLoot": "No loot found"
       }
+    },
+    "RandomLootPrompt": {
+      "Title": "Random Loot Roll",
+      "Results": "Results",
+      "NoResults": "No results yet. Click New Roll to generate loot.",
+      "Roll": "New Roll",
+      "RollRandomLoot": "Roll Random Loot",
+      "Reroll": "Reroll Last",
+      "Accept": "Accept",
+      "Cancel": "Cancel",
+      "TableLabel": "Table",
+      "RollNumber": "Roll",
+      "Clear": "Clear All"
     }
   }
 }

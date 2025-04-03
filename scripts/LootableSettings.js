@@ -156,6 +156,28 @@ export function settings() {
     default: false
   });
 
+  game.settings.register('lootable', 'randomLootMode', {
+    name: game.i18n.localize('LOOTABLE.RandomLootSettings.Mode.Name'),
+    hint: game.i18n.localize('LOOTABLE.RandomLootSettings.Mode.Hint'),
+    scope: 'world',
+    config: false,
+    type: String,
+    choices: {
+      onCreate: game.i18n.localize('LOOTABLE.RandomLootSettings.Mode.OnCreate'),
+      manualOnly: game.i18n.localize('LOOTABLE.RandomLootSettings.Mode.ManualOnly')
+    },
+    default: 'onCreate'
+  });
+
+  game.settings.register('lootable', 'hideRandomLootHUD', {
+    name: game.i18n.localize('LOOTABLE.RandomLootSettings.HideRandomLootHUD.Name'),
+    hint: game.i18n.localize('LOOTABLE.RandomLootSettings.HideRandomLootHUD.Hint'),
+    scope: 'world',
+    config: false,
+    type: Boolean,
+    default: false
+  });
+
   game.settings.register('lootable', 'creatureTypeTables', {
     name: game.i18n.localize('LOOTABLE.RandomLootSettings.CreatureTypeTables.Name'),
     scope: 'world',
@@ -185,6 +207,15 @@ export function settings() {
   game.settings.register('lootable', 'hideRandomLootChatMsg', {
     name: game.i18n.localize('LOOTABLE.RandomLootSettings.HideRandomLootChatMsg.Name'),
     hint: game.i18n.localize('LOOTABLE.RandomLootSettings.HideRandomLootChatMsg.Hint'),
+    scope: 'world',
+    config: false,
+    type: Boolean,
+    default: false
+  });
+
+  game.settings.register('lootable', 'showRandomLootPrompt', {
+    name: game.i18n.localize('LOOTABLE.RandomLootSettings.ShowRandomLootPrompt.Name'),
+    hint: game.i18n.localize('LOOTABLE.RandomLootSettings.ShowRandomLootPrompt.Hint'),
     scope: 'world',
     config: false,
     type: Boolean,
