@@ -13,6 +13,7 @@ function logWelcomeMessage() {
 
 Hooks.once('init', () => {
   settings();
+  RandomLoot.registerHandlebarsHelpers();
 });
 
 Hooks.once('ready', () => {
@@ -34,4 +35,32 @@ Hooks.on('renderChatMessage', (app, html, data) => {
   if (flags.randomLootGenerated) {
     html.addClass('lootable-random-loot-generated');
   }
+});
+
+Hooks.on('renderTokenHUD', (app, html, data) => {
+  if (!RandomLoot.canUserRollLoot(game.user)) return;
+  
+  const token = app.object;
+  if (!RandomLoot.canTokenReceiveLoot(token)) return;
+  
+  const hideHUD = game.settings.get('lootable', 'hideRandomLootHUD');
+  if (hideHUD) return;
+
+  const disableRandomLoot = game.settings.get('lootable', 'disableRandomLoot');
+  if (disableRandomLoot) return;
+  
+  const rollLootButton = $(`
+    <div class="control-icon" data-action="rollLoot">
+      <i class="fas fa-coins" title="${game.i18n.localize('LOOTABLE.RandomLootPrompt.RollRandomLoot')}"></i>
+    </div>
+  `);
+  
+  rollLootButton.click(async (ev) => {
+    ev.preventDefault();
+    await RandomLoot.handleManualRoll(token);
+  });
+  
+  // Insert the button in the right control group, after the combat button
+  const rightControls = html.find('.col.right');
+  rightControls.append(rollLootButton);
 });

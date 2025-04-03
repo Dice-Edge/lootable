@@ -1,4 +1,7 @@
+/* Variables
+----------------------------------------*/
 :root {
+  /* Colors */
   --color-gold: #ffd700;
   --color-dark-red: #4a0000;
   --color-warning: #ff9800;
@@ -6,22 +9,46 @@
   --color-danger: #c53131;
   --color-danger-hover: #ff0000;
   --color-text-muted: #cccccc;
+  --color-text: #000000;
   
+  /* Borders */
   --border-light: 1px solid rgba(0, 0, 0, 0.1);
   --border-medium: 1px solid #999;
   --border-separator: 1px solid #ddd;
   
+  /* Spacing */
   --spacing-xs: 1px;
   --spacing-sm: 2px;
   --spacing-md: 5px;
   --spacing-lg: 10px;
   
+  /* Other */
   --border-radius: 3px;
   --opacity-light: 0.1;
   --opacity-medium: 0.2;
 }
 
-/* Chat Message Styles */
+/* Disable Module Option
+----------------------------------------*/
+.form-group.disable-module {
+  background: rgba(197, 49, 49, var(--opacity-light));
+  border: 1px solid var(--color-danger);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.form-group.disable-module label {
+  color: var(--color-danger);
+  font-weight: bold;
+}
+
+.form-group.disable-module:hover {
+  background: rgba(197, 49, 49, calc(var(--opacity-light) * 2));
+}
+
+/* Chat Message Styles
+----------------------------------------*/
 #chat-log .message.lootable-message {
   display: flex;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
@@ -49,7 +76,8 @@
   font-style: italic;
 }
 
-/* Table Selector Styles */
+/* Table Selector Styles
+----------------------------------------*/
 .table-list {
   display: flex;
   flex-direction: column;
@@ -99,7 +127,8 @@
   flex-direction: column;
 }
 
-/* Notification Styles */
+/* Notification Styles
+----------------------------------------*/
 .lootable .notification {
   padding: var(--spacing-lg);
   border-radius: var(--border-radius);
@@ -118,7 +147,9 @@
   border: 1px solid var(--color-info);
 }
 
-/* Random Loot Settings Styles */
+/* Random Loot Settings Styles
+----------------------------------------*/
+/* Form Elements */
 .random-loot-settings .form-group {
   padding-bottom: var(--spacing-md);
 }
@@ -205,7 +236,7 @@
   cursor: default;
 }
 
-/* Button Styles */
+/* Settings Button Styles */
 .random-loot-settings .action-button {
   width: 28px;
   height: 28px;
@@ -236,4 +267,300 @@
 
 .random-loot-settings button i {
   margin: 0;
+}
+
+/* Random Loot Prompt Styles
+----------------------------------------*/
+/* Dialog Window */
+.dialog.random-loot-roll {
+  min-width: 400px;
+}
+
+.dialog.random-loot-roll .window-content {
+  padding: 0;
+}
+
+/* Prompt Container */
+.random-loot-prompt {
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+/* Token Information */
+.random-loot-prompt .token-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+.random-loot-prompt .token-details {
+  flex: 1;
+}
+
+.random-loot-prompt .token-details h3 {
+  margin: 0;
+}
+
+.random-loot-prompt .token-details p {
+  margin: var(--spacing-sm) 0 0 0;
+  color: var(--color-text);
+}
+
+/* Results Section */
+.random-loot-prompt .results {
+  margin: var(--spacing-lg) 0;
+  flex: 0 1 auto;
+  display: flex;
+  flex-direction: column;
+  height: 450px;
+  width: 100%;
+}
+
+.random-loot-prompt .results h4 {
+  margin: 0 0 var(--spacing-md) 0;
+  flex: 0 0 auto;
+}
+
+/* Results List */
+.random-loot-prompt .results-list {
+  flex: 1 1 auto;
+  height: 400px;
+  width: 100%;
+  border: var(--border-light);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-md);
+  margin: 0;
+  background: rgba(0, 0, 0, var(--opacity-light));
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+}
+
+/* Scrollbar Styles */
+.random-loot-prompt .results-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.random-loot-prompt .results-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.random-loot-prompt .results-list::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+/* Result Items */
+.random-loot-prompt .result-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease;
+}
+
+.random-loot-prompt .result-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.random-loot-prompt .result-item:last-child {
+  border-bottom: none;
+}
+
+.random-loot-prompt .result-item img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.random-loot-prompt .result-item i.fa-scroll {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2em;
+  color: #666666;
+}
+
+.random-loot-prompt .result-item span {
+  flex: 1;
+  color: var(--color-text);
+  white-space: normal;
+  line-height: 1.2;
+}
+
+.random-loot-prompt .no-results {
+  text-align: center;
+  color: var(--color-text);
+  margin: var(--spacing-lg) 0;
+  font-style: italic;
+}
+
+/* Button Container */
+.random-loot-prompt .buttons {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: flex-start;
+  margin-top: var(--spacing-md);
+  flex: 0 0 auto;
+}
+
+/* Button Styles */
+.random-loot-prompt button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  min-width: 120px;
+  transition: all 0.2s ease;
+  position: relative;
+  outline: none;
+}
+
+.random-loot-prompt button:focus-visible {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #4a90e2;
+}
+
+.random-loot-prompt button:hover {
+  filter: brightness(1.1);
+}
+
+.random-loot-prompt button:active {
+  transform: translateY(1px);
+}
+
+.random-loot-prompt button span {
+  flex: 1;
+  text-align: center;
+}
+
+.random-loot-prompt button i {
+  margin-right: 0;
+}
+
+/* Specific Button Types */
+.random-loot-prompt button.roll-button {
+  background: rgba(0, 255, 0, var(--opacity-light));
+}
+
+.random-loot-prompt button.roll-button:hover {
+  background: rgba(0, 255, 0, 0.3);
+}
+
+.random-loot-prompt button.reroll-button {
+  background: rgba(255, 165, 0, var(--opacity-light));
+}
+
+.random-loot-prompt button.reroll-button:hover {
+  background: rgba(255, 165, 0, 0.3);
+}
+
+.random-loot-prompt button.clear-button {
+  margin-left: auto;
+  background: #940000;
+  color: white;
+}
+
+.random-loot-prompt button.clear-button:hover {
+  background: #b00000;
+}
+
+.random-loot-prompt button.clear-button:disabled {
+  background: #ccc;
+}
+
+.random-loot-prompt button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(100%);
+}
+
+/* Loading States
+----------------------------------------*/
+/* General Loading State */
+.random-loot-prompt .loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  color: var(--color-text-muted);
+}
+
+.random-loot-prompt .loading i {
+  animation: spin 1s linear infinite;
+  margin-right: var(--spacing-md);
+}
+
+/* Loading Button States */
+.random-loot-prompt button.loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.random-loot-prompt button.loading span {
+  visibility: hidden;
+}
+
+.random-loot-prompt button.loading::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Loading Animation */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Roll Section */
+.random-loot-prompt .roll-section {
+  border: var(--border-light);
+  border-radius: var(--border-radius);
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-sm);
+  background: transparent;
+}
+
+.random-loot-prompt .roll-section:last-child {
+  margin-bottom: 0;
+}
+
+.random-loot-prompt .roll-section h5 {
+  margin: 0 0 var(--spacing-sm) 0;
+  padding-bottom: var(--spacing-sm);
+  border-bottom: var(--border-light);
+  font-weight: bold;
+  color: var(--color-text);
+}
+
+/* Token HUD Button
+----------------------------------------*/
+.control-icon[data-action="rollLoot"] {
+  order: 7; /* Position after combat button */
+}
+
+.control-icon[data-action="rollLoot"] i {
+  color: var(--color-gold);
+  text-shadow: 0 0 8px var(--color-dark-red);
+}
+
+.control-icon[data-action="rollLoot"]:hover i {
+  color: #fff;
+  text-shadow: 0 0 8px var(--color-gold);
 }

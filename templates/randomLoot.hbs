@@ -1,9 +1,42 @@
 <form class="random-loot-settings">
-  <div class="form-group">
+  <div class="form-group disable-module">
     <label>{{localize 'LOOTABLE.RandomLootSettings.DisableRandomLoot.Name'}}</label>
     <div class="form-fields">
       <input type="checkbox" name="disableRandomLoot" {{#if settings.disableRandomLoot}}checked{{/if}}>
     </div>
+  </div>
+
+  <h2>{{localize 'LOOTABLE.RandomLootSettings.GeneralConfig'}}</h2>
+
+  <div class="form-group">
+    <label>{{localize 'LOOTABLE.RandomLootSettings.Mode.Name'}}</label>
+    <div class="form-fields">
+      <select name="randomLootMode">
+        <option value="onCreate" {{#if (eq settings.randomLootMode "onCreate")}}selected{{/if}}>
+          {{localize 'LOOTABLE.RandomLootSettings.Mode.OnCreate'}}
+        </option>
+        <option value="manualOnly" {{#if (eq settings.randomLootMode "manualOnly")}}selected{{/if}}>
+          {{localize 'LOOTABLE.RandomLootSettings.Mode.ManualOnly'}}
+        </option>
+      </select>
+    </div>
+    <p class="notes">{{localize 'LOOTABLE.RandomLootSettings.Mode.Hint'}}</p>
+  </div>
+
+  <div class="form-group">
+    <label>{{localize 'LOOTABLE.RandomLootSettings.ShowRandomLootPrompt.Name'}}</label>
+    <div class="form-fields">
+      <input type="checkbox" name="showRandomLootPrompt" {{#if settings.showRandomLootPrompt}}checked{{/if}}>
+    </div>
+    <p class="notes">{{localize 'LOOTABLE.RandomLootSettings.ShowRandomLootPrompt.Hint'}}</p>
+  </div>
+
+  <div class="form-group">
+    <label>{{localize 'LOOTABLE.RandomLootSettings.HideRandomLootHUD.Name'}}</label>
+    <div class="form-fields">
+      <input type="checkbox" name="hideRandomLootHUD" {{#if settings.hideRandomLootHUD}}checked{{/if}}>
+    </div>
+    <p class="notes">{{localize 'LOOTABLE.RandomLootSettings.HideRandomLootHUD.Hint'}}</p>
   </div>
 
   <h2>{{localize 'LOOTABLE.RandomLootSettings.RolltableByCreatureType'}}</h2>
