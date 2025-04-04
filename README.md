@@ -43,9 +43,11 @@ How to Use:
 - By default there is a single entry that triggers only for humanoids of any subtype or treasure type and any CR rating but no table is assined. You should configure the entries as you prefer and assign a table to each entry. Once these are set up simply add a token to the scene to trigger the roll depending on your settings. You can also manually trigger the random loot by using the token HUD by right-clicking any NPC token already on the scene. The NPC must have a valid CR assigned or the loot will not generate.
 
 Setting up and rolling random loot for token:
+
 ![2025-04-03_19-55-33](https://github.com/user-attachments/assets/1ea58e06-e884-4042-8874-8e2c5808b1a4)
 
 Using the Random Loot prompt to generate loot:
+
 ![2025-04-03_19-59-17](https://github.com/user-attachments/assets/c06e28d7-9a97-46f4-b859-8a175de8aa9f)
 
 
