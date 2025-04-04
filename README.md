@@ -26,6 +26,7 @@ How to Use
 - Simply set the configuration to what types of creatures you want to allow to generate coin then you can add a matching creature type token to any scene. As long as the NPC has a CR rating the coin will calculate and be added to that token automatically. Because the coin is not added to the actor if you place multiple tokens of the same creature they will all calculate independently.
 
 Adding Pocket Change to a humanoid token:
+
 ![2025-04-03_19-43-18 (2)](https://github.com/user-attachments/assets/c0e84cd2-8036-489c-96c6-26e787be580b)
 
 
