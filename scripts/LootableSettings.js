@@ -185,7 +185,7 @@ export function settings() {
     type: Object,
     default: {
       entries: [
-        { type: "humanoid", subtype: "", crRange: [0, 30], tableId: "" }
+        { type: 'humanoid', subtype: '', crRange: [0, 30], tableId: '' }
       ]
     },
     onChange: value => {

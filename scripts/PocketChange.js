@@ -24,28 +24,30 @@ export class PocketChange {
     let currency = actor.system.currency;
     let CR = actor.system.details.cr;
     
-    let creatureType = "unknown";
-    const typeData = actor.system.details.type;
+    let creatureType = 'unknown';
+    let typeData = actor.system.details.type;
     
     if (typeData) {
-        if (typeData.value === "custom" && typeData.custom) {
-            creatureType = typeData.custom.toLowerCase();
+        if (typeData.value === 'custom' && typeData.custom) {
+            creatureType = typeData.custom;
         } else {
-            creatureType = (typeData.value || "unknown").toLowerCase();
+            creatureType = typeData.value || '';
         }
+    } else {
+        creatureType = actor.system?.details?.race || '';
     }
 
     if (enableDebug) {
-      console.log(`%cLootable DEBUG |%c [PC] Token: ${tokenName} | Creature Type: ${creatureType} | CR: ${CR}`, 'color: #940000;', 'color: inherit');
+      console.log('%cLootable DEBUG |%c [PC] Token: ' + tokenName + ' | Creature Type: ' + creatureType + ' | CR: ' + CR, 'color: #940000;', 'color: inherit');
     }
 
     if (CR === undefined || CR === null) {
       return;
     }
 
-    if (!allowedCreatureTypes.includes(creatureType)) {
+    if (!allowedCreatureTypes.includes(creatureType.toLowerCase())) {
       if (enableDebug) {
-        console.log(`%cLootable DEBUG |%c [PC] Skipping pocket change for ${tokenName}: Creature type "${creatureType}" not in allowed types [${allowedCreatureTypes.join(', ')}]`, 'color: #940000;', 'color: inherit');
+        console.log('%cLootable DEBUG |%c [PC] Skipping pocket change for ' + tokenName + ': Creature type \'' + creatureType + '\' not in allowed types [' + allowedCreatureTypes.join(', ') + ']', 'color: #940000;', 'color: inherit');
       }
       return;
     }
@@ -61,23 +63,23 @@ export class PocketChange {
       if (enableDebug && debugInfo) {
         let fullDebugInfo = debugInfo;
         if (conversionDebugInfo) {
-          fullDebugInfo += " | " + conversionDebugInfo;
+          fullDebugInfo += ' | ' + conversionDebugInfo;
         }
-        console.log(`%cLootable DEBUG |%c [PC] ${fullDebugInfo} | Coin Added: ${pp}pp, ${gp}gp, ${sp}sp, ${finalCp}cp`, 'color: #940000;', 'color: inherit');
+        console.log('%cLootable DEBUG |%c [PC] ' + fullDebugInfo + ' | Coin Added: ' + pp + 'pp, ' + gp + 'gp, ' + sp + 'sp, ' + finalCp + 'cp', 'color: #940000;', 'color: inherit');
       }
       
       if (currency) {
         await actor.update({
-          "system.currency.cp": (currency.cp || 0) + finalCp,
-          "system.currency.pp": (currency.pp || 0) + pp,
-          "system.currency.gp": (currency.gp || 0) + gp,
-          "system.currency.sp": (currency.sp || 0) + sp,
+          'system.currency.cp': (currency.cp || 0) + finalCp,
+          'system.currency.pp': (currency.pp || 0) + pp,
+          'system.currency.gp': (currency.gp || 0) + gp,
+          'system.currency.sp': (currency.sp || 0) + sp,
         });
       } else {
         return;
       }
       if (!hidePocketChangeChatMsg) {
-        let content = await renderTemplate(`modules/lootable/templates/coinMessage.hbs`, {
+        let content = await renderTemplate('modules/lootable/templates/coinMessage.hbs', {
           tokenName: tokenName,
           cp: finalCp,
           sp: sp,
@@ -87,8 +89,8 @@ export class PocketChange {
         });
         ChatMessage.create({
           content: content,
-          whisper: ChatMessage.getWhisperRecipients(`GM`),
-          flags: { "lootable": { coinGenerated: true } }
+          whisper: ChatMessage.getWhisperRecipients('GM'),
+          flags: { 'lootable': { coinGenerated: true } }
         });
       }
     }

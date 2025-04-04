@@ -41,7 +41,7 @@ export class PocketChangeSettingsForm extends FormApplication {
     }
   
     _initRangeInputs(html) {
-      let rangeInputs = html.find('input[type="range"]');
+      let rangeInputs = html.find('input[type=\'range\']');
       rangeInputs.each((i, input) => {
         let valueDisplay = $(input).next('.range-value');
         $(input).on('input', (event) => {

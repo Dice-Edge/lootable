@@ -1,28 +1,28 @@
-<form class="random-loot-prompt">
-  <div class="form-group">
-    <div class="token-info">
-      <img src="{{token.img}}" alt="{{token.name}}" width="64" height="64">
-      <div class="token-details">
+<form class='random-loot-prompt'>
+  <div class='form-group'>
+    <div class='token-info'>
+      <img src='{{token.img}}' alt='{{token.name}}' width='64' height='64'>
+      <div class='token-details'>
         <h3>{{token.name}}</h3>
         <p>{{localize 'LOOTABLE.RandomLootPrompt.TableLabel'}}: {{table.name}}</p>
       </div>
     </div>
   </div>
 
-  <div class="form-group results">
+  <div class='form-group results'>
     <h4>{{localize 'LOOTABLE.RandomLootPrompt.Results'}}</h4>
-    <div class="results-list">
+    <div class='results-list'>
       {{#if allResults}}
         {{#each allResults}}
-        <div class="roll-section">
+        <div class='roll-section'>
           <h5>{{localize 'LOOTABLE.RandomLootPrompt.RollNumber'}} {{subtract ../allResults.length @index}}</h5>
           {{#each this}}
-          <div class="result-item">
+          <div class='result-item'>
             {{#if this.isText}}
-              <i class="fas fa-scroll"></i>
+              <i class='fas fa-scroll'></i>
               <span>{{this.text}}</span>
             {{else}}
-              <img src="{{this.img}}" alt="{{this.name}}" width="32" height="32">
+              <img src='{{this.img}}' alt='{{this.name}}' width='32' height='32'>
               <span>{{this.name}}</span>
             {{/if}}
           </div>
@@ -30,20 +30,20 @@
         </div>
         {{/each}}
       {{else}}
-        <p class="no-results">{{localize 'LOOTABLE.RandomLootPrompt.NoResults'}}</p>
+        <p class='no-results'>{{localize 'LOOTABLE.RandomLootPrompt.NoResults'}}</p>
       {{/if}}
     </div>
   </div>
 
-  <div class="form-group buttons">
-    <button type="button" class="roll-button">
-      <i class="fas fa-dice-d20"></i> <span>{{localize 'LOOTABLE.RandomLootPrompt.Roll'}}</span>
+  <div class='form-group buttons'>
+    <button type='button' class='roll-button'>
+      <i class='fas fa-dice-d20'></i> <span>{{localize 'LOOTABLE.RandomLootPrompt.Roll'}}</span>
     </button>
-    <button type="button" class="reroll-button" {{#unless allResults}}disabled{{/unless}}>
-      <i class="fas fa-redo"></i> <span>{{localize 'LOOTABLE.RandomLootPrompt.Reroll'}}</span>
+    <button type='button' class='reroll-button' {{#unless allResults}}disabled{{/unless}}>
+      <i class='fas fa-redo'></i> <span>{{localize 'LOOTABLE.RandomLootPrompt.Reroll'}}</span>
     </button>
-    <button type="button" class="clear-button" {{#unless allResults}}disabled{{/unless}}>
-      <i class="fas fa-trash"></i> <span>{{localize 'LOOTABLE.RandomLootPrompt.Clear'}}</span>
+    <button type='button' class='clear-button' {{#unless allResults}}disabled{{/unless}}>
+      <i class='fas fa-trash'></i> <span>{{localize 'LOOTABLE.RandomLootPrompt.Clear'}}</span>
     </button>
   </div>
 </form> 
