@@ -50,6 +50,10 @@ Using the Random Loot prompt to generate loot:
 
 ![2025-04-03_19-59-17](https://github.com/user-attachments/assets/c06e28d7-9a97-46f4-b859-8a175de8aa9f)
 
+Using the token HUD to prompt a new Random Loot roll:
+
+![2025-04-03_20-04-10](https://github.com/user-attachments/assets/8d4b8cb7-f8f9-40dc-a4c9-443562c3596a)
+
 
 ## Requirements
 - Foundry VTT v12+
