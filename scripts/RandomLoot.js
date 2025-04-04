@@ -32,31 +32,31 @@ export class RandomLoot {
         return;
     }
     
-    let creatureType = "";
-    const typeData = tokenDoc.actor.system?.details?.type;
+    let creatureType = '';
+    let typeData = tokenDoc.actor.system?.details?.type;
     
     if (typeData) {
-        if (typeData.value === "custom" && typeData.custom) {
+        if (typeData.value === 'custom' && typeData.custom) {
             creatureType = typeData.custom;
+        } else if (typeData.value) {
+            creatureType = typeData.value || '';
         } else {
-            creatureType = typeData.value || "";
+            creatureType = tokenDoc.actor.system?.details?.race || '';
         }
-    } else {
-        creatureType = tokenDoc.actor.system?.details?.race || "";
     }
     
-    let creatureSubtype = tokenDoc.actor.system?.details?.type?.subtype || "";
+    let creatureSubtype = tokenDoc.actor.system?.details?.type?.subtype || '';
     
-    let treasureType = "";
+    let treasureType = '';
     if (tokenDoc.actor.system?.details?.treasure?.value instanceof Set) {
-        const treasureValues = Array.from(tokenDoc.actor.system.details.treasure.value.values());
-        treasureType = treasureValues.join(",");
+        let treasureValues = Array.from(tokenDoc.actor.system.details.treasure.value.values());
+        treasureType = treasureValues.join(',');
     }
     
     let cr = tokenDoc.actor.system?.details?.cr || 0;
     
     if (enableDebug) {
-        console.log(`%cLootable DEBUG |%c [RL] Token: ${tokenDoc.name} | Type: ${creatureType}, Subtype: ${creatureSubtype}, Treasure Type: ${treasureType}, CR: ${cr}`, 'color: #940000;', 'color: inherit');
+        console.log('%cLootable DEBUG |%c [RL] Token: ' + tokenDoc.name + ' | Type: ' + creatureType + ', Subtype: ' + creatureSubtype + ', Treasure Type: ' + treasureType + ', CR: ' + cr, 'color: #940000;', 'color: inherit');
     }
     
     if (!creatureType) {
@@ -76,12 +76,12 @@ export class RandomLoot {
             let table = tableId ? game.tables.get(tableId) : null;
             
             if (table) {
-                console.log(`%cLootable DEBUG |%c [RL] Rolling on table: "${table.name}" (${table.id})`, 'color: #940000;', 'color: inherit');
+                console.log('%cLootable DEBUG |%c [RL] Rolling on table: \'' + table.name + '\' (' + table.id + ')', 'color: #940000;', 'color: inherit');
             } else {
-                console.log(`%cLootable DEBUG |%c [RL] Table ID ${tableId} not found`, 'color: #940000;', 'color: inherit');
+                console.log('%cLootable DEBUG |%c [RL] Table ID ' + tableId + ' not found', 'color: #940000;', 'color: inherit');
             }
         } else {
-            console.log(`%cLootable DEBUG |%c [RL] No matching table found for this token`, 'color: #940000;', 'color: inherit');
+            console.log('%cLootable DEBUG |%c [RL] No matching table found for this token', 'color: #940000;', 'color: inherit');
         }
     }
     
@@ -102,7 +102,7 @@ export class RandomLoot {
             return;
         }
         
-        const consolidatedItems = await RandomLoot.addItemsToActor(tokenDoc.actor, results);
+        let consolidatedItems = await RandomLoot.addItemsToActor(tokenDoc.actor, results);
         
         if (!hideRandomLootChatMsg) {
             await RandomLoot.sendLootMessage(tokenDoc.actor, consolidatedItems || results);
@@ -114,13 +114,12 @@ export class RandomLoot {
     let currentResults = [];
     let allResults = [];
     
-    // Handle both token document and token object cases
-    const tokenName = tokenDoc.name;
-    const tokenImg = tokenDoc.document ? 
+    let tokenName = tokenDoc.name;
+    let tokenImg = tokenDoc.document ? 
       (tokenDoc.document.texture?.src || tokenDoc.document.img) : 
       (tokenDoc.texture?.src || tokenDoc.img);
     
-    const dialog = new Dialog({
+    let dialog = new Dialog({
       title: game.i18n.localize('LOOTABLE.RandomLootPrompt.Title'),
       content: await renderTemplate('modules/lootable/templates/randomLootPrompt.hbs', {
         token: {
@@ -132,14 +131,14 @@ export class RandomLoot {
       }),
       buttons: {
         accept: {
-          icon: '<i class="fas fa-check"></i>',
+          icon: '<i class=\'fas fa-check\'></i>',
           label: game.i18n.localize('LOOTABLE.RandomLootPrompt.Accept'),
           callback: async (html) => {
             if (!allResults || !allResults.length) return;
             
-            const flatResults = allResults.flat();
+            let flatResults = allResults.flat();
             
-            const consolidatedItems = await RandomLoot.addItemsToActor(tokenDoc.actor, flatResults);
+            let consolidatedItems = await RandomLoot.addItemsToActor(tokenDoc.actor, flatResults);
             
             if (!game.settings.get('lootable', 'hideRandomLootChatMsg')) {
               await RandomLoot.sendLootMessage(tokenDoc.actor, consolidatedItems || flatResults);
@@ -149,14 +148,14 @@ export class RandomLoot {
           }
         },
         cancel: {
-          icon: '<i class="fas fa-times"></i>',
+          icon: '<i class=\'fas fa-times\'></i>',
           label: game.i18n.localize('LOOTABLE.RandomLootPrompt.Cancel'),
           callback: () => null
         }
       },
       render: (html) => {
-        const updateContent = async () => {
-          const content = await renderTemplate('modules/lootable/templates/randomLootPrompt.hbs', {
+        let updateContent = async () => {
+          let content = await renderTemplate('modules/lootable/templates/randomLootPrompt.hbs', {
             token: {
               name: tokenName,
               img: tokenImg
@@ -168,19 +167,16 @@ export class RandomLoot {
           dialog.render(true);
         };
 
-        // Handle Roll button
         html.find('.roll-button').click(async (event) => {
           event.preventDefault();
           currentResults = await RandomLoot.rollTable(table);
           if (!currentResults || !currentResults.length) {
             return;
           }
-          // Add new results to the beginning of the array
           allResults.unshift(currentResults);
           await updateContent();
         });
 
-        // Handle Reroll button
         html.find('.reroll-button').click(async (event) => {
           event.preventDefault();
           if (!allResults.length) return;
@@ -189,12 +185,10 @@ export class RandomLoot {
           if (!currentResults || !currentResults.length) {
             return;
           }
-          // Replace first roll results (most recent)
           allResults[0] = currentResults;
           await updateContent();
         });
 
-        // Handle Clear button
         html.find('.clear-button').click(async (event) => {
           event.preventDefault();
           allResults = [];
@@ -202,7 +196,6 @@ export class RandomLoot {
           await updateContent();
         });
 
-        // Prevent form submission
         html.find('form').submit((ev) => ev.preventDefault());
       },
       close: () => {}
@@ -218,7 +211,7 @@ export class RandomLoot {
     let enableDebug = game.settings.get('lootable', 'enableDebug') || false;
     
     try {
-      const brt = game.modules.get('better-rolltables');
+      let brt = game.modules.get('better-rolltables');
       if (!brt?.api) {
         return await this.rollWithoutBetterTables(table);
       }
@@ -235,10 +228,10 @@ export class RandomLoot {
       
       for (let result of betterResults) {
         try {
-          const isTextEntry = this.isTextEntry(result);
+          let isTextEntry = this.isTextEntry(result);
           
           if (isTextEntry) {
-            const text = result.text || result.data?.text || '';
+            let text = result.text || result.data?.text || '';
             processedResults.textResults.push({
               text: text,
               isText: true
@@ -252,7 +245,7 @@ export class RandomLoot {
             itemData.system.quantity = result.hasOwnProperty('quantity') ? result.quantity : 1;
             processedResults.items.push(itemData);
           } else {
-            if (enableDebug) console.log(`%cLootable DEBUG |%c [RL] [Better Tables] Item not found: ${result.text || result.documentId}`, 'color: #940000;', 'color: inherit');
+            if (enableDebug) console.log('%cLootable DEBUG |%c [RL] [Better Tables] Item not found: ' + (result.text || result.documentId), 'color: #940000;', 'color: inherit');
             
             if (result.text) {
               processedResults.textResults.push({
@@ -281,7 +274,7 @@ export class RandomLoot {
       return true;
     }
     
-    const collection = result.documentCollection || result.collection || result.data?.collection;
+    let collection = result.documentCollection || result.collection || result.data?.collection;
     if (!collection && result.text) {
       return true;
     }
@@ -290,8 +283,8 @@ export class RandomLoot {
       return true;
     }
     
-    const text = result.text || result.data?.text;
-    const documentId = result.documentId || result.resultId || result.data?.resultId || result._id;
+    let text = result.text || result.data?.text;
+    let documentId = result.documentId || result.resultId || result.data?.resultId || result._id;
     
     if (text && !documentId) {
       return true;
@@ -313,7 +306,7 @@ export class RandomLoot {
         for (let pack of game.packs) {
           if (pack.documentName === 'Item') {
             try {
-              const packItem = await pack.getDocument(result.documentId);
+              let packItem = await pack.getDocument(result.documentId);
               if (packItem) {
                 return packItem;
               }
@@ -332,10 +325,10 @@ export class RandomLoot {
         for (let pack of game.packs) {
           if (pack.documentName === 'Item') {
             try {
-              const index = await pack.getIndex();
-              const entry = index.find(e => e.name === result.text);
+              let index = await pack.getIndex();
+              let entry = index.find(e => e.name === result.text);
               if (entry) {
-                const packItem = await pack.getDocument(entry._id);
+                let packItem = await pack.getDocument(entry._id);
                 if (packItem) {
                   return packItem;
                 }
@@ -381,7 +374,7 @@ export class RandomLoot {
         
         for (let r of rollResults) {
             if (this.isTextEntry(r)) {
-                const text = r.text || r.data?.text || '';
+                let text = r.text || r.data?.text || '';
                 results.textResults.push({
                     text: text,
                     isText: true
@@ -389,21 +382,21 @@ export class RandomLoot {
                 continue;
             }
             
-            let documentCollection = r.documentCollection || r.collection || r.data?.collection || null;
+            let collection = r.documentCollection || r.collection || r.data?.collection || null;
             let documentId = r.documentId || r.resultId || r.data?.resultId || r._id || null;
             
-            if (!documentCollection) {
+            if (!collection) {
                 continue;
             }
             
             let resultObj = {
-                documentCollection: documentCollection,
+                documentCollection: collection,
                 documentId: documentId
             };
             
             let item = await this.getItem(resultObj);
             if (!item) {
-                if (enableDebug) console.log(`%cLootable DEBUG |%c [RL] [Standard Tables] Item not found: ${r.text || documentId}`, 'color: #940000;', 'color: inherit');
+                if (enableDebug) console.log('%cLootable DEBUG |%c [RL] [Standard Tables] Item not found: ' + (r.text || documentId), 'color: #940000;', 'color: inherit');
                 
                 if (r.text) {
                     results.textResults.push({
@@ -444,14 +437,14 @@ export class RandomLoot {
     if (!items.length) return [];
     
     try {
-        const itemsToAdd = items.filter(item => !item.isText);
-        const textEntries = items.filter(item => item.isText);
+        let itemsToAdd = items.filter(item => !item.isText);
+        let textEntries = items.filter(item => item.isText);
         
         if (!itemsToAdd.length && !textEntries.length) return items;
         
         let groupedItems = {};
         for (let item of itemsToAdd) {
-            const key = item.name;
+            let key = item.name;
             if (!groupedItems[key]) {
                 groupedItems[key] = foundry.utils.deepClone(item);
             } else {
@@ -459,31 +452,31 @@ export class RandomLoot {
             }
         }
         
-        const consolidatedItems = Object.values(groupedItems);
+        let consolidatedItems = Object.values(groupedItems);
         
         await actor.createEmbeddedDocuments('Item', consolidatedItems);
         
         if (enableDebug) {
-            const totalItemCount = itemsToAdd.length;
-            const uniqueItemCount = consolidatedItems.length;
-            const textCount = textEntries.length;
+            let totalItemCount = itemsToAdd.length;
+            let uniqueItemCount = consolidatedItems.length;
+            let textCount = textEntries.length;
             
-            let debugMessage = `%cLootable DEBUG |%c [RL] Added to ${actor.name}: ${totalItemCount} total items consolidated into ${uniqueItemCount} unique items`;
+            let debugMessage = '%cLootable DEBUG |%c [RL] Added to ' + actor.name + ': ' + totalItemCount + ' total items consolidated into ' + uniqueItemCount + ' unique items';
             
             if (textCount > 0) {
-                debugMessage += ` | ${textCount} text entries found`;
+                debugMessage += ' | ' + textCount + ' text entries found';
             }
             
             if (uniqueItemCount > 0) {
-                const itemList = consolidatedItems.map(item => 
-                    `${item.name} (${item.system.quantity || 1})`
+                let itemList = consolidatedItems.map(item => 
+                    item.name + ' (' + (item.system.quantity || 1) + ')'
                 ).join(', ');
-                debugMessage += ` | Items: ${itemList}`;
+                debugMessage += ' | Items: ' + itemList;
             }
             
             if (textCount > 0) {
-                const textList = textEntries.map(entry => entry.text).join(', ');
-                debugMessage += ` | Text: ${textList}`;
+                let textList = textEntries.map(entry => entry.text).join(', ');
+                debugMessage += ' | Text: ' + textList;
             }
             
             console.log(debugMessage, 'color: #940000;', 'color: inherit');
@@ -498,12 +491,12 @@ export class RandomLoot {
   static async sendLootMessage(actor, results) {
     let enableDebug = game.settings.get('lootable', 'enableDebug') || false;
     
-    const textEntries = results.filter(item => item.isText);
-    const itemResults = results.filter(item => !item.isText);
+    let textEntries = results.filter(item => item.isText);
+    let itemResults = results.filter(item => !item.isText);
     
     let groupedItems = {};
     for (let item of itemResults) {
-        const key = item.name;
+        let key = item.name;
         if (!groupedItems[key]) {
             groupedItems[key] = {
                 name: item.name,
@@ -515,11 +508,11 @@ export class RandomLoot {
         }
     }
     
-    const itemsToDisplay = Object.values(groupedItems);
+    let itemsToDisplay = Object.values(groupedItems);
     
     let groupedTextEntries = {};
     for (let entry of textEntries) {
-        const key = entry.text;
+        let key = entry.text;
         if (!groupedTextEntries[key]) {
             groupedTextEntries[key] = {
                 text: entry.text,
@@ -531,10 +524,10 @@ export class RandomLoot {
         }
     }
     
-    const consolidatedTextEntries = Object.values(groupedTextEntries);
+    let consolidatedTextEntries = Object.values(groupedTextEntries);
     
     try {
-        let content = await renderTemplate(`modules/lootable/templates/lootMessage.hbs`, {
+        let content = await renderTemplate('modules/lootable/templates/lootMessage.hbs', {
             actor: {
                 name: actor.name,
                 img: actor.img
@@ -545,8 +538,8 @@ export class RandomLoot {
         
         ChatMessage.create({
             content: content,
-            whisper: ChatMessage.getWhisperRecipients(`GM`),
-            flags: { "lootable": { randomLootGenerated: true } }
+            whisper: ChatMessage.getWhisperRecipients('GM'),
+            flags: { 'lootable': { randomLootGenerated: true } }
         });
     } catch (error) {
     }
@@ -559,23 +552,41 @@ export class RandomLoot {
   static canTokenReceiveLoot(token) {
     if (!token.actor) return false;
     
-    // Check if the token is an NPC
     if (!token.actor.type === 'npc') return false;
     
-    let creatureType = "";
-    const typeData = token.actor.system?.details?.type;
+    let cr = token.actor.system?.details?.cr;
+    if (cr === undefined || cr === null) return false;
+    
+    let creatureType = '';
+    let typeData = token.actor.system?.details?.type;
     
     if (typeData) {
-      if (typeData.value === "custom" && typeData.custom) {
+      if (typeData.value === 'custom' && typeData.custom) {
         creatureType = typeData.custom;
       } else {
-        creatureType = typeData.value || "";
+        creatureType = typeData.value || '';
       }
     } else {
-      creatureType = token.actor.system?.details?.race || "";
+      creatureType = token.actor.system?.details?.race || '';
     }
     
     if (!creatureType) return false;
+
+    let creatureSubtype = token.actor.system?.details?.type?.subtype || '';
+    let treasureType = '';
+    if (token.actor.system?.details?.treasure?.value instanceof Set) {
+      let treasureValues = Array.from(token.actor.system.details.treasure.value.values());
+      treasureType = treasureValues.join(',');
+    }
+
+    let creatureTypeTables = game.settings.get('lootable', 'creatureTypeTables');
+    if (!creatureTypeTables?.entries?.length) return false;
+
+    let matchingEntry = this.findMatchingTableEntry(creatureType, creatureSubtype, treasureType, cr, creatureTypeTables.entries);
+    if (!matchingEntry) return false;
+
+    let table = game.tables.get(matchingEntry.tableId);
+    if (!table) return false;
     
     return true;
   }
@@ -586,33 +597,33 @@ export class RandomLoot {
     for (let entry of entries) {
       if (!entry.tableId) continue;
       
-      if (entry.type && entry.type !== "") {
-        const entryTypes = entry.type.toLowerCase().split(',').map(t => t.trim());
-        const tokenTypes = creatureType.toLowerCase().split(',').map(t => t.trim());
+      if (entry.type && entry.type !== '') {
+        let entryTypes = entry.type.toLowerCase().split(',').map(t => t.trim());
+        let tokenTypes = creatureType.toLowerCase().split(',').map(t => t.trim());
         
-        const hasMatchingType = entryTypes.some(entryType => 
+        let hasMatchingType = entryTypes.some(entryType => 
           tokenTypes.some(tokenType => tokenType === entryType)
         );
         
         if (!hasMatchingType) continue;
       }
       
-      if (entry.subtype && entry.subtype !== "") {
-        const entrySubtypes = entry.subtype.toLowerCase().split(',').map(s => s.trim());
-        const tokenSubtypes = creatureSubtype.toLowerCase().split(',').map(s => s.trim());
+      if (entry.subtype && entry.subtype !== '') {
+        let entrySubtypes = entry.subtype.toLowerCase().split(',').map(s => s.trim());
+        let tokenSubtypes = creatureSubtype.toLowerCase().split(',').map(s => s.trim());
         
-        const hasMatchingSubtype = entrySubtypes.some(entrySubtype => 
+        let hasMatchingSubtype = entrySubtypes.some(entrySubtype => 
           tokenSubtypes.some(tokenSubtype => tokenSubtype === entrySubtype)
         );
         
         if (!hasMatchingSubtype) continue;
       }
       
-      if (entry.treasureType && entry.treasureType !== "") {
-        const entryTreasureTypes = entry.treasureType.toLowerCase().split(',').map(t => t.trim());
-        const tokenTreasureTypes = treasureType.toLowerCase().split(',').map(t => t.trim());
+      if (entry.treasureType && entry.treasureType !== '') {
+        let entryTreasureTypes = entry.treasureType.toLowerCase().split(',').map(t => t.trim());
+        let tokenTreasureTypes = treasureType.toLowerCase().split(',').map(t => t.trim());
         
-        const hasMatchingTreasureType = entryTreasureTypes.some(entryTreasureType => 
+        let hasMatchingTreasureType = entryTreasureTypes.some(entryTreasureType => 
           tokenTreasureTypes.some(tokenTreasureType => tokenTreasureType === entryTreasureType)
         );
         
@@ -634,36 +645,36 @@ export class RandomLoot {
     
     if (!this.canTokenReceiveLoot(token)) {
       if (enableDebug) {
-        console.log(`%cLootable DEBUG |%c [RL] Token ${token.name} is not valid for random loot`, 'color: #940000;', 'color: inherit');
+        console.log('%cLootable DEBUG |%c [RL] Token ' + token.name + ' is not valid for random loot', 'color: #940000;', 'color: inherit');
       }
       return;
     }
     
-    let creatureType = "";
-    const typeData = token.actor.system?.details?.type;
+    let creatureType = '';
+    let typeData = token.actor.system?.details?.type;
     
     if (typeData) {
-      if (typeData.value === "custom" && typeData.custom) {
+      if (typeData.value === 'custom' && typeData.custom) {
         creatureType = typeData.custom;
       } else {
-        creatureType = typeData.value || "";
+        creatureType = typeData.value || '';
       }
     } else {
-      creatureType = token.actor.system?.details?.race || "";
+      creatureType = token.actor.system?.details?.race || '';
     }
     
-    let creatureSubtype = token.actor.system?.details?.type?.subtype || "";
+    let creatureSubtype = token.actor.system?.details?.type?.subtype || '';
     
-    let treasureType = "";
+    let treasureType = '';
     if (token.actor.system?.details?.treasure?.value instanceof Set) {
-      const treasureValues = Array.from(token.actor.system.details.treasure.value.values());
-      treasureType = treasureValues.join(",");
+      let treasureValues = Array.from(token.actor.system.details.treasure.value.values());
+      treasureType = treasureValues.join(',');
     }
     
     let cr = token.actor.system?.details?.cr || 0;
     
     if (enableDebug) {
-      console.log(`%cLootable DEBUG |%c [RL] Token: ${token.name} | Type: ${creatureType}, Subtype: ${creatureSubtype}, Treasure Type: ${treasureType}, CR: ${cr}`, 'color: #940000;', 'color: inherit');
+      console.log('%cLootable DEBUG |%c [RL] Token: ' + token.name + ' | Type: ' + creatureType + ', Subtype: ' + creatureSubtype + ', Treasure Type: ' + treasureType + ', CR: ' + cr, 'color: #940000;', 'color: inherit');
     }
     
     let creatureTypeTables = game.settings.get('lootable', 'creatureTypeTables');
@@ -679,12 +690,12 @@ export class RandomLoot {
         let table = tableId ? game.tables.get(tableId) : null;
         
         if (table) {
-          console.log(`%cLootable DEBUG |%c [RL] Rolling on table: "${table.name}" (${table.id})`, 'color: #940000;', 'color: inherit');
+          console.log('%cLootable DEBUG |%c [RL] Rolling on table: \'' + table.name + '\' (' + table.id + ')', 'color: #940000;', 'color: inherit');
         } else {
-          console.log(`%cLootable DEBUG |%c [RL] Table ID ${tableId} not found`, 'color: #940000;', 'color: inherit');
+          console.log('%cLootable DEBUG |%c [RL] Table ID ' + tableId + ' not found', 'color: #940000;', 'color: inherit');
         }
       } else {
-        console.log(`%cLootable DEBUG |%c [RL] No matching table found for this token`, 'color: #940000;', 'color: inherit');
+        console.log('%cLootable DEBUG |%c [RL] No matching table found for this token', 'color: #940000;', 'color: inherit');
       }
     }
     
@@ -705,7 +716,7 @@ export class RandomLoot {
         return;
       }
       
-      const consolidatedItems = await this.addItemsToActor(token.actor, results);
+      let consolidatedItems = await this.addItemsToActor(token.actor, results);
       
       if (!hideRandomLootChatMsg) {
         await this.sendLootMessage(token.actor, consolidatedItems || results);

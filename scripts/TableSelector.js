@@ -13,17 +13,17 @@ export class TableSelector extends FormApplication {
   
     static get defaultOptions() {
       return foundry.utils.mergeObject(super.defaultOptions, {
-        title: game.i18n.localize(`LOOTABLE.RandomLootSettings.TableSelector.Title`),
-        template: `modules/lootable/templates/tableSelector.hbs`,
+        title: game.i18n.localize('LOOTABLE.RandomLootSettings.TableSelector.Title'),
+        template: 'modules/lootable/templates/tableSelector.hbs',
         width: 400,
         height: 'auto',
-        classes: [`lootable`, `table-selector`],
+        classes: ['lootable', 'table-selector'],
         scrollY: ['.table-list']
       });
     }
   
     async getData() {
-      let currentTableId = "";
+      let currentTableId = '';
       
       if (this.creatureTypeTables && this.creatureTypeTables.entries) {
           let entry = this.creatureTypeTables.entries.find(e => 
@@ -35,13 +35,13 @@ export class TableSelector extends FormApplication {
           );
           
           if (entry) {
-              currentTableId = entry.tableId || "";
+              currentTableId = entry.tableId || '';
           }
       }
       
       let tables = [{
-          id: "",
-          name: game.i18n.localize(`LOOTABLE.RandomLootSettings.NoTable`)
+          id: '',
+          name: game.i18n.localize('LOOTABLE.RandomLootSettings.NoTable')
       }];
       
       let worldTables = game.tables.contents;
@@ -64,9 +64,9 @@ export class TableSelector extends FormApplication {
     }
     
     async _updateObject(_event, formData) {
-      let tableId = formData.selectedTable || "";
+      let tableId = formData.selectedTable || '';
       
-      let creatureTypeTables = game.settings.get(`lootable`, `creatureTypeTables`);
+      let creatureTypeTables = game.settings.get('lootable', 'creatureTypeTables');
       
       let index = creatureTypeTables.entries.findIndex(e => 
           e.type === this.creatureType && 
@@ -79,9 +79,9 @@ export class TableSelector extends FormApplication {
       if (index !== -1) {
           creatureTypeTables.entries[index].tableId = tableId;
           
-          await game.settings.set(`lootable`, `creatureTypeTables`, creatureTypeTables);
+          await game.settings.set('lootable', 'creatureTypeTables', creatureTypeTables);
       } else {
-          if (this.enableDebug) console.log(`%cLootable DEBUG |%c No entry found for ${this.creatureType}, ${this.subtype}, ${this.treasureType}, ${JSON.stringify(this.crRange)}`, 'color: #940000;', 'color: inherit');
+          if (this.enableDebug) console.log('%cLootable DEBUG |%c No entry found for ' + this.creatureType + ', ' + this.subtype + ', ' + this.treasureType + ', ' + JSON.stringify(this.crRange), 'color: #940000;', 'color: inherit');
       }
       
       if (this.callback) {

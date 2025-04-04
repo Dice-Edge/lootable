@@ -16,20 +16,17 @@
     "maximum": "12"
   },
   "relationships": {
-    "systems": [
-      {
-        "id": "dnd5e",
-        "type": "system",
-        "compatibility": [
-          {
-            "minimum": "3",
-            "verified": "4.3",
-            "maximum": "4"
-          }
+        "systems": [
+            {
+                "id": "dnd5e",
+                "compatibility": {
+                    "minimum": "4.0.0",
+                    "verified": "4.3.6",
+                    "maximum": "4.99"
+                }
+            }
         ]
-      }
-    ]
-  },
+    },
   "languages": [
     {
       "lang": "en",

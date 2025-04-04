@@ -63,7 +63,7 @@ export class RandomLootSettingsForm extends FormApplication {
     if (table) {
         mappedEntry.tableName = table.name;
     } else {
-        if (this.enableDebug) console.log(`%cLootable DEBUG |%c Table not found: ${mappedEntry.tableId}`, 'color: #940000;', 'color: inherit');
+        if (this.enableDebug) console.log('%cLootable DEBUG |%c Table not found: ' + mappedEntry.tableId, 'color: #940000;', 'color: inherit');
         mappedEntry.tableName = game.i18n.localize('LOOTABLE.RandomLootSettings.TableNotFound');
     }
     
@@ -96,20 +96,20 @@ export class RandomLootSettingsForm extends FormApplication {
     let button = event.currentTarget;
     let { creatureType, creatureSubtype, treasureType, crRangeStart, crRangeEnd } = button.dataset;
     
-    const crStart = parseInt(crRangeStart);
-    const crEnd = parseInt(crRangeEnd);
+    let crStart = parseInt(crRangeStart);
+    let crEnd = parseInt(crRangeEnd);
     
-    let currentTableId = "";
+    let currentTableId = '';
     let entryIndex = this.creatureTypeTables.entries.findIndex(e => {
         if (e.crRange[0] !== crStart || e.crRange[1] !== crEnd) return false;
         
-        const entryType = e.type?.toLowerCase() || '';
-        const entrySubtype = e.subtype?.toLowerCase() || '';
-        const entryTreasureType = e.treasureType?.toLowerCase() || '';
+        let entryType = e.type?.toLowerCase() || '';
+        let entrySubtype = e.subtype?.toLowerCase() || '';
+        let entryTreasureType = e.treasureType?.toLowerCase() || '';
         
-        const buttonType = creatureType?.toLowerCase() || '';
-        const buttonSubtype = creatureSubtype?.toLowerCase() || '';
-        const buttonTreasureType = treasureType?.toLowerCase() || '';
+        let buttonType = creatureType?.toLowerCase() || '';
+        let buttonSubtype = creatureSubtype?.toLowerCase() || '';
+        let buttonTreasureType = treasureType?.toLowerCase() || '';
         
         if (entryType !== buttonType) return false;
         if (entrySubtype !== buttonSubtype) return false;
@@ -119,15 +119,15 @@ export class RandomLootSettingsForm extends FormApplication {
     });
     
     if (entryIndex !== -1) {
-        currentTableId = this.creatureTypeTables.entries[entryIndex].tableId || "";
+        currentTableId = this.creatureTypeTables.entries[entryIndex].tableId || '';
     } else if (this.enableDebug) {
-        console.log(`%cLootable DEBUG |%c No entry found for ${creatureType}, ${creatureSubtype}, ${treasureType}, ${crRangeStart}-${crRangeEnd}`, 'color: #940000;', 'color: inherit');
+        console.log('%cLootable DEBUG |%c No entry found for ' + creatureType + ', ' + creatureSubtype + ', ' + treasureType + ', ' + crRangeStart + '-' + crRangeEnd, 'color: #940000;', 'color: inherit');
     }
     
     let tables = [{
-        id: "",
+        id: '',
         name: game.i18n.localize('LOOTABLE.RandomLootSettings.NoTable'),
-        selected: currentTableId === ""
+        selected: currentTableId === ''
     }];
     
     let worldTables = game.tables.contents;
@@ -140,8 +140,8 @@ export class RandomLootSettingsForm extends FormApplication {
     }
     
     tables.sort((a, b) => {
-        if (a.id === "") return -1;
-        if (b.id === "") return 1;
+        if (a.id === '') return -1;
+        if (b.id === '') return 1;
         return a.name.localeCompare(b.name);
     });
     
@@ -157,28 +157,28 @@ export class RandomLootSettingsForm extends FormApplication {
       height: 500,
       buttons: {
         confirm: {
-          icon: '<i class="fas fa-check"></i>',
+          icon: '<i class=\'fas fa-check\'></i>',
           label: game.i18n.localize('LOOTABLE.RandomLootSettings.TableSelector.Confirm'),
           callback: (html) => {
-            const form = html.find('form')[0];
-            const tableId = form.selectedTable?.value || "";
+            let form = html.find('form')[0];
+            let tableId = form.selectedTable?.value || '';
             
             if (entryIndex !== -1) {
               this.creatureTypeTables.entries[entryIndex].tableId = tableId;
               this._updateAndRender();
             } else if (this.enableDebug) {
-              console.log(`%cLootable DEBUG |%c Entry not found for creature type: ${creatureType}, subtype: ${creatureSubtype}, treasure type: ${treasureType}, CR: ${crRangeStart}-${crRangeEnd}`, 'color: #940000;', 'color: inherit');
+              console.log('%cLootable DEBUG |%c Entry not found for creature type: ' + creatureType + ', subtype: ' + creatureSubtype + ', treasure type: ' + treasureType + ', CR: ' + crRangeStart + '-' + crRangeEnd, 'color: #940000;', 'color: inherit');
             }
           }
         }
       },
-      default: "confirm",
+      default: 'confirm',
       render: (html) => {
-        const tableList = html.find('.table-list')[0];
+        let tableList = html.find('.table-list')[0];
         if (tableList) {
           $(tableList).css('max-height', '350px').css('overflow-y', 'auto');
           
-          const selectedRadio = html.find('input[type="radio"]:checked')[0];
+          let selectedRadio = html.find('input[type=\'radio\']:checked')[0];
           if (selectedRadio) {
             setTimeout(() => {
               selectedRadio.scrollIntoView({ block: 'center' });
@@ -194,19 +194,19 @@ export class RandomLootSettingsForm extends FormApplication {
     let button = event.currentTarget;
     let { creatureType, creatureSubtype, treasureType, crRangeStart, crRangeEnd } = button.dataset;
     
-    const crStart = parseInt(crRangeStart);
-    const crEnd = parseInt(crRangeEnd);
+    let crStart = parseInt(crRangeStart);
+    let crEnd = parseInt(crRangeEnd);
     
     let entryIndex = this.creatureTypeTables.entries.findIndex(e => {
         if (e.crRange[0] !== crStart || e.crRange[1] !== crEnd) return false;
         
-        const entryType = e.type?.toLowerCase() || '';
-        const entrySubtype = e.subtype?.toLowerCase() || '';
-        const entryTreasureType = e.treasureType?.toLowerCase() || '';
+        let entryType = e.type?.toLowerCase() || '';
+        let entrySubtype = e.subtype?.toLowerCase() || '';
+        let entryTreasureType = e.treasureType?.toLowerCase() || '';
         
-        const buttonType = creatureType?.toLowerCase() || '';
-        const buttonSubtype = creatureSubtype?.toLowerCase() || '';
-        const buttonTreasureType = treasureType?.toLowerCase() || '';
+        let buttonType = creatureType?.toLowerCase() || '';
+        let buttonSubtype = creatureSubtype?.toLowerCase() || '';
+        let buttonTreasureType = treasureType?.toLowerCase() || '';
         
         if (entryType !== buttonType) return false;
         if (entrySubtype !== buttonSubtype) return false;
@@ -216,7 +216,7 @@ export class RandomLootSettingsForm extends FormApplication {
     });
     
     if (entryIndex === -1) {
-        if (this.enableDebug) console.log(`%cLootable DEBUG |%c Could not find entry for Type: ${creatureType}, Subtype: ${creatureSubtype}, Treasure Type: ${treasureType}, CR: ${crRangeStart}-${crRangeEnd}`, 'color: #940000;', 'color: inherit');
+        if (this.enableDebug) console.log('%cLootable DEBUG |%c Could not find entry for Type: ' + creatureType + ', Subtype: ' + creatureSubtype + ', Treasure Type: ' + treasureType + ', CR: ' + crRangeStart + '-' + crRangeEnd, 'color: #940000;', 'color: inherit');
         return;
     }
     
@@ -241,7 +241,7 @@ export class RandomLootSettingsForm extends FormApplication {
     let index = parseInt(tr.dataset.index);
     
     if (isNaN(index) || index < 0 || index >= this.creatureTypeTables.entries.length) {
-      console.error(`Invalid index: ${index}`);
+      console.error('%cLootable ERROR |%c Invalid index: ' + index, 'color: #ff0000;', 'color: inherit');
       return;
     }
     
@@ -365,9 +365,9 @@ class AddCreatureTypeForm extends FormApplication {
     }
     
     let duplicate = this.creatureTypeTables.entries.some(e => {
-        const eType = e.type?.toLowerCase() || '';
-        const eSubtype = e.subtype?.toLowerCase() || '';
-        const eTreasureType = e.treasureType?.toLowerCase() || '';
+        let eType = e.type?.toLowerCase() || '';
+        let eSubtype = e.subtype?.toLowerCase() || '';
+        let eTreasureType = e.treasureType?.toLowerCase() || '';
         
         return eType === type && 
                eSubtype === subtype && 
@@ -386,7 +386,7 @@ class AddCreatureTypeForm extends FormApplication {
       subtype,
       treasureType,
       crRange: [crMin, crMax],
-      tableId: ""
+      tableId: ''
     };
     
     if (this.callback) {
@@ -455,9 +455,9 @@ class EditCreatureTypeForm extends FormApplication {
     let duplicate = this.creatureTypeTables.entries.some((e, i) => {
       if (i === this.entryIndex) return false;
       
-      const eType = e.type?.toLowerCase() || '';
-      const eSubtype = e.subtype?.toLowerCase() || '';
-      const eTreasureType = e.treasureType?.toLowerCase() || '';
+      let eType = e.type?.toLowerCase() || '';
+      let eSubtype = e.subtype?.toLowerCase() || '';
+      let eTreasureType = e.treasureType?.toLowerCase() || '';
       
       return eType === type && 
              eSubtype === subtype && 
