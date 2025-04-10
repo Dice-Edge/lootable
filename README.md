@@ -27,7 +27,7 @@ How to Use
 
 Adding Pocket Change to a humanoid token:
 
-![2025-04-03_19-43-18 (2)](https://github.com/user-attachments/assets/c0e84cd2-8036-489c-96c6-26e787be580b)
+img
 
 
 ### Random Loot
@@ -44,15 +44,15 @@ How to Use:
 
 Setting up and rolling random loot for token:
 
-![2025-04-03_19-55-33](https://github.com/user-attachments/assets/1ea58e06-e884-4042-8874-8e2c5808b1a4)
+img
 
 Using the Random Loot prompt to generate loot:
 
-![2025-04-03_19-59-17](https://github.com/user-attachments/assets/c06e28d7-9a97-46f4-b859-8a175de8aa9f)
+img
 
 Using the token HUD to prompt a new Random Loot roll:
 
-![2025-04-03_20-04-10](https://github.com/user-attachments/assets/8d4b8cb7-f8f9-40dc-a4c9-443562c3596a)
+img
 
 
 ## Requirements
