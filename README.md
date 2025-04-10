@@ -27,8 +27,7 @@ How to Use
 
 Adding Pocket Change to a humanoid token:
 
-img
-
+![2025-04-10_14-34-10](https://github.com/user-attachments/assets/7f30325b-a33b-4d13-80de-cf10bdbf8ce7)
 
 ### Random Loot
 A Robust configurable system that uses rollable tables and adds the loot rolled to a token. This can be done automatically when the token is added, or you can have it prompt each time a new token is added. The random loot can also be triggered using the Random Loot button added to the token HUD.
@@ -44,15 +43,15 @@ How to Use:
 
 Setting up and rolling random loot for token:
 
-img
+![2025-04-10_14-47-19](https://github.com/user-attachments/assets/05fd280d-3137-4485-af6f-0519f68b4baf)
 
 Using the Random Loot prompt to generate loot:
 
-img
+![2025-04-10_14-50-03](https://github.com/user-attachments/assets/4679802e-829e-4ff5-bc0c-7b824013a0a1)
 
 Using the token HUD to prompt a new Random Loot roll:
 
-img
+![2025-04-10_14-51-06](https://github.com/user-attachments/assets/defde237-f035-46e9-b9aa-898a068b65fe)
 
 
 ## Requirements
