@@ -9,10 +9,11 @@
 
 A Foundry VTT module that automatically adds loot to NPCs when they are added to a scene, using rollable tables and configurable settings.
 
-## Features
-Note: Each feature can be toggled off independently within their own settings.
+## TOOLS
+Note: Each tool can be toggled off independently within their own settings.
 
-### Pocket Change
+
+### Pocket Change Tool
 Features a highly customizeable system that automatically adds coin to tokens based on their Challenge Rating (CR) when they are placed on the scene.
 
 Setting Options
@@ -29,7 +30,8 @@ Adding Pocket Change to a humanoid token:
 
 ![2025-04-10_14-34-10](https://github.com/user-attachments/assets/7f30325b-a33b-4d13-80de-cf10bdbf8ce7)
 
-### Random Loot
+
+### Random Loot Tool
 A Robust configurable system that uses rollable tables and adds the loot rolled to a token. This can be done automatically when the token is added, or you can have it prompt each time a new token is added. The random loot can also be triggered using the Random Loot button added to the token HUD.
 
 Setting Options
@@ -52,6 +54,22 @@ Using the Random Loot prompt to generate loot:
 Using the token HUD to prompt a new Random Loot roll:
 
 ![2025-04-10_14-51-06](https://github.com/user-attachments/assets/defde237-f035-46e9-b9aa-898a068b65fe)
+
+
+### Treasure Pile Tool
+A broad spectrum interface desinged to generate any size of treasure pile. It can generate the contents from something as small as a nobleman's purse to a dragon's hoard.
+
+Setting Options
+- **Default Tables**: This is the selection of tables you want to have available to use for the Treasure Pile interface, the tables will show in the table list and be used for the auto generate feature.
+- **Generation Attempt Limit**: This setting allows you to designate how many tries you want the auto generate attempt to fit your gold specifications. Note that setting this setting high can cause issues.
+- **Show All Tables**: This option allows you to show all rollable tables in the table list on the interface, it does not however affect the selected tables for the auto generate feature.
+
+How to Use:
+- Open the treasure pile generator using the button at the top of the Items tab. Then start generating the content using manual methods of adding coins, rolling on tables, or dragging in items. Or use the auto generate feature to generate a random amount of coin and items. Then you can use the export feature to bring the contents to an actor or journal page.
+
+Using the Treasure Pile interface:
+
+![2025-05-13_17-02-07](https://github.com/user-attachments/assets/34e81a01-7267-405a-80d8-b4c1c8b23c7e)
 
 
 ## Requirements
