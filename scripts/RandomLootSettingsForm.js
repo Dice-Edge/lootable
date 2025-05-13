@@ -48,9 +48,23 @@ export class RandomLootSettingsForm extends FormApplication {
   _findEntryIndex(type, subtype, treasureType, crStart, crEnd) {
     return this.creatureTypeTables.entries.findIndex(e => {
       if (e.crRange[0] !== crStart || e.crRange[1] !== crEnd) return false;
-      return e.type?.toLowerCase() === (type?.toLowerCase() ?? '') && 
-             e.subtype?.toLowerCase() === (subtype?.toLowerCase() ?? '') && 
-             e.treasureType?.toLowerCase() === (treasureType?.toLowerCase() ?? '');
+      
+      // Handle empty or undefined values for type comparison
+      const entryType = (e.type || '').toLowerCase();
+      const searchType = (type || '').toLowerCase();
+      if (entryType && searchType && entryType !== searchType) return false;
+      
+      // Handle empty or undefined values for subtype comparison
+      const entrySubtype = (e.subtype || '').toLowerCase();
+      const searchSubtype = (subtype || '').toLowerCase();
+      if (entrySubtype && searchSubtype && entrySubtype !== searchSubtype) return false;
+      
+      // Handle empty or undefined values for treasureType comparison
+      const entryTreasureType = (e.treasureType || '').toLowerCase();
+      const searchTreasureType = (treasureType || '').toLowerCase();
+      if (entryTreasureType && searchTreasureType && entryTreasureType !== searchTreasureType) return false;
+      
+      return true;
     });
   }
 
@@ -79,16 +93,14 @@ export class RandomLootSettingsForm extends FormApplication {
   async _onSelectTable(event) {
     event.preventDefault();
     const button = event.currentTarget;
-    const { type, subtype, treasureType, crRangeStart, crRangeEnd } = button.dataset;
-    const crStart = parseInt(crRangeStart);
-    const crEnd = parseInt(crRangeEnd);
-    const entryIndex = this._findEntryIndex(type, subtype, treasureType, crStart, crEnd);
-    const currentTableId = entryIndex !== -1 ? this.creatureTypeTables.entries[entryIndex].tableId ?? '' : '';
+    const index = parseInt(button.dataset.index);
+    if (isNaN(index) || index < 0 || index >= this.creatureTypeTables.entries.length) {
+      return;
+    }
+    const currentTableId = this.creatureTypeTables.entries[index].tableId ?? '';
     await this._showTableSelectionDialog(currentTableId, async (tableId) => {
-      if (entryIndex !== -1) {
-        this.creatureTypeTables.entries[entryIndex].tableId = tableId;
-        await this._updateAndRender();
-      }
+      this.creatureTypeTables.entries[index].tableId = tableId;
+      await this._updateAndRender();
     });
   }
   
