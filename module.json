@@ -2,7 +2,7 @@
   "id": "lootable",
   "title": "Lootable!",
   "description": "Module to add loot to NPCs when added to a scene using world rollable tables.",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "authors": [
     {
       "name": "Dice Edge",
@@ -38,11 +38,13 @@
   "esmodules": [
     "scripts/Lootable.js",
     "scripts/LootableSettings.js",
-    "scripts/PocketChangeSettingsForm.js",
-    "scripts/RandomLootSettingsForm.js",
     "scripts/TableSelector.js",
     "scripts/PocketChange.js",
-    "scripts/RandomLoot.js"
+    "scripts/PocketChangeSettingsForm.js",
+    "scripts/RandomLoot.js",
+    "scripts/RandomLootSettingsForm.js",
+    "scripts/TreasurePile.js",
+    "scripts/TreasurePileSettingsForm.js"
   ],
   "styles": [
     "styles/styles.css"
