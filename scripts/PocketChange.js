@@ -71,7 +71,7 @@ export class PocketChange {
           tokenName: tokenName,
           isCoinMessage: true,
           isPenniless: isPenniless,
-          cp: cp,
+          cp: finalCp,
           sp: sp,
           gp: gp,
           pp: pp
