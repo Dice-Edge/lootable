@@ -1,0 +1,35 @@
+<form>
+  <div class="form-group">
+    <label>{{localize 'LOOTABLE.tsrplIntf.exportWin.journalName'}}:</label>
+    <select name="journal" id="journalSelect" {{#unless journals.length}}disabled{{/unless}}>
+      {{#each journals}}
+      <option value="{{this.id}}">{{this.name}}</option>
+      {{/each}}
+    </select>
+  </div>
+  <div class="form-group">
+    <label>{{localize 'LOOTABLE.tsrplIntf.exportWin.pageName'}}:</label>
+    <input type="text" name="pageName" value="{{localize 'LOOTABLE.tsrplIntf.exportWin.pageDefault'}}">
+  </div>
+  {{#if isGM}}
+  <div class="form-group">
+    <label>
+      <input type="checkbox" name="createNew" id="createNew">
+      {{localize 'LOOTABLE.tsrplIntf.exportWin.createJournal'}}
+    </label>
+  </div>
+  <div class="form-group new-journal-name" style="display: none;">
+    <label>{{localize 'LOOTABLE.tsrplIntf.exportWin.newJournal'}}:</label>
+    <input type="text" name="newJournalName" value="{{localize 'LOOTABLE.tsrplIntf.exportWin.newDefault'}}">
+  </div>
+  {{/if}}
+  <div class="notes">
+    {{localize 'LOOTABLE.tsrplIntf.total'}}: {{totalValue}}
+  </div>
+
+  <footer>
+    <button type="submit" class="button">
+      <i class="fas fa-file-export"></i> {{localize 'LOOTABLE.tsrplIntf.exportWin.export'}}
+    </button>
+  </footer>
+</form>

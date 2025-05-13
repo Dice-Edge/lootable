@@ -1,0 +1,37 @@
+<form>
+  <div class="disable-module">
+    <label>{{localize "LOOTABLE.settings.tsrplSettings.disable"}}</label>
+    <div class="form-fields">
+      <input type="checkbox" name="disableTreasurePile" {{#if settings.disableTreasurePile}}checked{{/if}}>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>{{localize "LOOTABLE.settings.tsrplSettings.defaultTables"}}</label>
+    <button type="button" class="button select-tables">
+      <i class="fas fa-table"></i> {{localize "LOOTABLE.settings.tsrplSettings.selectTables"}}
+    </button>
+  </div>
+
+  <div class="form-group">
+    <label>{{localize "LOOTABLE.settings.tsrplSettings.genLimit"}}</label>
+    <div class="form-fields">
+      <input type="number" name="generationLimit" value="{{settings.generationLimit}}" min="1">
+    </div>
+    <p class="notes">{{localize "LOOTABLE.settings.tsrplSettings.genLimitHint"}}</p>
+  </div>
+
+  <div class="form-group">
+    <label>{{localize "LOOTABLE.settings.tsrplSettings.showAll"}}</label>
+    <div class="form-fields">
+      <input type="checkbox" name="showAllTables" {{#if settings.showAllTables}}checked{{/if}}>
+    </div>
+    <p class="notes">{{localize "LOOTABLE.settings.tsrplSettings.showAllHint"}}</p>
+  </div>
+
+  <footer>
+    <button type="submit" class="button">
+      <i class="fas fa-save"></i> {{localize "LOOTABLE.save"}}
+    </button>
+  </footer>
+</form>

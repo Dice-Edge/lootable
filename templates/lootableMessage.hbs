@@ -1,0 +1,27 @@
+<div>
+  <strong>{{tokenName}}</strong>
+</div>
+<div>
+  {{#if isCoinMessage}}
+  {{#if isPenniless}}
+  {{localize 'LOOTABLE.pktcgMsg'}} <em>{{localize 'LOOTABLE.settings.pktcgSettings.noCoinChance'}}</em>
+  {{else}}
+  {{localize 'LOOTABLE.pktcgMsg'}} <em>{{cp}} cp, {{sp}} sp, {{gp}} gp, {{pp}} pp</em>
+  {{/if}}
+  {{else}}
+  {{localize 'LOOTABLE.rndltMsg'}}
+  <em>
+    {{#if items.length}}
+    {{#each items as |item index|}}{{#if index}}, {{/if}}"{{item.name}}"{{#if item.quantity}}
+    x{{item.quantity}}{{/if}}{{/each}}
+    {{/if}}
+    {{#if textEntries.length}}
+    {{#if items.length}}, {{/if}}
+    {{#each textEntries as |entry index|}}{{#if index}}, {{/if}}"{{entry.text}}"{{#if entry.quantity}}
+    x{{entry.quantity}}{{/if}}{{/each}}
+    {{else}}
+    {{#unless items.length}}"{{localize 'LOOTABLE.rndltPrompt.noResults'}}"{{/unless}}
+    {{/if}}
+  </em>
+  {{/if}}
+</div>

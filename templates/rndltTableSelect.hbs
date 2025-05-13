@@ -1,0 +1,26 @@
+<form>
+  <div class='table-list'>
+    {{#if tables.length}}
+    <ul>
+        {{#each tables}}
+        <li>
+            <label class="table-item">
+                <div>
+                    <input type="{{#if ../multiSelect}}checkbox{{else}}radio{{/if}}" name="selectedTable" value="{{this.id}}" {{#if this.selected}}checked{{/if}} />
+                    <span>{{this.name}}</span>
+                </div>
+            </label>
+        </li>
+        {{/each}}
+    </ul>
+    {{else}}
+    <p>{{localize "LOOTABLE.settings.rndltSettings.tableSelector.noTables"}}</p>
+    {{/if}}
+  </div>
+  
+  <footer>
+    <button type="submit" class="button">
+        <i class="fas fa-check"></i> {{localize "LOOTABLE.settings.rndltSettings.tableSelector.confirm"}}
+    </button>
+  </footer>
+</form>

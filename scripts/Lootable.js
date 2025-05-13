@@ -1,6 +1,7 @@
 import { settings } from './LootableSettings.js';
 import { PocketChange } from './PocketChange.js';
 import { RandomLoot } from './RandomLoot.js';
+import { TreasurePile } from './TreasurePile.js';
 
 function logWelcomeMessage() {
   let moduleData = game.modules.get('lootable');
@@ -14,6 +15,9 @@ function logWelcomeMessage() {
 Hooks.once('init', () => {
   settings();
   RandomLoot.registerHandlebarsHelpers();
+  Handlebars.registerHelper('isCoin', function(type) {
+    return type === 'coins';
+  });
 });
 
 Hooks.once('ready', () => {
@@ -28,37 +32,47 @@ Hooks.on('createToken', async (tokenDoc, options, userId) => {
 Hooks.on('renderChatMessage', (app, html, data) => {
   let flags = data?.message?.flags?.lootable;
   if (!flags) return;
-  html.addClass('message lootable-message');
+  html.addClass('lootable-message');
   if (flags.coinGenerated) {
     html.addClass('lootable-coin-generated');
   }
   if (flags.randomLootGenerated) {
-    html.addClass('lootable-random-loot-generated');
+    html.addClass('lootable-rndlt-generated');
   }
 });
 
-Hooks.on('renderTokenHUD', (app, html, data) => {
+Hooks.on('renderTokenHUD', async (app, html, data) => {
   if (!RandomLoot.canUserRollLoot(game.user)) return;
-  
   let token = app.object;
   if (!RandomLoot.canTokenReceiveLoot(token)) return;
-  
   let hideHUD = game.settings.get('lootable', 'hideRandomLootHUD');
   if (hideHUD) return;
-
   let disableRandomLoot = game.settings.get('lootable', 'disableRandomLoot');
   if (disableRandomLoot) return;
-  
-  let rollLootButton = $(`
-    <div class='control-icon' data-action='rollLoot'>
-        <i class='fas fa-coins' title='${game.i18n.localize('LOOTABLE.RandomLootPrompt.RollRandomLoot')}'></i>
-    </div>
-  `);
-  
-  rollLootButton.click(async () => {
-    await RandomLoot.rollRandomLoot(token);
+  let buttonTemplate = await renderTemplate('modules/lootable/templates/lootableButtons.hbs', {
+    isRollLootButton: true
   });
-  
+  let rollLootButton = $(buttonTemplate);
+  rollLootButton.click(async () => {
+    await RandomLoot.handleManualRoll(token);
+  });
   let rightControls = html.find('.col.right');
   rightControls.append(rollLootButton);
+});
+
+Hooks.on('renderSidebarTab', async (app, html, data) => {
+    if (!game.user.isGM) return;
+    if (!(app instanceof ItemDirectory)) return;
+    let disableTreasurePile = game.settings.get('lootable', 'disableTreasurePile');
+    if (disableTreasurePile) return;
+    let buttonTemplate = await renderTemplate('modules/lootable/templates/lootableButtons.hbs', {
+      isTreasurePileButton: true
+    });
+    let treasurePileButton = $(buttonTemplate);
+    treasurePileButton.click(() => {
+        new TreasurePile().render(true);
+    });
+    let header = html.find('.directory-header');
+    let searchField = header.find('.header-search');
+    treasurePileButton.insertBefore(searchField);
 });

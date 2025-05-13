@@ -1,0 +1,13 @@
+{{#if isRollLootButton}}
+<div class='control-icon' data-action='rollLoot'>
+  <i class='fas fa-coins' title='{{localize "LOOTABLE.rndltHUDHint"}}'></i>
+</div>
+
+{{else if isTreasurePileButton}}
+<div class="action-buttons flexrow">
+  <button type="button" class="tsrpl-button">
+    <i class="fas fa-coins"></i> {{localize "LOOTABLE.tsrplIntfButton"}}
+  </button>
+</div>
+
+{{/if}}

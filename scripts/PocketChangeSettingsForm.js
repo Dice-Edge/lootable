@@ -1,9 +1,10 @@
 export class PocketChangeSettingsForm extends FormApplication {
+  
     static get defaultOptions() {
       return foundry.utils.mergeObject(super.defaultOptions, {
-        title: game.i18n.localize('LOOTABLE.SettingsMenu.PocketChange.Name'),
+        title: game.i18n.localize('LOOTABLE.settings.pktcgName'),
         id: 'pocket-change-settings',
-        template: 'modules/lootable/templates/pocketChange.hbs',
+        template: 'modules/lootable/templates/pktcgSettings.hbs',
         width: 500,
         height: 'auto',
         closeOnSubmit: true,
@@ -25,12 +26,6 @@ export class PocketChangeSettingsForm extends FormApplication {
           doubleCoinChance: game.settings.get('lootable', 'doubleCoinChance'),
           tripleCoinChance: game.settings.get('lootable', 'tripleCoinChance'),
           hidePocketChangeChatMsg: game.settings.get('lootable', 'hidePocketChangeChatMsg')
-        },
-        headers: {
-          amountConfig: game.i18n.localize('LOOTABLE.PocketChangeSettings.AmountConfig'),
-          tokenConfig: game.i18n.localize('LOOTABLE.PocketChangeSettings.TokenConfig'),
-          probabilityConfig: game.i18n.localize('LOOTABLE.PocketChangeSettings.ProbabilityConfig'),
-          messageConfig: game.i18n.localize('LOOTABLE.PocketChangeSettings.MessageConfig')
         }
       };
     }

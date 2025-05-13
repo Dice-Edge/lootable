@@ -1,0 +1,31 @@
+<form>
+  <div class="form-group">
+    <label>{{localize 'LOOTABLE.tsrplIntf.exportWin.actorName'}}:</label>
+    <select name="actor" id="actorSelect" {{#unless actors.length}}disabled{{/unless}}>
+      {{#each actors}}
+      <option value="{{this.id}}">{{this.name}}</option>
+      {{/each}}
+    </select>
+  </div>
+  {{#if isGM}}
+  <div class="form-group">
+    <label>
+      <input type="checkbox" name="createNew" id="createNew">
+      {{localize 'LOOTABLE.tsrplIntf.exportWin.createActor'}}
+    </label>
+  </div>
+  <div class="form-group new-actor-name" style="display: none;">
+    <label>{{localize 'LOOTABLE.tsrplIntf.exportWin.newActor'}}:</label>
+    <input type="text" name="newActorName" value="{{localize 'LOOTABLE.tsrplIntf.exportWin.newDefault'}}">
+  </div>
+  {{/if}}
+  <div class="notes">
+    {{localize 'LOOTABLE.tsrplIntf.total'}}: {{totalValue}}
+  </div>
+
+  <footer>
+    <button type="submit" class="button">
+      <i class="fas fa-file-export"></i> {{localize 'LOOTABLE.tsrplIntf.exportWin.export'}}
+    </button>
+  </footer>
+</form>

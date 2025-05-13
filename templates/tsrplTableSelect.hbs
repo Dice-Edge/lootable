@@ -1,0 +1,24 @@
+<form>
+  <div class='table-list'>
+    {{#if tables.length}}
+    <ul>
+      {{#each tables}}
+      <li>
+        <label class="table-item">
+          <input type='checkbox' name='selectedTables' value='{{this.id}}' {{#if this.selected}}checked{{/if}}>
+          <span>{{this.name}}</span>
+        </label>
+      </li>
+      {{/each}}
+    </ul>
+    {{else}}
+    <p>{{localize 'lootable.TableSelector.NoTables'}}</p>
+    {{/if}}
+  </div>
+
+  <footer>
+    <button type="submit" name="submit" class="button">
+      <i class="fas fa-check"></i> {{localize "LOOTABLE.save"}}
+    </button>
+  </footer>
+</form>

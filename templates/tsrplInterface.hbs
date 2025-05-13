@@ -1,0 +1,182 @@
+<form class="tsrpl-interface">
+  <div class="tsrpl-container">
+    <!-- Left Column: Tables and Controls -->
+    <div class="tsrpl-left-column">
+      <div class="tsrpl-coin-generation">
+        <h3>{{localize "LOOTABLE.tsrplIntf.coinGen"}}</h3>
+        <div class="tsrpl-coin-controls">
+          <label>{{localize "LOOTABLE.tsrplIntf.coinType"}}</label>
+          <div class="radio-group">
+            <label>
+              <input type="radio" name="coinType" value="random" {{#if (eq selectedCoinType "random" )}}checked{{/if}}>
+              {{localize "LOOTABLE.tsrplIntf.random"}}
+            </label>
+            <label>
+              <input type="radio" name="coinType" value="pp" {{#if (eq selectedCoinType "pp" )}}checked{{/if}}>
+              {{localize "LOOTABLE.tsrplIntf.pp"}}
+            </label>
+            <label>
+              <input type="radio" name="coinType" value="gp" {{#if (eq selectedCoinType "gp" )}}checked{{/if}}>
+              {{localize "LOOTABLE.tsrplIntf.gp"}}
+            </label>
+            <label>
+              <input type="radio" name="coinType" value="sp" {{#if (eq selectedCoinType "sp" )}}checked{{/if}}>
+              {{localize "LOOTABLE.tsrplIntf.sp"}}
+            </label>
+            <label>
+              <input type="radio" name="coinType" value="cp" {{#if (eq selectedCoinType "cp" )}}checked{{/if}}>
+              {{localize "LOOTABLE.tsrplIntf.cp"}}
+            </label>
+          </div>
+        </div>
+        <div class="tsrpl-coin-controls">
+          <label>{{localize "LOOTABLE.tsrplIntf.coinAmount"}}</label>
+          <div class="radio-group">
+            <label>
+              <input type="radio" name="coinAmount" value="random" {{#if (eq selectedAmountType "random"
+                )}}checked{{/if}}>
+              {{localize "LOOTABLE.tsrplIntf.random"}}
+            </label>
+            <label>
+              <input type="radio" name="coinAmount" value="purse" {{#if (eq selectedAmountType "purse"
+                )}}checked{{/if}}>
+              {{localize "LOOTABLE.tsrplIntf.purse"}}
+            </label>
+            <label>
+              <input type="radio" name="coinAmount" value="sack" {{#if (eq selectedAmountType "sack" )}}checked{{/if}}>
+              {{localize "LOOTABLE.tsrplIntf.sack"}}
+            </label>
+            <label>
+              <input type="radio" name="coinAmount" value="coffer" {{#if (eq selectedAmountType "coffer"
+                )}}checked{{/if}}>
+              {{localize "LOOTABLE.tsrplIntf.coffer"}}
+            </label>
+            <label>
+              <input type="radio" name="coinAmount" value="chest" {{#if (eq selectedAmountType "chest"
+                )}}checked{{/if}}>
+              {{localize "LOOTABLE.tsrplIntf.chest"}}
+            </label>
+            <label>
+              <input type="radio" name="coinAmount" value="vault" {{#if (eq selectedAmountType "vault"
+                )}}checked{{/if}}>
+              {{localize "LOOTABLE.tsrplIntf.vault"}}
+            </label>
+          </div>
+        </div>
+        <button type="button" class="button add-coins">
+          <i class="fas fa-coins"></i> {{localize "LOOTABLE.tsrplIntf.addCoins"}}
+        </button>
+      </div>
+
+      <div class="table-list">
+        <h3>{{localize "LOOTABLE.tsrplIntf.tables"}}</h3>
+        {{#each tables}}
+        <div class="table-item">
+          <span class="tsrpl-table-name">{{this.name}}</span>
+          <button type="button" class="button icon-only good roll-table" data-table-id="{{this.id}}">
+            <i class="fas fa-dice-d20"></i>
+          </button>
+        </div>
+        {{/each}}
+      </div>
+
+      <div class="tsrpl-autogen-controls">
+        <h3>{{localize "LOOTABLE.tsrplIntf.autogen"}}</h3>
+        <div class="info-message">
+          <div>
+            <div>
+              <i class="fas fa-info-circle"></i>
+            </div>
+            <div>
+              <p>{{localize "LOOTABLE.tsrplIntf.autogenInfo"}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="tsrpl-value-inputs">
+          <div class="form-group">
+            <label>{{localize "LOOTABLE.tsrplIntf.min"}}</label>
+            <input type="number" name="minValue" value="{{minValue}}" min="0">
+          </div>
+          <div class="form-group">
+            <label>{{localize "LOOTABLE.tsrplIntf.max"}}</label>
+            <input type="number" name="maxValue" value="{{maxValue}}" min="0">
+          </div>
+          <div>
+            <label>{{localize "LOOTABLE.tsrplIntf.coinPer"}}</label>
+            <input type="number" name="coinPercentage" value="{{coinPercentage}}" min="0" max="100">
+          </div>
+        </div>
+        <button type="button" class="button autogen">
+          <i class="fas fa-magic"></i> {{localize "LOOTABLE.tsrplIntf.genButton"}}
+        </button>
+      </div>
+    </div>
+
+    <!-- Right Column: Results -->
+    <div class="tsrpl-right-column">
+      <div class="tsrpl-results-list">
+        <!-- Coin Summary Section -->
+        <div class="tsrpl-coin-summary">
+          <div class="tsrpl-coin-row">
+            <div class="tsrpl-coin pp">
+              <input type="number" name="pp" value="{{totalCoins.pp}}" min="0"> pp
+            </div>
+            <div class="tsrpl-coin gp">
+              <input type="number" name="gp" value="{{totalCoins.gp}}" min="0"> gp
+            </div>
+            <div class="tsrpl-coin sp">
+              <input type="number" name="sp" value="{{totalCoins.sp}}" min="0"> sp
+            </div>
+            <div class="tsrpl-coin cp">
+              <input type="number" name="cp" value="{{totalCoins.cp}}" min="0"> cp
+            </div>
+          </div>
+        </div>
+
+        <!-- Results Items -->
+        <div>
+          {{#each results}}
+          {{#unless (eq type "coins")}}
+          <div class="result-item">
+            <div>
+              <a class="remove-item" data-item-id="{{item._id}}"><i class="fas fa-times"></i></a>
+            </div>
+            <div>
+              <input type="number" name="itemQuantity" value="{{quantity}}" min="1" data-item-id="{{item._id}}" />
+            </div>
+            <div class="tsrpl-item-icon">
+              <img src="{{item.img}}" alt="{{item.name}}" title="{{item.name}}" />
+            </div>
+            <div class="tsrpl-item-name clickable" data-uuid="{{source.uuid}}" data-item-id="{{item._id}}">{{item.name}}
+            </div>
+            <div>({{round displayValue}} {{currency}})</div>
+          </div>
+          {{/unless}}
+          {{/each}}
+        </div>
+      </div>
+
+      <div class="tsrpl-drop-zone" title="{{localize 'LOOTABLE.tsrplIntf.drop'}}">
+        <i>{{localize 'LOOTABLE.tsrplIntf.drop'}}</i>
+      </div>
+
+      <button type="button" class="button clear clear-results">
+        <i class="fas fa-trash"></i> {{localize "LOOTABLE.tsrplIntf.clear"}}
+      </button>
+
+      <div class="tsrpl-total-value">
+        <strong>{{localize "LOOTABLE.tsrplIntf.total"}}:</strong>
+        <span>{{formattedTotalValue}} gp</span>
+      </div>
+
+      <div class="tsrpl-export-controls button-group">
+        <button type="button" class="button export-actor">
+          <i class="fas fa-user"></i> {{localize "LOOTABLE.tsrplIntf.exportActor"}}
+        </button>
+        <button type="button" class="button export-journal">
+          <i class="fas fa-book"></i> {{localize "LOOTABLE.tsrplIntf.exportJournal"}}
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

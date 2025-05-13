@@ -1,566 +1,596 @@
-/* Variables
-----------------------------------------*/
 :root {
-  /* Colors */
-  --color-gold: #ffd700;
-  --color-dark-red: #4a0000;
-  --color-warning: #ff9800;
-  --color-info: #0078ff;
-  --color-danger: #c53131;
-  --color-danger-hover: #ff0000;
-  --color-text-muted: #cccccc;
-  --color-text: #000000;
+  --color-black: #000000;
+  --color-blue: #0078ff;
+  --color-blue-royal: #4b88ff;
+  --color-gray: #999999;
+  --color-gray-dark: #333333;
+  --color-gray-light: #cccccc;
+  --color-gray-mid: #666666;
+  --color-gray-platinum: #e0e0e0;
+  --color-gray-silver: #c0c0c0;
+  --color-orange: #ff9800;
+  --color-orange-copper: #cd7f32;
+  --color-orange-deep: #ff6400;
+  --color-red: #da2020;
+  --color-red-burgundy: #4a0000;
+  --color-red-bright: #ff0000;
+  --color-white: #ffffff;
+  --color-yellow: #ffd700;
+  --color-green: #00ff00;
   
-  /* Borders */
-  --border-light: 1px solid rgba(0, 0, 0, 0.1);
-  --border-medium: 1px solid #999;
-  --border-separator: 1px solid #ddd;
+  --color-black-10: rgba(0, 0, 0, 0.1);
+  --color-gray-10: rgba(106, 106, 106, 0.1);
+  --color-gray-30: rgba(106, 106, 106, 0.3);
+  --color-gray-50: rgba(106, 106, 106, 0.5);
+  --color-light-green-30: rgba(144, 238, 144, 0.3);
+  --color-orange-30: rgba(255, 165, 0, 0.3);
+  --color-red-10: rgba(255, 0, 0, 0.1);
+  --color-red-30: rgba(255, 0, 0, 0.3);
+  --color-blue-10: rgba(0, 120, 255, 0.1);
   
-  /* Spacing */
   --spacing-xs: 1px;
-  --spacing-sm: 2px;
-  --spacing-md: 5px;
+  --spacing-sm: 4px;
+  --spacing-md: 8px;
   --spacing-lg: 10px;
-  
-  /* Other */
-  --border-radius: 3px;
-  --opacity-light: 0.1;
-  --opacity-medium: 0.2;
 }
 
-/* Disable Module Option
-----------------------------------------*/
-.form-group.disable-module {
-  background: rgba(197, 49, 49, var(--opacity-light));
-  border: 1px solid var(--color-danger);
-  border-radius: var(--border-radius);
+/* ═══════════════════════════════════════════════════════════ *\
+ *                      SHARED STYLES                          *
+\* ═══════════════════════════════════════════════════════════ */
+
+/* ━━━━━━━━━━━━━ FORM COMPONENTS ━━━━━━━━━━━━━ */
+.disable-module {
+  background: var(--color-red-30);
+  border: 1px solid var(--color-red);
+  border-radius: var(--spacing-sm);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  color: var(--color-black);
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.info-message {
+  background: var(--color-blue-10);
+  border: 1px solid var(--color-blue);
+  border-radius: var(--spacing-sm);
   padding: var(--spacing-lg);
   margin-bottom: var(--spacing-lg);
 }
 
-.form-group.disable-module label {
-  color: var(--color-danger);
-  font-weight: bold;
-}
-
-.form-group.disable-module:hover {
-  background: rgba(197, 49, 49, calc(var(--opacity-light) * 2));
-}
-
-/* Chat Message Styles
-----------------------------------------*/
-#chat-log .message.lootable-message {
+.info-message > div {
   display: flex;
-  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-  color: var(--color-gold);
-  background-color: var(--color-dark-red);
-  border: 2px solid var(--color-gold);
+  align-items: center;
+}
+
+.info-message div:first-child {
+  margin-right: var(--spacing-lg);
+}
+
+.info-message p {
+  margin: 0;
+}
+
+/* ━━━━━━━━━━━━━ CHAT MESSAGE STYLING ━━━━━━━━━━━━━ */
+#chat-log .lootable-message {
+  display: flex;
+  text-shadow: -1px -1px 0 var(--color-black), 1px -1px 0 var(--color-black), -1px 1px 0 var(--color-black), 1px 1px 0 var(--color-black);
+  color: var(--color-yellow);
+  background-color: var(--color-red-burgundy) !important;
+  border: 2px solid var(--color-yellow);
   text-align: center;
-  font-size: 12px;
   margin: var(--spacing-sm);
   padding: var(--spacing-sm);
 }
 
-#chat-log .message.lootable-message::before {
+#chat-log .lootable-message::before {
   background-image: url(../assets/chat.webp);
   background-position: center;
-  opacity: var(--opacity-medium);
+  opacity: 0.2;
 }
 
-#chat-log .message.lootable-message header.message-header {
+#chat-log .lootable-message header.message-header {
   display: none;
 }
 
-#chat-log .message.lootable-message em {
-  color: var(--color-text-muted);
+#chat-log .lootable-message em {
+  color: var(--color-gray-light);
   font-style: italic;
 }
 
-/* Table Selector Styles
-----------------------------------------*/
+/* ━━━━━━━━━━━━━ TABLE LIST COMPONENTS ━━━━━━━━━━━━━ */
 .table-list {
-  display: flex;
-  flex-direction: column;
-  max-height: 300px;
+  max-height: 350px;
   overflow-y: auto;
-  margin-bottom: var(--spacing-lg);
-  padding: var(--spacing-xs);
-  border: var(--border-light);
-  border-radius: var(--border-radius);
+}
+
+.table-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .table-item {
-  padding: var(--spacing-xs) var(--spacing-md);
-  border-bottom: var(--border-separator);
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-gray-10);
 }
 
-.table-item:last-child {
-  border-bottom: none;
+.table-item:hover {
+  background: var(--color-gray-30);
 }
 
 .table-item label {
   display: flex;
   align-items: center;
-  width: 100%;
-  padding: var(--spacing-xs);
-  margin: 0;
-  cursor: pointer;
-}
-
-.table-item input[type="radio"] {
-  margin-right: var(--spacing-lg);
-  flex-shrink: 0;
-}
-
-.lootable.table-selector button[type="submit"] {
-  width: 100%;
-  margin-top: var(--spacing-lg);
-  padding: var(--spacing-md);
-  background: rgba(0, 0, 0, var(--opacity-light));
-  border: 1px solid #7a7971;
-  border-radius: var(--border-radius);
-}
-
-.dialog.table-selector-dialog .window-content {
-  max-height: 500px;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Notification Styles
-----------------------------------------*/
-.lootable .notification {
-  padding: var(--spacing-lg);
-  border-radius: var(--border-radius);
-  text-align: center;
-}
-
-.lootable .notification.warning {
-  background: rgba(255, 180, 0, var(--opacity-light));
-  color: var(--color-warning);
-  border: 1px solid var(--color-warning);
-}
-
-.lootable.table-selector .notification.info {
-  background: rgba(0, 120, 255, var(--opacity-light));
-  color: var(--color-info);
-  border: 1px solid var(--color-info);
-}
-
-/* Random Loot Settings Styles
-----------------------------------------*/
-/* Form Elements */
-.random-loot-settings .form-group {
-  padding-bottom: var(--spacing-md);
-}
-
-.random-loot-settings .info-message {
-  background-color: rgba(0, 0, 255, var(--opacity-light));
-  border: 1px solid blue;
-  border-radius: var(--border-radius);
-  padding: var(--spacing-lg);
-  margin-bottom: var(--spacing-lg);
-}
-
-.random-loot-settings .info-message > div {
-  display: flex;
-  align-items: center;
-}
-
-.random-loot-settings .info-message i {
-  flex-shrink: 0;
-  margin-right: var(--spacing-lg);
-}
-
-.random-loot-settings .info-message p {
-  margin: 0;
-}
-
-/* Creature Types Container */
-.random-loot-settings .creature-types-container {
-  margin-bottom: var(--spacing-lg);
-  border: var(--border-medium);
-  border-radius: var(--border-radius);
-  overflow: hidden;
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-.random-loot-settings .creature-type-header {
-  background-color: rgba(0, 0, 0, var(--opacity-light));
-  padding: var(--spacing-md);
-  font-weight: bold;
-  border-bottom: var(--border-medium);
-}
-
-.random-loot-settings .creature-type-header .header-row,
-.random-loot-settings .creature-type-entry .entry-row {
-  display: grid;
-  grid-template-columns: 70px 1fr 1fr 1fr 1fr 1fr 120px;
-  align-items: center;
   gap: var(--spacing-md);
 }
 
-.random-loot-settings .creature-type-entry {
-  border-bottom: var(--border-separator);
-  margin: 0 !important;
-  padding: var(--spacing-md);
-}
-
-.random-loot-settings .creature-type-entry:last-child {
-  border-bottom: none;
-}
-
-.random-loot-settings .creature-type-entry.no-table {
-  background-color: rgba(255, 0, 0, 0.1);
-}
-
-.random-loot-settings .creature-type-entry.no-table .select-table i {
-  color: var(--color-danger);
-}
-
-.random-loot-settings .creature-type-entry.no-table .select-table:hover i {
-  color: var(--color-danger-hover);
-}
-
-.random-loot-settings .creature-type-entry label {
-  font-weight: bold;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin: 0;
-}
-
-.random-loot-settings .creature-type-entry input[readonly] {
-  background-color: rgba(0, 0, 0, var(--opacity-light));
-  cursor: default;
-}
-
-/* Settings Button Styles */
-.random-loot-settings .action-button {
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  margin: 0 var(--spacing-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.random-loot-settings .order-buttons,
-.random-loot-settings .action-buttons {
-  display: flex;
-  justify-content: center;
-}
-
-.random-loot-settings .text-center {
-  text-align: center;
-}
-
-.random-loot-settings .remove-creature-type i {
-  color: var(--color-danger);
-}
-
-.random-loot-settings .remove-creature-type:hover i {
-  color: var(--color-danger-hover);
-}
-
-.random-loot-settings button i {
-  margin: 0;
-}
-
-/* Random Loot Prompt Styles
-----------------------------------------*/
-/* Dialog Window */
-.dialog.random-loot-roll {
-  min-width: 400px;
-}
-
-.dialog.random-loot-roll .window-content {
-  padding: 0;
-}
-
-/* Prompt Container */
-.random-loot-prompt {
-  padding: var(--spacing-lg);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-}
-
-/* Token Information */
-.random-loot-prompt .token-info {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-lg);
-  margin-bottom: var(--spacing-lg);
-  flex: 0 0 auto;
-  width: 100%;
-}
-
-.random-loot-prompt .token-details {
-  flex: 1;
-}
-
-.random-loot-prompt .token-details h3 {
-  margin: 0;
-}
-
-.random-loot-prompt .token-details p {
-  margin: var(--spacing-sm) 0 0 0;
-  color: var(--color-text);
-}
-
-/* Results Section */
-.random-loot-prompt .results {
-  margin: var(--spacing-lg) 0;
-  flex: 0 1 auto;
-  display: flex;
-  flex-direction: column;
-  height: 450px;
-  width: 100%;
-}
-
-.random-loot-prompt .results h4 {
-  margin: 0 0 var(--spacing-md) 0;
-  flex: 0 0 auto;
-}
-
-/* Results List */
-.random-loot-prompt .results-list {
-  flex: 1 1 auto;
-  height: 400px;
-  width: 100%;
-  border: var(--border-light);
-  border-radius: var(--border-radius);
-  padding: var(--spacing-md);
-  margin: 0;
-  background: rgba(0, 0, 0, var(--opacity-light));
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
-}
-
-/* Scrollbar Styles */
-.random-loot-prompt .results-list::-webkit-scrollbar {
-  width: 8px;
-}
-
-.random-loot-prompt .results-list::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.random-loot-prompt .results-list::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.3);
-  border-radius: 4px;
-}
-
-/* Result Items */
-.random-loot-prompt .result-item {
+.table-item div {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  transition: background-color 0.2s ease;
 }
 
-.random-loot-prompt .result-item:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
-.random-loot-prompt .result-item:last-child {
-  border-bottom: none;
-}
-
-.random-loot-prompt .result-item img {
-  width: 32px;
+/* ━━━━━━━━━━━━━ BUTTON STYLES ━━━━━━━━━━━━━ */
+.button {
+  margin: 0;
+  padding: var(--spacing-sm);
+  line-height: 20px;
   height: 32px;
-  object-fit: contain;
-}
-
-.random-loot-prompt .result-item i.fa-scroll {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2em;
-  color: #666666;
-}
-
-.random-loot-prompt .result-item span {
-  flex: 1;
-  color: var(--color-text);
-  white-space: normal;
-  line-height: 1.2;
-}
-
-.random-loot-prompt .no-results {
-  text-align: center;
-  color: var(--color-text);
-  margin: var(--spacing-lg) 0;
-  font-style: italic;
-}
-
-/* Button Container */
-.random-loot-prompt .buttons {
-  display: flex;
-  gap: var(--spacing-sm);
-  justify-content: flex-start;
-  margin-top: var(--spacing-md);
-  flex: 0 0 auto;
-}
-
-/* Button Styles */
-.random-loot-prompt button {
+  background: var(--color-black-10);
+  border: 1px solid var(--color-gray);
+  border-radius: var(--spacing-sm);
+  transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-md);
-  padding: var(--spacing-md) var(--spacing-lg);
-  min-width: 120px;
-  transition: all 0.2s ease;
+  gap: var(--spacing-sm);
   position: relative;
   outline: none;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--color-gray-dark);
 }
 
-.random-loot-prompt button:focus-visible {
-  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #4a90e2;
-}
-
-.random-loot-prompt button:hover {
-  filter: brightness(1.1);
-}
-
-.random-loot-prompt button:active {
-  transform: translateY(1px);
-}
-
-.random-loot-prompt button span {
-  flex: 1;
-  text-align: center;
-}
-
-.random-loot-prompt button i {
-  margin-right: 0;
-}
-
-/* Specific Button Types */
-.random-loot-prompt button.roll-button {
-  background: rgba(0, 255, 0, var(--opacity-light));
-}
-
-.random-loot-prompt button.roll-button:hover {
-  background: rgba(0, 255, 0, 0.3);
-}
-
-.random-loot-prompt button.reroll-button {
-  background: rgba(255, 165, 0, var(--opacity-light));
-}
-
-.random-loot-prompt button.reroll-button:hover {
-  background: rgba(255, 165, 0, 0.3);
-}
-
-.random-loot-prompt button.clear-button {
-  margin-left: auto;
-  background: #940000;
-  color: white;
-}
-
-.random-loot-prompt button.clear-button:hover {
-  background: #b00000;
-}
-
-.random-loot-prompt button.clear-button:disabled {
-  background: #ccc;
-}
-
-.random-loot-prompt button:disabled {
+.button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   filter: grayscale(100%);
 }
 
-/* Loading States
-----------------------------------------*/
-/* General Loading State */
-.random-loot-prompt .loading {
+.button.icon-only {
+  width: 32px;
+  padding: 0;
+  min-width: 32px;
+}
+
+.button.icon-only i {
+  margin: 0;
+  font-size: 14px;
+}
+
+.button.good,
+.button.icon-only.good {
+  background: var(--color-light-green-30);
+}
+
+.button.clear {
+  background: var(--color-red-burgundy);
+  color: var(--color-white);
+}
+
+.button-group {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+/* ═══════════════════════════════════════════════════════════ *\
+ *                     RANDOM LOOT TOOL                        *
+\* ═══════════════════════════════════════════════════════════ */
+
+/* ━━━━━━━━━━━━━ RANDOM LOOT SETTINGS ━━━━━━━━━━━━━ */
+.rndlt-types-container {
+  margin-bottom: var(--spacing-lg);
+  border: 1px solid var(--color-gray);
+  border-radius: var(--spacing-sm);
+  overflow: hidden;
+  max-height: 400px;
+  overflow-y: auto;
+  gap: var(--spacing-sm);
+  text-align: center;
+}
+
+.rndlt-types-header {
+  display: grid;
+  grid-template-columns: 70px 1fr 1fr 1fr 1fr 1fr 120px;
+  background-color: var(--color-black-10);
+  padding: var(--spacing-sm);
+  font-weight: bold;
+}
+
+.form-group.rndlt-types-entry {
+  display: grid;
+  grid-template-columns: 70px 1fr 1fr 1fr 1fr 1fr 120px;
+  border-bottom: 1px solid var(--color-gray);
+  margin: 0 !important;
+  padding: var(--spacing-sm);
+}
+
+.rndlt-types-entry:last-child {
+  border-bottom: none;
+}
+
+.rndlt-types-entry.no-table {
+  background: var(--color-red-10);
+}
+
+.rndlt-types-entry.no-table .select-table i {
+  color: var(--color-red);
+}
+
+.rndlt-remove-types i {
+  color: var(--color-red);
+}
+
+/* ━━━━━━━━━━━━━ RANDOM LOOT PROMPT ━━━━━━━━━━━━━ */
+.rndlt-prompt {
+  display: flex;
+  flex-direction: column;
+  height: 700px;
+  padding: var(--spacing-md);
+}
+
+.rndlt-prompt h4 {
+  font-weight: bold;
+  text-align: center;
+}
+
+.rndlt-prompt .token-info {
   display: flex;
   align-items: center;
-  justify-content: center;
-  height: 100px;
-  color: var(--color-text-muted);
+  gap: var(--spacing-md);
+  width: 100%;
 }
 
-.random-loot-prompt .loading i {
-  animation: spin 1s linear infinite;
-  margin-right: var(--spacing-md);
+.rndlt-prompt .token-details {
+  flex: 1;
 }
 
-/* Loading Button States */
-.random-loot-prompt button.loading {
-  position: relative;
-  pointer-events: none;
-  opacity: 0.7;
+.rndlt-prompt .results {
+  flex: 1;
+  display: grid;
+  gap: var(--spacing-lg);
+  overflow-y: auto;
+  background: var(--color-black-10);
+  border: 1px solid var(--color-gray-dark);
+  border-radius: 3px;
+  padding: var(--spacing-md);
 }
 
-.random-loot-prompt button.loading span {
-  visibility: hidden;
+.rndlt-prompt .no-results {
+  text-align: center;
+  padding: var(--spacing-lg);
+  font-style: italic;
+  align-self: start;
 }
 
-.random-loot-prompt button.loading::after {
-  content: "";
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  border: 2px solid transparent;
-  border-top-color: currentColor;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-/* Loading Animation */
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-/* Roll Section */
-.random-loot-prompt .roll-section {
-  border: var(--border-light);
-  border-radius: var(--border-radius);
-  margin-bottom: var(--spacing-md);
-  padding: var(--spacing-sm);
-  background: transparent;
-}
-
-.random-loot-prompt .roll-section:last-child {
+.rndlt-prompt .roll-section:last-child {
   margin-bottom: 0;
 }
 
-.random-loot-prompt .roll-section h5 {
-  margin: 0 0 var(--spacing-sm) 0;
-  padding-bottom: var(--spacing-sm);
-  border-bottom: var(--border-light);
+.rndlt-prompt .roll-section h5 {
+  margin: 0 0 var(--spacing-xs) 0;
+  border-bottom: 2px solid var(--color-red-burgundy);
   font-weight: bold;
-  color: var(--color-text);
+  color: var(--color-black);
 }
 
-/* Token HUD Button
-----------------------------------------*/
+.rndlt-prompt .result-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  border-bottom: 1px solid var(--color-gray);
+}
+
+.rndlt-prompt .result-item:last-child {
+  border-bottom: none;
+}
+
+/* ━━━━━━━━━━━━━ RANDOM LOOT PROMPT BUTTON ━━━━━━━━━━━━━ */
 .control-icon[data-action="rollLoot"] {
-  order: 7; /* Position after combat button */
+  order: 7;
 }
 
 .control-icon[data-action="rollLoot"] i {
-  color: var(--color-gold);
-  text-shadow: 0 0 8px var(--color-dark-red);
+  color: var(--color-yellow);
+  text-shadow: 0 0 var(--spacing-md) var(--color-red-burgundy);
 }
 
 .control-icon[data-action="rollLoot"]:hover i {
-  color: #fff;
-  text-shadow: 0 0 8px var(--color-gold);
+  color: var(--color-white);
+  text-shadow: 0 0 var(--spacing-md) var(--color-yellow);
+}
+
+/* ═══════════════════════════════════════════════════════════ *\
+ *                    TREASURE PILE TOOL                       *
+\* ═══════════════════════════════════════════════════════════ */
+.tsrpl-interface {
+  min-width: 800px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.tsrpl-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+  overflow: hidden;
+  flex: 1;
+}
+
+.tsrpl-left-column {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  gap: var(--spacing-md);
+  padding: 0;
+}
+
+.tsrpl-right-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  background: var(--color-black-10);
+  border: 1px solid var(--color-gray);
+  border-radius: var(--spacing-sm);
+  padding: var(--spacing-md);
+  overflow: hidden;
+}
+
+.tsrpl-button i {
+  color: var(--color-yellow);
+  text-shadow: 0 0 4px var(--color-black);
+}
+
+/* ━━━━━━━━━━━━━ TREASURE PILE COIN GENERATION ━━━━━━━━━━━━━ */
+.tsrpl-coin-generation {
+  background: var(--color-black-10);
+  border: 1px solid var(--color-gray);
+  border-radius: 5px;
+  padding: var(--spacing-md);
+  margin: 0;
+}
+
+.tsrpl-coin-generation .add-coins i {
+  color: var(--color-yellow);
+}
+
+.tsrpl-interface .radio-group {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.tsrpl-interface .radio-group label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-gray-10);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--spacing-sm);
+  font-weight: normal;
+  border: 1px solid var(--color-gray);
+}
+
+.tsrpl-interface .radio-group input[type="radio"] {
+  margin: 0 var(--spacing-sm) 0 0;
+  position: static;
+}
+
+.tsrpl-interface .radio-group label:has(input[type="radio"]:checked) {
+  background: var(--color-light-green-30);
+}
+
+.tsrpl-coin-controls {
+  margin-bottom: var(--spacing-md);
+  padding: 0 var(--spacing-sm);
+  font-size: 12px;
+}
+
+/* ━━━━━━━━━━━━━ TREASURE PILE TABLE LIST ━━━━━━━━━━━━━ */
+.tsrpl-interface .table-list {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow-y: auto;
+  background: var(--color-black-10);
+  border: 1px solid var(--color-gray);
+  border-radius: var(--spacing-sm);
+  padding: var(--spacing-md);
+  margin: 0;
+  max-height: none;
+}
+
+.tsrpl-table-name {
+  flex: 1;
+}
+
+/* ━━━━━━━━━━━━━ TREASURE PILE AUTOGEN ━━━━━━━━━━━━━ */
+.tsrpl-autogen-controls {
+  background: var(--color-black-10);
+  border: 1px solid var(--color-gray);
+  border-radius: var(--spacing-sm);
+  padding: var(--spacing-md);
+  margin: 0;
+}
+
+.tsrpl-value-inputs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.tsrpl-value-inputs input[type="number"] {
+  width: 65px;
+  text-align: right;
+}
+
+.tsrpl-value-inputs input[name="coinPercentage"] {
+  width: 35px;
+  text-align: center;
+}
+
+.tsrpl-value-inputs label {
+  white-space: nowrap;
+  margin-right: 5px;
+}
+
+.tsrpl-results-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md);
+}
+
+.tsrpl-results-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* ━━━━━━━━━━━━━ TREASURE PILE COIN DISPLAY ━━━━━━━━━━━━━ */
+.tsrpl-coin-summary {
+  background: var(--color-black-10);
+  padding: var(--spacing-sm);
+}
+
+.tsrpl-coin-row {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.tsrpl-coin {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+}
+
+.tsrpl-coin input[type="number"] {
+  width: 40px;
+  background: transparent;
+  border: none;
+  text-align: center;
+}
+
+.tsrpl-coin.pp {
+  background-color: var(--color-gray-platinum);
+}
+
+.tsrpl-coin.gp {
+  background-color: var(--color-yellow);
+}
+
+.tsrpl-coin.sp {
+  background-color: var(--color-gray-silver);
+}
+
+.tsrpl-coin.cp {
+  background-color: var(--color-orange-copper);
+}
+
+/* ━━━━━━━━━━━━━ TREASURE PILE RESULTS ━━━━━━━━━━━━━ */
+.tsrpl-results-list {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--color-black-10);
+  border: 1px solid var(--color-gray);
+  border-radius: var(--spacing-sm);
+}
+
+.tsrpl-results-list .result-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs);
+  border-bottom: 1px solid var(--color-gray-light);
+}
+
+.tsrpl-results-list .result-item:last-child {
+  border-bottom: none;
+}
+
+.tsrpl-results-list .result-item .remove-item {
+  color: var(--color-red-burgundy);
+  margin-left: var(--spacing-sm);
+  align-items: center;
+  justify-content: center;
+}
+
+.tsrpl-results-list .result-item input[name="itemQuantity"] {
+  width: 30px;
+  text-align: center;
+}
+
+.tsrpl-results-list .result-item .tsrpl-item-name.clickable {
+  cursor: pointer;
+}
+
+.tsrpl-results-list .result-item .tsrpl-item-name.clickable:hover {
+  text-shadow: 0 0 var(--spacing-md) var(--color-red-30), 0 0 12px var(--color-red-30);
+}
+
+.tsrpl-item-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.tsrpl-item-name {
+  flex: 1;
+}
+
+.tsrpl-total-value {
+  background: var(--color-black-10);
+  border: 1px solid var(--color-gray);
+  border-radius: var(--spacing-sm);
+  padding: var(--spacing-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+}
+
+/* ━━━━━━━━━━━━━ TREASURE PILE EXPORT ━━━━━━━━━━━━━ */
+.tsrpl-export-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-sm);
+}
+
+.tsrpl-export-dialog .form-group {
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+/* ━━━━━━━━━━━━━ TREASURE PILE DROP ZONE ━━━━━━━━━━━━━ */
+.tsrpl-drop-zone {
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-gray-50);
+  border: 2px dotted var(--color-gray-dark);
+  border-radius: var(--spacing-sm);
+}
+
+.tsrpl-drop-zone.dragover {
+  background: var(--color-light-green-30);
+  border-color: var(--color-green);
 }

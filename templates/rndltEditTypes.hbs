@@ -1,0 +1,32 @@
+<form class="edit-type-form">
+  <div class="form-group">
+    <label for="editCreatureType">{{localize 'LOOTABLE.settings.rndltSettings.addEditType.ctype'}}</label>
+    <input type="text" id="editCreatureType" name="editCreatureType" value="{{type}}" placeholder="{{localize 'LOOTABLE.settings.rndltSettings.addEditType.ctypeHint'}}">
+  </div>
+  <div class="form-group">
+    <label for="editCreatureSubtype">{{localize 'LOOTABLE.settings.rndltSettings.addEditType.subtype'}}</label>
+    <input type="text" id="editCreatureSubtype" name="editCreatureSubtype" value="{{subtype}}" placeholder="{{localize 'LOOTABLE.settings.rndltSettings.addEditType.subtypeHint'}}">
+  </div>
+  <div class="form-group">
+    <label for="editCreatureTreasureType">{{localize 'LOOTABLE.settings.rndltSettings.addEditType.treasure'}}</label>
+    <input type="text" id="editCreatureTreasureType" name="editCreatureTreasureType" value="{{treasureType}}" placeholder="{{localize 'LOOTABLE.settings.rndltSettings.addEditType.treasureHint'}}">
+  </div>
+  <div class="form-group">
+    <label for="editCreatureCRMin">{{localize 'LOOTABLE.settings.rndltSettings.addEditType.min'}}</label>
+    <input type="number" id="editCreatureCRMin" name="editCreatureCRMin" min="0" max="30" value="{{crRangeStart}}" required
+           data-error-required="{{localize 'LOOTABLE.settings.rndltSettings.error.requiredField'}}"
+           data-error-max="{{localize 'LOOTABLE.settings.rndltSettings.error.maxValueError'}}">
+  </div>
+  <div class="form-group">
+    <label for="editCreatureCRMax">{{localize 'LOOTABLE.settings.rndltSettings.addEditType.max'}}</label>
+    <input type="number" id="editCreatureCRMax" name="editCreatureCRMax" min="0" max="30" value="{{crRangeEnd}}" required
+           data-error-required="{{localize 'LOOTABLE.settings.rndltSettings.error.requiredField'}}"
+           data-error-max="{{localize 'LOOTABLE.settings.rndltSettings.error.maxValueError'}}">
+  </div>
+
+  <footer>
+    <button type="submit" name="submit" class="button">
+      <i class="fas fa-save"></i> {{localize 'LOOTABLE.save'}}
+    </button>
+  </footer>
+</form>

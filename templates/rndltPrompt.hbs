@@ -1,0 +1,55 @@
+<form class='rndlt-prompt'>
+  <div class='form-group'>
+    <div class='token-info'>
+      <img src='{{token.img}}' alt='{{token.name}}' width='64' height='64'>
+      <div class='token-details'>
+        <h3>{{token.name}}</h3>
+        <p>{{localize 'LOOTABLE.rndltPrompt.table'}}: {{table.name}}</p>
+      </div>
+    </div>
+  </div>
+
+  <h4>{{localize 'LOOTABLE.rndltPrompt.results'}}</h4>
+  <div class='form-group results'>
+    {{#if allResults}}
+      {{#each allResults}}
+      <div class='roll-section'>
+        <h5>{{localize 'LOOTABLE.rndltPrompt.roll'}} {{subtract ../allResults.length @index}}</h5>
+        {{#each this}}
+        <div class='result-item'>
+          {{#if this.isText}}
+            <i class='fas fa-scroll'></i>
+            <span>{{this.text}}</span>
+          {{else}}
+            <img src='{{this.img}}' alt='{{this.name}}' width='32' height='32'>
+            <span>{{this.name}}</span>
+          {{/if}}
+        </div>
+        {{/each}}
+      </div>
+      {{/each}}
+    {{else}}
+      <p class='no-results'>{{localize 'LOOTABLE.rndltPrompt.noResults'}}</p>
+    {{/if}}
+  </div>
+
+  <div class='form-group'>
+    <div class='button-group'>
+      <button type='button' class='button good roll-button'>
+        <i class='fas fa-dice-d20'></i> <span>{{localize 'LOOTABLE.rndltPrompt.newRoll'}}</span>
+      </button>
+      <button type='button' class='button reroll-button' {{#unless allResults}}disabled{{/unless}}>
+        <i class='fas fa-redo'></i> <span>{{localize 'LOOTABLE.rndltPrompt.reRoll'}}</span>
+      </button>
+      <button type='button' class='button clear clear-button' {{#unless allResults}}disabled{{/unless}}>
+        <i class='fas fa-trash'></i> <span>{{localize 'LOOTABLE.rndltPrompt.clear'}}</span>
+      </button>
+    </div>
+  </div>
+
+  <footer class="button-group">
+    <button type="button" class="button">
+        <i class="fas fa-check"></i> {{localize 'LOOTABLE.rndltPrompt.accept'}}
+    </button>
+  </footer>
+</form> 

@@ -1,0 +1,134 @@
+<form>
+  <div class='disable-module'>
+    <label>{{localize 'LOOTABLE.settings.rndltSettings.disable'}}</label>
+    <div class='form-fields'>
+      <input type='checkbox' name='disableRandomLoot' {{#if settings.disableRandomLoot}}checked{{/if}}>
+    </div>
+  </div>
+
+  <h2>{{localize 'LOOTABLE.settings.rndltSettings.generalConfig'}}</h2>
+
+  <div class='form-group'>
+    <label>{{localize 'LOOTABLE.settings.rndltSettings.mode'}}</label>
+    <div class='form-fields'>
+      <select name='randomLootMode'>
+        <option value='onCreate' {{#if (eq settings.randomLootMode 'onCreate')}}selected{{/if}}>
+          {{localize 'LOOTABLE.settings.rndltSettings.onCreate'}}
+        </option>
+        <option value='manualOnly' {{#if (eq settings.randomLootMode 'manualOnly')}}selected{{/if}}>
+          {{localize 'LOOTABLE.settings.rndltSettings.manual'}}
+        </option>
+      </select>
+    </div>
+    <p class='notes'>{{localize 'LOOTABLE.settings.rndltSettings.modeHint'}}</p>
+  </div>
+
+  <div class='form-group'>
+    <label>{{localize 'LOOTABLE.settings.rndltSettings.usePrompt'}}</label>
+    <div class='form-fields'>
+      <input type='checkbox' name='showRandomLootPrompt' {{#if settings.showRandomLootPrompt}}checked{{/if}}>
+    </div>
+    <p class='notes'>{{localize 'LOOTABLE.settings.rndltSettings.usePromptHint'}}</p>
+  </div>
+
+  <div class='form-group'>
+    <label>{{localize 'LOOTABLE.settings.rndltSettings.hideHUD'}}</label>
+    <div class='form-fields'>
+      <input type='checkbox' name='hideRandomLootHUD' {{#if settings.hideRandomLootHUD}}checked{{/if}}>
+    </div>
+    <p class='notes'>{{localize 'LOOTABLE.settings.rndltSettings.hideHUDHint'}}</p>
+  </div>
+
+  <h2>{{localize 'LOOTABLE.settings.rndltSettings.rolltableTypes'}}</h2>
+  
+  <div class='info-message'>
+    <div>
+      <div>
+        <i class='fas fa-info-circle'></i>
+      </div>
+      <div>
+        <p>{{localize 'LOOTABLE.settings.rndltSettings.rolltableTypesInfo'}}</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class='rndlt-types-container'>
+    <div class='rndlt-types-header'>
+      <div>{{localize 'LOOTABLE.settings.rndltSettings.order'}}</div>
+      <div>{{localize 'LOOTABLE.settings.rndltSettings.ctype'}}</div>
+      <div>{{localize 'LOOTABLE.settings.rndltSettings.subtype'}}</div>
+      <div>{{localize 'LOOTABLE.settings.rndltSettings.treasure'}}</div>
+      <div>{{localize 'LOOTABLE.settings.rndltSettings.min'}}-{{localize 'LOOTABLE.settings.rndltSettings.max'}}</div>
+      <div>{{localize 'LOOTABLE.settings.rndltSettings.table'}}</div>
+      <div>{{localize 'LOOTABLE.settings.rndltSettings.actions'}}</div>
+    </div>
+    {{#each creatureTypes}}
+    <div class='form-group rndlt-types-entry {{#unless this.tableId}}no-table{{/unless}}' data-index='{{this.index}}'>
+      <div>
+        <button type='button' class='button icon-only move-up' {{#if @first}}disabled{{/if}}>
+          <i class='fas fa-arrow-up'></i>
+        </button>
+        <button type='button' class='button icon-only move-down' {{#if @last}}disabled{{/if}}>
+          <i class='fas fa-arrow-down'></i>
+        </button>
+      </div>
+      <div>{{this.type}}</div>
+      <div>{{this.subtype}}</div>
+      <div>{{this.treasureType}}</div>
+      <div>CR {{this.crRange.[0]}}-{{this.crRange.[1]}}</div>
+      <div>{{this.tableName}}</div>
+      <div>
+        <button type='button' class='button icon-only select-table' 
+                data-type='{{this.type}}' 
+                data-subtype='{{this.subtype}}' 
+                data-treasure-type='{{this.treasureType}}'
+                data-cr-range-start='{{this.crRange.[0]}}' 
+                data-cr-range-end='{{this.crRange.[1]}}'
+                title='{{localize "LOOTABLE.settings.rndltSettings.tableSelector.name"}}'>
+          <i class='fas fa-table'></i>
+        </button>
+        <button type='button' class='button icon-only edit-type' 
+                data-type='{{this.type}}' 
+                data-subtype='{{this.subtype}}' 
+                data-treasure-type='{{this.treasureType}}'
+                data-cr-range-start='{{this.crRange.[0]}}' 
+                data-cr-range-end='{{this.crRange.[1]}}'
+                title='{{localize "LOOTABLE.settings.rndltSettings.addEditType.editName"}}'>
+          <i class='fas fa-edit'></i>
+        </button>
+        <button type='button' class='button icon-only rndlt-remove-types' 
+                data-type='{{this.type}}' 
+                data-subtype='{{this.subtype}}' 
+                data-treasure-type='{{this.treasureType}}'
+                data-cr-range-start='{{this.crRange.[0]}}' 
+                data-cr-range-end='{{this.crRange.[1]}}'
+                title='{{localize "LOOTABLE.settings.rndltSettings.addEditType.confirmAdd"}}'>
+          <i class='fas fa-trash'></i>
+        </button>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+
+  <div class='form-group'>
+    <button type='button' class='button add-type'>
+      <i class='fas fa-plus'></i> {{localize 'LOOTABLE.settings.rndltSettings.addEditType.addName'}}
+    </button>
+  </div>
+
+  <h2>{{localize 'LOOTABLE.settings.rndltSettings.msgConfig'}}</h2>
+
+  <div class='form-group'>
+    <label>{{localize 'LOOTABLE.settings.rndltSettings.hideMsg'}}</label>
+    <div class='form-fields'>
+      <input type='checkbox' name='hideRandomLootChatMsg' {{#if settings.hideRandomLootChatMsg}}checked{{/if}}>
+    </div>
+    <p class='notes'>{{localize 'LOOTABLE.settings.rndltSettings.hideMsgHint'}}</p>
+  </div>
+
+  <footer>
+    <button type='submit' class="button">
+      <i class='fas fa-save'></i> {{localize 'LOOTABLE.save'}}
+    </button>
+  </footer>
+</form>

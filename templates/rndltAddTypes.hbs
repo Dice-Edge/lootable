@@ -1,0 +1,33 @@
+<form class="add-type-form">
+  <div class="form-group">
+    <label for="newCreatureType">{{localize 'LOOTABLE.settings.rndltSettings.addEditType.ctype'}}</label>
+    <input type="text" id="newCreatureType" name="newCreatureType" placeholder="{{localize 'LOOTABLE.settings.rndltSettings.addEditType.ctypeHint'}}">
+  </div>
+  <div class="form-group">
+    <label for="newCreatureSubtype">{{localize 'LOOTABLE.settings.rndltSettings.addEditType.subtype'}}</label>
+    <input type="text" id="newCreatureSubtype" name="newCreatureSubtype" placeholder="{{localize 'LOOTABLE.settings.rndltSettings.addEditType.subtypeHint'}}">
+  </div>
+  <div class="form-group">
+    <label for="newCreatureTreasureType">{{localize 'LOOTABLE.settings.rndltSettings.addEditType.treasure'}}</label>
+    <input type="text" id="newCreatureTreasureType" name="newCreatureTreasureType" placeholder="{{localize 'LOOTABLE.settings.rndltSettings.addEditType.treasureHint'}}">
+  </div>
+  <div class="form-group">
+    <label for="newCreatureCRMin">{{localize 'LOOTABLE.settings.rndltSettings.addEditType.min'}}</label>
+    <input type="number" id="newCreatureCRMin" name="newCreatureCRMin" min="0" max="30" value="0" required
+           data-error-required="{{localize 'LOOTABLE.settings.rndltSettings.error.requiredField'}}"
+           data-error-max="{{localize 'LOOTABLE.settings.rndltSettings.error.maxValueError'}}"
+           data-error-range="{{localize 'LOOTABLE.settings.rndltSettings.error.invalidCRRange'}}">
+  </div>
+  <div class="form-group">
+    <label for="newCreatureCRMax">{{localize 'LOOTABLE.settings.rndltSettings.addEditType.max'}}</label>
+    <input type="number" id="newCreatureCRMax" name="newCreatureCRMax" min="0" max="30" value="30" required
+           data-error-required="{{localize 'LOOTABLE.settings.rndltSettings.error.requiredField'}}"
+           data-error-max="{{localize 'LOOTABLE.settings.rndltSettings.error.maxValueError'}}">
+  </div>
+  
+  <footer>
+    <button type="submit" name="submit" class="button">
+      <i class="fas fa-plus"></i> {{localize 'LOOTABLE.settings.rndltSettings.addEditType.confirm'}}
+    </button>
+  </footer>
+</form>

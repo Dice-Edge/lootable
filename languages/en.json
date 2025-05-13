@@ -1,170 +1,189 @@
 {
   "LOOTABLE": {
-    "SettingsMenu": {
-      "PocketChange": {
-        "Name": "Pocket Change Settings",
-        "Label": "Pocket Change"
-      },
-      "RandomLoot": {
-        "Name": "Random Loot Settings",
-        "Label": "Random Loot"
-      },
-      "EnableDebug": {
-        "Name": "Enable Debugging"
-      }
+    "rndltHUDHint": "Roll Random Loot for this token",
+    "tsrplIntfButton": "Generate Treasure Pile",
+    "pktcgMsg": "Pocket Change:",
+    "rndltMsg": "Random Loot:",
+    "reload": "Reload Application?",
+    "reloadHint": "Some of the changed settings require a reload of the application to take effect. Would you like to reload now?",
+    "save": "Save Changes",
+
+    "rndltPrompt": {
+      "name": "Random Loot Roll",
+      "table": "Table",
+      "results": "Results",
+      "noResults": "No results yet. Click New Roll to generate loot.",
+      "roll": "Roll",
+      "newRoll": "New Roll",
+      "reRoll": "Reroll Last",
+      "clear": "Clear All",
+      "accept": "Accept Results"
     },
-    "PocketChangeSettings": {
-      "AmountConfig": "Amount Config",
-      "TokenConfig": "Token Config",
-      "ProbabilityConfig": "Probability Config",
-      "ProbabilityNote": "The total values of the probabilities should not exceed 100% otherwise it will fail to correctly calculate.",
-      "MessageConfig": "Message Config",
-      "SaveChanges": "Save Changes",
-      "DisablePocketChange": {
-        "Name": "Disable Pocket Change"
-      },
-      "PerCoinAmount": {
-        "Name": "Percentage of Coin Amount",
-        "Hint": "Percentage of coin tokens receive. (10-300%) [default: 100%]"
-      },
-      "MinCoinAmount": {
-        "Name": "Minimum Coin Amount",
-        "Hint": "Minimum number of coins a token can receive in cp if not 0. [default: 10]"
-      },
-      "IgnoreExistingCoin": {
-        "Name": "Ignore Existing Coin",
-        "Hint": "Tokens that already have coin are ignored. [default: true]"
-      },
-      "AllowedCreatureTypes": {
-        "Name": "Allowed Creature Types",
-        "Hint": "List of creature types that can receive coin, types are separated by commas. (e.g., humanoid, beast, monstrosity) [default: humanoid]"
-      },
-      "NoCoinChance": {
-        "Name": "Penniless Chance",
-        "Hint": "Probability of a token receiving no coin. (0-100%) [default: 0%]"
-      },
-      "TenPercentGoldChance": {
-        "Name": "Squalid Chance",
-        "Hint": "Probability of a token receiving one tenth the amount of coin. (0-100%) [default: 5%]"
-      },
-      "HalfGoldChance": {
-        "Name": "Poor Chance",
-        "Hint": "Probability of a token receiving half the amount of coin. (0-100%) [default: 10%]"
-      },
-      "DoubleCoinChance": {
-        "Name": "Affluent Chance",
-        "Hint": "Probability of a token receiving double the amount of coin. (0-100%) [default: 10%]"
-      },
-      "TripleCoinChance": {
-        "Name": "Rich Chance",
-        "Hint": "Probability of a token receiving triple the amount of coin. (0-100%) [default: 5%]"
-      },
-      "HidePocketChangeChatMsg": {
-        "Name": "Hide Chat Messages",
-        "Hint": "Hide chat messages when coin is generated. [default: false]"
-      }
+
+    "tsrplIntf": {
+      "name": "Treasure Pile Generator",
+      "coinGen": "Coin Generation",
+      "coinType": "Coin Type",
+      "random": "Random",
+      "pp": "Platinum",
+      "gp": "Gold",
+      "sp": "Silver",
+      "cp": "Copper",
+      "coinAmount": "Amount",
+      "purse": "Purse",
+      "sack": "Sack",
+      "coffer": "Coffer",
+      "chest": "Chest",
+      "vault": "Vault",
+      "addCoins": "Add Coins",
+      "tables": "Available Tables",
+      "autogen": "Auto Generate",
+      "autogenInfo": "Auto Generate will attempt to match the Min value as closely as possible without going over the Max value. Only tables configured in the Default Tables in the settings will be rolled on.",
+      "min": "Min Value",
+      "max": "Max Value",
+      "coinPer": "Coin %",
+      "genButton": "Generate",
+      "drop": "drag items here to add to results...",
+      "clear": "Clear Results",
+      "total": "Total Value",
+      "exportActor": "Export to Actor",
+      "exportJournal": "Export to Journal",
+
+      "exportWin": {
+        "actorName": "Actor",
+        "journalName": "Journal",
+        "actor": "Actor",
+        "createActor": "Create New Actor",
+        "newActor": "New Actor Name",
+        "journal": "Journal",
+        "createJournal": "Create New Journal",
+        "newJournal": "New Journal Name",
+        "pageName": "Page Name",
+        "newDefault": "Treasure Pile",
+        "pageDefault": "Treasure Page",
+        "export": "Export"
+        },
+
+        "notice": {
+          "noTables": "No rollable tables found in your world.",
+          "rollError": "Error rolling on table.",
+          "noDefaultTables": "No default tables selected.",
+          "noEligibleTables": "No eligible tables found.",
+          "generationLimit": "Treasure Pile generation limit reached.",
+          "exportError": "Error exporting treasure.",
+          "exportSuccess": "Treasure exported successfully.",
+          "newActorNameMissing": "New actor name is required.",
+          "newJournalNameMissing": "New journal name is required.",
+          "pageNameMissing": "Page name is required."
+        }
     },
-    "RandomLootSettings": {
-      "GeneralConfig": "General Config",
-      "RolltableByCreatureType": "Rolltable by Types",
-      "MessageConfig": "Message Config",
-      "SaveChanges": "Save Changes",
-      "MissingTable": "Missing Table",
-      "NoTable": "No Table Selected",
-      "MultiValueHint": "You can use comma-separated values in the Type, Subtype, and Treasure Type fields. The token added only needs to match a single value in each of the fields to use the rolltable. Once a token is added to the scene it will use only the first matching table in the rows listed below.",
-      "ColumnHeaders": {
-        "Order": "Order",
-        "Type": "Type",
-        "Subtype": "Subtype",
-        "TreasureType": "Treasure Type",
-        "CRRange": "CR Range",
-        "Table": "Table",
-        "Actions": "Actions"
+
+    "settings": {
+      "pktcgName": "Pocket Change Settings",
+      "rndltName": "Random Loot Settings",
+      "tsrplName": "Treasure Pile Settings",
+      "pktcgLabel": "Pocket Change",
+      "rndltLabel": "Random Loot",
+      "tsrplLabel": "Treasure Pile",
+      "debug": "Enable Debugging",
+
+      "pktcgSettings": {
+        "name": "Pocket Change Settings",
+        "disable": "Disable Pocket Change",
+        "amtConfig": "Amount Config",
+        "perCoinAmt": "Percentage of Coin Amount",
+        "perCoinAmtHint": "Percentage of coin tokens receive. (10-300%) [default: 100%]",
+        "minCoinAmt": "Minimum Coin Amount",
+        "minCoinAmtHint": "Minimum number of coins a token can receive in cp if not 0. [default: 10]",
+        "tokenConfig": "Token Config",
+        "ignoreExistCoin": "Ignore Existing Coin",
+        "ignoreExistCoinHint": "Tokens that already have coin are ignored. [default: true]",
+        "allowedTypes": "Allowed Creature Types",
+        "allowedTypesHint": "List of creature types that can receive coin, types are separated by commas. (e.g., humanoid, beast, monstrosity) [default: humanoid]",
+        "ProbabilityConfig": "Probability Config",
+        "ProbabilityNote": "The total values of the probabilities should not exceed 100% otherwise it will fail to correctly calculate.",
+        "noCoinChance": "Penniless Chance",
+        "noCoinChanceHint": "Probability of a token receiving no coin. (0-100%) [default: 0%]",
+        "tenPerChance": "Squalid Chance",
+        "tenPerChanceHint": "Probability of a token receiving one tenth the amount of coin. (0-100%) [default: 5%]",
+        "halfChance": "Poor Chance",
+        "halfChanceHint": "Probability of a token receiving half the amount of coin. (0-100%) [default: 10%]",
+        "doubleChance": "Affluent Chance",
+        "doubleChanceHint": "Probability of a token receiving double the amount of coin. (0-100%) [default: 10%]",
+        "tripleChance": "Rich Chance",
+        "tripleChanceHint": "Probability of a token receiving triple the amount of coin. (0-100%) [default: 5%]",
+        "MessageConfig": "Message Config",
+        "hidePktcgChatMsg": "Hide Chat Messages",
+        "hidePktcgChatMsgHint": "Hide chat messages when coin is generated. [default: false]"
       },
-      "Mode": {
-        "Name": "Random Loot Mode",
-        "Hint": "Determines when random loot is added to tokens. [default: On Token Creation]",
-        "OnCreate": "On Token Creation",
-        "ManualOnly": "Manual Only"
+
+      "rndltSettings": {
+        "name": "Random Loot Settings",
+        "disable": "Disable Random Loot",
+        "generalConfig": "General Config",
+        "mode": "Random Loot Mode",
+        "modeHint": "Determines when random loot is added to tokens. [default: On Token Creation]",
+        "onCreate": "On Token Creation",
+        "manual": "Manual Only",
+        "usePrompt": "Use Prompt",
+        "usePromptHint": "When enabled, shows a prompt to roll for loot instead of automatically rolling. [default: false]",
+        "hideHUD": "Hide Random Loot Button",
+        "hideHUDHint": "Hide the random loot button from the token HUD. [default: false]",
+        "rolltableTypes": "Rolltable by Types",
+        "rolltableTypesInfo": "Tokens added to the scene will use the first matching rolltable in the list below.",
+        "order": "Order",
+        "ctype": "Creature Type",
+        "subtype": "Creature Subtype",
+        "treasure": "Treasure Type",
+        "min": "Min CR",
+        "max": "Max CR",
+        "table": "Table",
+        "actions": "Actions",
+        "msgConfig": "Message Config",
+        "hideMsg": "Hide Chat Messages",
+        "hideMsgHint": "Hide chat messages when items are granted. [default: false]",
+
+        "addEditType": {
+          "addName": "Add New Types Selection",
+          "editName": "Edit Types Selection",
+          "ctype": "Creature Type",
+          "ctypeHint": "Enter type (optional)",
+          "subtype": "Creature Subtype",
+          "subtypeHint": "Enter subtype (optional)",
+          "treasure": "Treasure Type",
+          "treasureHint": "Enter treasure type (optional)",
+          "min": "Minimum CR",
+          "minHint": "Enter minimum CR (optional)",
+          "max": "Maximum CR",
+          "maxHint": "Enter maximum CR (optional)",
+          "confirm": "Add New Type"
+        },
+
+        "tableSelector": {
+          "name": "Select Table",
+          "noTable": "No Table",
+          "noTables": "No rollable tables found in your world.",
+          "confirm": "Confirm Selection"
+        },
+
+        "error": {
+          "invalidCRRange": "Minimum CR cannot be greater than Maximum CR.",
+          "requiredField": "CR value must be filled out.",
+          "maxValueError": "Value must be less than or equal to 30.",
+          "duplicateEntry": "A creature type with these exact specifications already exists."
+        }
       },
-      "HideRandomLootHUD": {
-        "Name": "Hide Random Loot Button",
-        "Hint": "Hide the random loot button from the token HUD. [default: false]"
-      },
-      "DisableRandomLoot": {
-        "Name": "Disable Random Loot"
-      },
-      "HideRandomLootChatMsg": {
-        "Name": "Hide Chat Messages",
-        "Hint": "Hide chat messages when items are granted. [default: false]"
-      },
-      "TableSelector": {
-        "Title": "Select Table",
-        "NoTable": "No Table",
-        "NoTables": "No rollable tables found in your world.",
-        "Confirm": "Confirm Selection"
-      },
-      "EditCreatureType": {
-        "Title": "Edit Creature Type",
-        "TypeLabel": "Creature Type",
-        "SubtypeLabel": "Creature Subtype",
-        "TreasureTypeLabel": "Treasure Type",
-        "CRMinLabel": "Minimum CR",
-        "CRMaxLabel": "Maximum CR",
-        "Confirm": "Update",
-        "Cancel": "Cancel"
-      },
-      "RemoveCreatureType": {
-        "Title": "Remove Creature Type",
-        "ConfirmContent": "Remove creature type: '{type}', subtype: '{subtype}', treasure type: '{treasureType}', CR: {crRange}?"
-      },
-      "AddCreatureType": {
-        "Title": "Add New Creature Type",
-        "TypeLabel": "Creature Type",
-        "TypePlaceholder": "Enter type (optional)",
-        "SubtypeLabel": "Creature Subtype",
-        "SubtypePlaceholder": "Enter subtype (optional)",
-        "TreasureTypeLabel": "Treasure Type",
-        "TreasureTypePlaceholder": "Enter treasure type (optional)",
-        "CRMinLabel": "Minimum CR",
-        "CRMaxLabel": "Maximum CR",
-        "DuplicateEntry": "A creature type with these exact specifications already exists.",
-        "InvalidCRRange": "Minimum CR cannot be greater than Maximum CR.",
-        "RequiredField": "CR value must be filled out.",
-        "MaxValueError": "Value must be less than or equal to 30.",
-        "Confirm": "Add",
-        "Cancel": "Cancel"
-      },
-      "ShowRandomLootPrompt": {
-        "Name": "Show Loot Roll Prompt",
-        "Hint": "When enabled, shows a prompt to roll for loot instead of automatically rolling. [default: false]"
-      }
-    },
-    "ChatMessages": {
-      "CoinGenerated": "Pocket Change:",
-      "CoinGeneratedPenniless": "Pocket Change:",
-      "PennilessText": "Penniless (No Coin)",
-      "RandomLootGenerated": "Random Loot:",
-      "NoLoot": "Nothing"
-    },
-    "RandomLoot": {
-      "ChatMessage": {
-        "Title": "Random Loot",
-        "NoLoot": "No loot found"
-      }
-    },
-    "RandomLootPrompt": {
-      "Title": "Random Loot Roll",
-      "Results": "Results",
-      "NoResults": "No results yet. Click New Roll to generate loot.",
-      "Roll": "New Roll",
-      "RollRandomLoot": "Roll Random Loot",
-      "Reroll": "Reroll Last",
-      "Accept": "Accept",
-      "Cancel": "Cancel",
-      "TableLabel": "Table",
-      "RollNumber": "Roll",
-      "Clear": "Clear All"
+
+      "tsrplSettings": {
+        "name": "Treasure Pile Settings",
+        "disable": "Disable Treasure Pile",
+        "defaultTables": "Default Tables",
+        "selectTables": "Select Tables",
+        "genLimit": "Generation Attempt Limit",
+        "genLimitHint": "The maximum number of times the treasure pile will be generated. [default: 50]",
+        "showAll": "Show All Tables",
+        "showAllHint": "When enabled, shows all available tables in the Treasure Pile interface regardless of the default table selection."
+        }
     }
   }
 }

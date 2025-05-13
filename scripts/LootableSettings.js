@@ -1,26 +1,35 @@
 import { PocketChangeSettingsForm } from './PocketChangeSettingsForm.js';
 import { RandomLootSettingsForm } from './RandomLootSettingsForm.js';
+import { TreasurePileSettingsForm } from './TreasurePileSettingsForm.js';
 
 /* Settings Menu */
 export function settings() {
   game.settings.registerMenu('lootable', 'pocketChangeSettings', {
-    name: game.i18n.localize('LOOTABLE.SettingsMenu.PocketChange.Name'),
-    label: game.i18n.localize('LOOTABLE.SettingsMenu.PocketChange.Label'),
+    name: game.i18n.localize('LOOTABLE.settings.pktcgName'),
+    label: game.i18n.localize('LOOTABLE.settings.pktcgLabel'),
     icon: 'fas fa-coins',
     type: PocketChangeSettingsForm,
     restricted: true
   });
 
   game.settings.registerMenu('lootable', 'randomLootSettings', {
-    name: game.i18n.localize('LOOTABLE.SettingsMenu.RandomLoot.Name'),
-    label: game.i18n.localize('LOOTABLE.SettingsMenu.RandomLoot.Label'),
+    name: game.i18n.localize('LOOTABLE.settings.rndltName'),
+    label: game.i18n.localize('LOOTABLE.settings.rndltLabel'),
     icon: 'fas fa-dice-d20',
     type: RandomLootSettingsForm,
     restricted: true
   });
 
+  game.settings.registerMenu('lootable', 'treasurePileSettings', {
+    name: game.i18n.localize('LOOTABLE.settings.tsrplName'),
+    label: game.i18n.localize('LOOTABLE.settings.tsrplLabel'),
+    icon: 'fas fa-chess-pawn',
+    type: TreasurePileSettingsForm,
+    restricted: true
+  });
+
   game.settings.register('lootable', 'enableDebug', {
-    name: game.i18n.localize('LOOTABLE.SettingsMenu.EnableDebug.Name'),
+    name: game.i18n.localize('LOOTABLE.settings.debug'),
     scope: 'world',
     config: true,
     type: Boolean,
@@ -29,7 +38,7 @@ export function settings() {
   
   /* Pocket Change Settings */
   game.settings.register('lootable', 'disablePocketChange', {
-    name: game.i18n.localize('LOOTABLE.PocketChangeSettings.DisablePocketChange.Name'),
+    name: 'Disable Pocket Change',
     scope: 'world',
     config: false,
     type: Boolean,
@@ -37,7 +46,7 @@ export function settings() {
   });
 
   game.settings.register('lootable', 'perCoinAmount', {
-    name: game.i18n.localize('LOOTABLE.PocketChangeSettings.PerCoinAmount.Name'),
+    name: 'Per Coin Amount',
     scope: 'world',
     config: false,
     type: Number,
@@ -50,7 +59,7 @@ export function settings() {
   });
 
   game.settings.register('lootable', 'minCoinAmount', {
-    name: game.i18n.localize('LOOTABLE.PocketChangeSettings.MinCoinAmount.Name'),
+    name: 'Minimum Coin Amount',
     scope: 'world',
     config: false,
     type: Number,
@@ -58,7 +67,7 @@ export function settings() {
   });
 
   game.settings.register('lootable', 'ignoreExistingCoin', {
-    name: game.i18n.localize('LOOTABLE.PocketChangeSettings.IgnoreExistingCoin.Name'),
+    name: 'Ignore Existing Coin',
     scope: 'world',
     config: false,
     type: Boolean,
@@ -66,7 +75,7 @@ export function settings() {
   });
 
   game.settings.register('lootable', 'allowedCreatureTypes', {
-    name: game.i18n.localize('LOOTABLE.PocketChangeSettings.AllowedCreatureTypes.Name'),
+    name: 'Allowed Creature Types',
     scope: 'world',
     config: false,
     type: String,
@@ -74,7 +83,7 @@ export function settings() {
   });
 
   game.settings.register('lootable', 'noCoinChance', {
-    name: game.i18n.localize('LOOTABLE.PocketChangeSettings.NoCoinChance.Name'),
+    name: 'No Coin Chance',
     scope: 'world',
     config: false,
     type: Number,
@@ -87,7 +96,7 @@ export function settings() {
   });
 
   game.settings.register('lootable', 'tenPercentGoldChance', {
-    name: game.i18n.localize('LOOTABLE.PocketChangeSettings.TenPercentGoldChance.Name'),
+    name: 'Ten Percent Gold Chance',
     scope: 'world',
     config: false,
     type: Number,
@@ -100,7 +109,7 @@ export function settings() {
   });
 
   game.settings.register('lootable', 'halfGoldChance', {
-    name: game.i18n.localize('LOOTABLE.PocketChangeSettings.HalfGoldChance.Name'),
+    name: 'Half Gold Chance',
     scope: 'world',
     config: false,
     type: Number,
@@ -113,7 +122,7 @@ export function settings() {
   });
 
   game.settings.register('lootable', 'doubleCoinChance', {
-    name: game.i18n.localize('LOOTABLE.PocketChangeSettings.DoubleCoinChance.Name'),
+    name: 'Double Coin Chance',
     scope: 'world',
     config: false,
     type: Number,
@@ -126,7 +135,7 @@ export function settings() {
   });
 
   game.settings.register('lootable', 'tripleCoinChance', {
-    name: game.i18n.localize('LOOTABLE.PocketChangeSettings.TripleCoinChance.Name'),
+    name: 'Triple Coin Chance',
     scope: 'world',
     config: false,
     type: Number,
@@ -139,8 +148,7 @@ export function settings() {
   });
 
   game.settings.register('lootable', 'hidePocketChangeChatMsg', {
-    name: game.i18n.localize('LOOTABLE.PocketChangeSettings.HidePocketChangeChatMsg.Name'),
-    hint: game.i18n.localize('LOOTABLE.PocketChangeSettings.HidePocketChangeChatMsg.Hint'),
+    name: 'Hide Pocket Change Chat Message',
     scope: 'world',
     config: false,
     type: Boolean,
@@ -149,7 +157,7 @@ export function settings() {
 
   /* Random Loot Settings */
   game.settings.register('lootable', 'disableRandomLoot', {
-    name: game.i18n.localize('LOOTABLE.RandomLootSettings.DisableRandomLoot.Name'),
+    name: 'Disable Random Loot',
     scope: 'world',
     config: false,
     type: Boolean,
@@ -157,8 +165,7 @@ export function settings() {
   });
 
   game.settings.register('lootable', 'randomLootMode', {
-    name: game.i18n.localize('LOOTABLE.RandomLootSettings.Mode.Name'),
-    hint: game.i18n.localize('LOOTABLE.RandomLootSettings.Mode.Hint'),
+    name: 'Random Loot Mode',
     scope: 'world',
     config: false,
     type: String,
@@ -170,8 +177,7 @@ export function settings() {
   });
 
   game.settings.register('lootable', 'hideRandomLootHUD', {
-    name: game.i18n.localize('LOOTABLE.RandomLootSettings.HideRandomLootHUD.Name'),
-    hint: game.i18n.localize('LOOTABLE.RandomLootSettings.HideRandomLootHUD.Hint'),
+    name: 'Hide Random Loot HUD',
     scope: 'world',
     config: false,
     type: Boolean,
@@ -179,7 +185,7 @@ export function settings() {
   });
 
   game.settings.register('lootable', 'creatureTypeTables', {
-    name: game.i18n.localize('LOOTABLE.RandomLootSettings.CreatureTypeTables.Name'),
+    name: 'Creature Type Tables',
     scope: 'world',
     config: false,
     type: Object,
@@ -205,8 +211,7 @@ export function settings() {
   });
 
   game.settings.register('lootable', 'hideRandomLootChatMsg', {
-    name: game.i18n.localize('LOOTABLE.RandomLootSettings.HideRandomLootChatMsg.Name'),
-    hint: game.i18n.localize('LOOTABLE.RandomLootSettings.HideRandomLootChatMsg.Hint'),
+    name: 'Hide Random Loot Chat Message',
     scope: 'world',
     config: false,
     type: Boolean,
@@ -214,15 +219,47 @@ export function settings() {
   });
 
   game.settings.register('lootable', 'showRandomLootPrompt', {
-    name: game.i18n.localize('LOOTABLE.RandomLootSettings.ShowRandomLootPrompt.Name'),
-    hint: game.i18n.localize('LOOTABLE.RandomLootSettings.ShowRandomLootPrompt.Hint'),
+    name: 'Show Random Loot Prompt',
     scope: 'world',
     config: false,
     type: Boolean,
     default: false
   });
-}
 
-Handlebars.registerHelper('json', function(context) {
-  return JSON.stringify(context, null, 2);
-});
+  /* Treasure Pile Settings */
+  game.settings.register('lootable', 'disableTreasurePile', {
+    name: 'Disable Treasure Pile',
+    scope: 'world',
+    config: false,
+    type: Boolean,
+    default: false
+  });
+
+  game.settings.register('lootable', 'treasurePileDefaultTables', {
+    name: 'Treasure Pile Default Tables',
+    scope: 'world',
+    config: false,
+    type: Array,
+    default: []
+  });
+
+  game.settings.register('lootable', 'treasurePileGenerationLimit', {
+    name: 'Treasure Pile Generation Limit',
+    scope: 'world',
+    config: false,
+    type: Number,
+    default: 250
+  });
+
+  game.settings.register('lootable', 'treasurePileShowAllTables', {
+    name: 'Treasure Pile Show All Tables',
+    scope: 'world',
+    config: false,
+    type: Boolean,
+    default: false
+  });
+
+  Handlebars.registerHelper('json', function(context) {
+    return JSON.stringify(context, null, 2);
+  });
+}
